@@ -1,27 +1,24 @@
 package com.student.service;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.student.domain.student;
-import com.student.resporatiry.studentResporatiry;
-
-
+import com.student.domain.Student;
+import com.student.respsitory.StudentRespository;
 
 @Service
-public class studentService {
+public class StudentService {
 
-	Logger logger = LoggerFactory.getLogger(studentService.class);
+	Logger logger = LoggerFactory.getLogger(StudentService.class);
 
 	@Autowired
-	private studentResporatiry stuResporatiry;
+	private StudentRespository stuResporatiry;
 
-	public student getStudentInfo(Long id) {
+	public Student getStudentInfo(Long id) {
 		try {
-			student stu = stuResporatiry.getOne(id);
+			Student stu = stuResporatiry.getOne(id);
 
 			return stu;
 		} catch (Exception e) {

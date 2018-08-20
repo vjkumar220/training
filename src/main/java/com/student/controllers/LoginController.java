@@ -1,4 +1,4 @@
-package com.login.example;
+package com.student.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
