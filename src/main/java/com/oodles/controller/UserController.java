@@ -40,7 +40,7 @@ public User createUser(@Valid @RequestBody User user) {
 }
 
 
-//Create a single user
+//Get a single user
 
 @GetMapping("/getusers/{id}")
 public User getUserById(@PathVariable(value = "id") Long userId) {
