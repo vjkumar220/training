@@ -132,6 +132,8 @@ public class UserController {
 
 	}
 
+	// Delete
+
 	User delete = null;
 
 	@RequestMapping(value = "/deleteuser/{id}", method = RequestMethod.GET)

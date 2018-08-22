@@ -24,6 +24,8 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepositry;
+	
+	//Creating new User
 
 	public Map<String, Object> generateUser(String name, String email) {
 
