@@ -1,6 +1,5 @@
 package com.student.service;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
 
 import java.util.HashMap;
@@ -24,8 +23,8 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepositry;
-	
-	//Creating new User
+
+	// Creating new User
 
 	public Map<String, Object> generateUser(String name, String email) {
 
@@ -69,16 +68,16 @@ public class UserService {
 		return result;
 
 	}
-	
-	//Delete
-	
+
+	// Delete
+
 	public User deleteUser(String id) {
 		logger.info("user in deleteUser method ");
-		Optional<User> value =userRepositry.findById(Long.parseLong(id));
-		
+		Optional<User> value = userRepositry.findById(Long.parseLong(id));
+
 		User result = value.get();
-		if(value.isPresent() && (!result.getId().equals(id))){
-			
+		if (value.isPresent() && (!result.getId().equals(id))) {
+
 			userRepositry.deleteById(Long.parseLong(id));
 		}
 		return result;
