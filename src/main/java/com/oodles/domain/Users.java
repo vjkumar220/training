@@ -1,61 +1,93 @@
 package com.oodles.domain;
 
+
+import java.io.Serializable;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
-@Table(name = "Userdetail")
-public class Users {
-	private int id;
-    private String name;
-    private Order order;
-    public Users()
-    {
-    	
-    }
-    public Users(String name) {
-        this.name = name;
-    }
 
-    public Users(String name, Order order) {
-        this.name = name;
-        this.order = order;
-    }
+public class Users implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public int getId() {
-        return id;
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	private String name;
 
-    public String getName() {
-        return name;
-    }
+	private String password;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	private String email;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    public Order getOrder() {
-        return order;
-    }
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "wallet_id")
+	private Wallet wallet;
 
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-    
-    
-    
-    
+	@OneToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<Order> order;
+
+	public Users() {
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Wallet getWallet() {
+		return wallet;
+	}
+
+	public void setWallet(Wallet wallet) {
+		this.wallet = wallet;
+	}
+
+	public Set<Order> getOrder() {
+		return order;
+	}
+
+	public void setOrder(Set<Order> order) {
+		this.order = order;
+	}
+
 }

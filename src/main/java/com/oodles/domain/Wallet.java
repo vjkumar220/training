@@ -1,48 +1,53 @@
 package com.oodles.domain;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
-@Table(name = "Wallet")
+@Table(name = "Walletdetail")
 public class Wallet {
 	 @Id
 	    @GeneratedValue(strategy = GenerationType.AUTO)
-	    @Column(name = "id")
-	    private Integer id;
+	   
+	    private Integer walletid;
 	    private Integer Amount ;
 
-	    @OneToOne(cascade = CascadeType.ALL)
-	    @JoinColumn(name = "id", referencedColumnName = "id")
-	    private User user;
+	    @OneToOne(mappedBy = "wallet")
+	  
+	    private Users users;
 	    public Wallet() {
 	    }
-		public Integer getId() {
-			return id;
+		
+		public Integer getWalletid() {
+			return walletid;
 		}
-		public void setId(Integer id) {
-			this.id = id;
+
+		public void setWalletid(Integer walletid) {
+			this.walletid = walletid;
 		}
+
 		public Integer getAmount() {
 			return Amount;
 		}
+
 		public void setAmount(Integer amount) {
 			Amount = amount;
 		}
-		public User getUser() {
-			return user;
+
+		public Users getUser() {
+			return users;
 		}
-		public void setUser(User user) {
-			this.user = user;
+		public void setUser(Users users) {
+			this.users = users;
 		}
 	    
 }

@@ -1,69 +1,59 @@
 package com.oodles.domain;
 
-import java.util.Set;
 
-import javax.persistence.CascadeType;
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
-@Table(name = "Order")
+@Table(name="orderdetail")
 public class Order {
-	private int id;
-    private String name;
-    private Set<Users> user;
-    public Order()
-    {
-    	
-    }
-    public Order(String name) {
-        this.name = name;
-    }
-
-    @Id
+	
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public int getId() {
-        return id;
+	private Long orderid;
+    private String ordername;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id")
+    private Users users;
+    
+    public Order(){
+    }
+    
+    public Order(String ordername, Users users){
+    	this.ordername = ordername;
+    	this.users = users;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public void setOrderid(Long orderid) {
+		this.orderid = orderid;
+	}
+	
+	public String getOrdername() {
+		return ordername;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setOrdername(String ordername) {
+		this.ordername = ordername;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public Users getUser() {
+		return users;
+	}
 
-    @OneToMany(mappedBy = "Order", cascade = CascadeType.ALL)
-    public Set<Users> getusers() {
-        return user;
-    }
-
-    public void setOrders(Set<Users> user) {
-        this.user = user;
-    }
-
-    @Override
-    public String toString() {
-        String result = String.format(
-                "Category[id=%d, name='%s']%n",
-                id, name);
-        if (user != null) {
-            for(Users user : user) {
-                result += String.format(
-                        "Users[id=%d, name='%s']%n",
-                        user.getId(), user.getName());
-            }
-        }
-
-        return result;
-    }
+	public void setUser(Users users) {
+		this.users = users;
+	}
+    
+    
 }
