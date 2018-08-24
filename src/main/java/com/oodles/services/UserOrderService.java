@@ -1,14 +1,14 @@
-/*package com.oodles.services;
+package com.oodles.services;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+import com.oodles.domain.Order;
+import com.oodles.domain.User;
 import com.oodles.domain.Users;
 import com.oodles.repository.UserOrderRepository;
 
@@ -17,21 +17,12 @@ public class UserOrderService {
 	public static final Logger logger = LoggerFactory.getLogger(UserOrderService.class);
 	@Autowired
 	private UserOrderRepository userorderRepository;
-	
-	
-	public Map<String, Object> createUser(String name) {
-		Map<String, Object> result = new HashMap<String, Object>();
-		Users user = userorderRepository.findByName(name);
-		if(user == null){
-			Users newUser=new Users();
-			newUser.setName(name);
-				
-			userorderRepository.saveAll(newUser);
-			
-			result.put("responseMessage", "success");
-		}
-		return result;
+	public List<Order> one()
+	{
+		List<Order> cus=userorderRepository.findAll();
+		return cus;
 	}
 	
+	
+	
 }
-*/

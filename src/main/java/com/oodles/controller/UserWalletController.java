@@ -8,18 +8,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.oodles.domain.Users;
 import com.oodles.domain.Wallet;
-import com.oodles.repository.UserWalletRepository;
+import com.oodles.services.UserWalletService;
 @Controller
 public class UserWalletController {
-	@Autowired
-	private UserWalletRepository userwalletRepository;
 
-    public UserWalletController(UserWalletRepository userwalletRepository) {
-        this.userwalletRepository = userwalletRepository;
-    }
+	@Autowired
+private UserWalletService userwalletservice;
 
     @GetMapping(value = "/all")
     public List<Wallet> getUserContact() {
-        return userwalletRepository.findAll();
-    }
+    	List<Wallet> result =userwalletservice.one();
+        return result;
+        }
 }
