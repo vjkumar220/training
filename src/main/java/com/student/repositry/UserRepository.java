@@ -1,4 +1,4 @@
-package com.student.respsitory;
+package com.student.repositry;
 
 import java.util.Optional;
 

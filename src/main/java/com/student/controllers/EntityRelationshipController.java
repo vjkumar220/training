@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.student.domain.User;
 import com.student.service.EntityRelationshipService;
-import com.student.service.UserService;
 
 @RestController
 public class EntityRelationshipController {

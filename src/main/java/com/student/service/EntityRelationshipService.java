@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.student.domain.User;
-import com.student.respsitory.UserRepository;
+import com.student.repositry.UserRepository;
 
 @Service
 public class EntityRelationshipService {

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.student.domain.Student;
-import com.student.respsitory.StudentRespository;
+import com.student.repositry.StudentRespository;
 
 @Service
 public class StudentService {
