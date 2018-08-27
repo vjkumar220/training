@@ -3,7 +3,7 @@ package com.oodles.domain;
 public class OTPSystem {
 private String mobilenumber;
 private String otp;
-private String expirytime;
+private Long expirytime;
 public String getMobilenumber() {
 	return mobilenumber;
 }
@@ -16,11 +16,13 @@ public String getOtp() {
 public void setOtp(String otp) {
 	this.otp = otp;
 }
-public String getExpirytime() {
+public Long getExpirytime() {
 	return expirytime;
 }
-public void setExpirytime(String expirytime) {
+public void setExpirytime(Long expirytime) {
 	this.expirytime = expirytime;
 }
+
+
 
 }

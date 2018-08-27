@@ -17,7 +17,7 @@ public class MailController {
 	@RequestMapping(value= "/sendmail" ,method= RequestMethod.GET)
 	public String sendMail() {
 		
-		mailService.sendMail("shubhamsinghgu@gmail.com", "Shivam.Sahu@oodlestechnologies.com", "First Mail", "First mail from spring boot");
+		mailService.sendMail("shubhamsinghgu@gmail.com", "Shubham.singh@oodlestechnologies.com", "First Mail", "First mail from spring boot");
 		
 		return"Mail Sent Successfully..!!";
 	}
