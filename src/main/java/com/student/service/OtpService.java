@@ -21,7 +21,7 @@ public class OtpService {
 	
 	private Map<String, Otp> otp_data = new HashMap<>();
 	private final static String ACCOUNT_SID = "ACe2f058ec28715b76bdeaac2da52d1324";
-	private final static String AUTH_ID = "66384b401747451a0cf47404f3ae8d4c" + "";
+	private final static String AUTH_ID = "66384b401747451a0cf47404f3ae8d4c";
 	static {
 
 		logger.info("OTP service - static block");
