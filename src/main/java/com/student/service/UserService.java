@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.student.domain.User;
-import com.student.repositry.UserRepository;
+import com.student.repository.UserRepository;
 
 @Service
 public class UserService {

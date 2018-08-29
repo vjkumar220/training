@@ -1,4 +1,4 @@
-package com.student.repositry;
+package com.student.repository;
 
 import java.util.Optional;
 

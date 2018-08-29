@@ -25,7 +25,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.student.domain.Validation;
 import com.student.exception.StudentNotFoundException;
-import com.student.repositry.ValidationRepository;
+import com.student.repository.ValidationRepository;
 
 @RestController
 public class ValidationController {
@@ -47,10 +47,6 @@ public class ValidationController {
 			throw new StudentNotFoundException("id-" + id);
 
 		Resource<Validation> resource = new Resource<Validation>(validation.get());
-
-		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).retrieveAllValidations());
-
-		resource.add(linkTo.withRel("all-students"));
 
 		return resource;
 	}

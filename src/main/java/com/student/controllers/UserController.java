@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.student.domain.User;
 import com.student.exception.ResourceNotFoundException;
-import com.student.repositry.UserRepository;
+import com.student.repository.UserRepository;
 import com.student.service.UserService;
 import com.student.util.ResponseHandler;
 
