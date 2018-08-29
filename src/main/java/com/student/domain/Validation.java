@@ -39,9 +39,13 @@ public class Validation implements Serializable {
 	private String email;
 
 	@NotBlank(message = "Enter Password")
+	// in this regexp checking atleast one upper and lower cases, number, special char 
 	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&].{8,}$", message=" Enter Password Valid password")
 	private String Password;
 	
+	// In this regexp we checking phone number length 10 and number starting with 6-9
+	@NotBlank(message = "Enter the Phone Number")
+	@Pattern(regexp ="^[6-9]\\d{9}$")
 	private String phoneNumber;
 	
 	public Validation() {

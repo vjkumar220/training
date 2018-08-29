@@ -10,6 +10,8 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
@@ -30,17 +32,25 @@ import com.student.repository.ValidationRepository;
 @RestController
 public class ValidationController {
 	
+	Logger logger = LoggerFactory.getLogger(ValidationController.class);
+	
 	@Autowired
 	ValidationRepository validationRepository;
 	
 	@GetMapping("/validation")
 	public List<Validation> retrieveAllValidations() {
+		
+		logger.info("ValidationController retriveAllValidations");
+		
 		return validationRepository.findAll();
 	}
 
 	
 	@GetMapping("/validation/{id}")
 	public Resource<Validation> retrieveValidation(@PathVariable long id) {
+		
+		logger.info("ValidationController retriveValidations");
+		
 		Optional<Validation> validation =validationRepository.findById(id);
 
 		if (!validation.isPresent())
@@ -48,16 +58,28 @@ public class ValidationController {
 
 		Resource<Validation> resource = new Resource<Validation>(validation.get());
 
+		//This will help you to create the link for api by using HATEOS dependency
+		
+		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).retrieveAllValidations());
+
+		resource.add(linkTo.withRel("all-students"));
+
 		return resource;
 	}
 	
 	@DeleteMapping("/validation/{id}")
-	public void deleteStudent(@PathVariable long id) {
+	public void deleteValidation(@PathVariable long id) {
+		
+		logger.info("ValidationController deleteValidations");
+		
 		validationRepository.deleteById(id);
 	}
 	
 	@PostMapping("/validation")
-	public ResponseEntity<Object> createStudent(@Valid @RequestBody Validation validation) {
+	public ResponseEntity<Object> createValidation(@Valid @RequestBody Validation validation) {
+		
+		logger.info("ValidationController createValidations");
+		
 		Validation saveValidation = validationRepository.save(validation);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -68,8 +90,10 @@ public class ValidationController {
 	
 	
 	@PutMapping("/validation/{id}")
-	public ResponseEntity<Object> updateStudent(@Valid @RequestBody Validation validation, @PathVariable long id) {
+	public ResponseEntity<Object> updateValidation(@Valid @RequestBody Validation validation, @PathVariable long id) {
 
+		logger.info("ValidationController updateValidations");
+		
 		Optional<Validation> validationOptional = validationRepository.findById(id);
 
 		if (!validationOptional.isPresent())
