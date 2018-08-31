@@ -12,10 +12,11 @@ import javax.persistence.Table;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name = "cryptowallet")
-@EntityListeners(AuditingEntityListener.class)
+//@EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"}, 
         allowGetters = true)
 public class CryptoWallet {
@@ -28,6 +29,7 @@ public class CryptoWallet {
 	private String walletType;
 	 @ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "user_id", nullable = false)
+	 @JsonBackReference
 	    private User user;
 public CryptoWallet()
 {
@@ -70,5 +72,3 @@ public void setUser(User user) {
 }
 
 }
-    
-            

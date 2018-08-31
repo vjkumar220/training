@@ -1,3 +1,4 @@
+
 package com.oodles.models;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -24,9 +25,10 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 @Table(name = "user")
-@EntityListeners(AuditingEntityListener.class)
+//@EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"}, 
         allowGetters = true)
 public class User implements Serializable {
@@ -43,7 +45,7 @@ public class User implements Serializable {
     private String mobilenumber;
     @NotNull
 	  @Pattern(regexp="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$",message="The password should have contain minimum 1 lowercase, maximum 1 uppercase, 1 digit and 1 special character(Minimum Length=8)")
-    @Transient
+    
     private String password;
    @NotNull
     private String country;	
@@ -51,17 +53,20 @@ public class User implements Serializable {
    @OneToMany(cascade = CascadeType.ALL,
            fetch = FetchType.EAGER,
            mappedBy = "user")
-   private Set<CryptoWallet> wallet = new HashSet<>();
+   @JsonManagedReference
+   private Set<CryptoWallet> cryptowallet = new HashSet<>();
    
    @OneToOne(fetch = FetchType.EAGER,
            cascade =  CascadeType.ALL,
            mappedBy = "user")
+   @JsonManagedReference
    private FiatWallet fiatwallet;
    
    @ManyToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
    @JoinTable(name="User_Role", 
                joinColumns={@JoinColumn(name="id")}, 
                inverseJoinColumns={@JoinColumn(name="roleId")})
+   @JsonManagedReference
    private Set<Role> role;
 
 
@@ -105,11 +110,14 @@ public Long getId() {
 	public void setCountry(String country) {
 		this.country = country;
 	}
-	public Set<CryptoWallet> getWallet() {
-		return wallet;
+	
+	
+	
+	public Set<CryptoWallet> getCryptowallet() {
+		return cryptowallet;
 	}
-	public void setWallet(Set<CryptoWallet> wallet) {
-		this.wallet = wallet;
+	public void setCryptowallet(Set<CryptoWallet> cryptowallet) {
+		this.cryptowallet = cryptowallet;
 	}
 	public FiatWallet getFiatwallet() {
 		return fiatwallet;

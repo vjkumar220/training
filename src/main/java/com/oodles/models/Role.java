@@ -12,11 +12,12 @@ import javax.persistence.Table;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "role")
-@EntityListeners(AuditingEntityListener.class)
+//@EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"}, 
         allowGetters = true)
 public class Role {
@@ -25,6 +26,7 @@ public class Role {
     private Long roleId;
     private String roleType;
     @ManyToMany(mappedBy="role")
+    @JsonBackReference
     private Set<User> user;
 	public Long getRoleId() {
 		return roleId;

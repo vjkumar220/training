@@ -12,11 +12,12 @@ import javax.persistence.Table;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "fiatwallet")
-@EntityListeners(AuditingEntityListener.class)
+//@EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"}, 
         allowGetters = true)
 public class FiatWallet {
@@ -29,6 +30,7 @@ public class FiatWallet {
 	private String walletType;
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+	@JsonBackReference
     private User user;
 	public FiatWallet()
 	{
