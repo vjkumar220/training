@@ -1,16 +1,28 @@
 package com.oodles.models;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name = "user")
@@ -19,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
         allowGetters = true)
 public class User implements Serializable {
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
  	@Size(min=2, message="Name should have atleast 2 characters")
     private String name;
@@ -35,6 +47,27 @@ public class User implements Serializable {
     private String password;
    @NotNull
     private String country;	
+
+   @OneToMany(cascade = CascadeType.ALL,
+           fetch = FetchType.EAGER,
+           mappedBy = "user")
+   private Set<CryptoWallet> wallet = new HashSet<>();
+   
+   @OneToOne(fetch = FetchType.EAGER,
+           cascade =  CascadeType.ALL,
+           mappedBy = "user")
+   private FiatWallet fiatwallet;
+   
+   @ManyToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
+   @JoinTable(name="User_Role", 
+               joinColumns={@JoinColumn(name="id")}, 
+               inverseJoinColumns={@JoinColumn(name="roleId")})
+   private Set<Role> role;
+
+
+   public User() {
+
+   } 
 public Long getId() {
 		return id;
 	}
@@ -72,5 +105,24 @@ public Long getId() {
 	public void setCountry(String country) {
 		this.country = country;
 	}
+	public Set<CryptoWallet> getWallet() {
+		return wallet;
+	}
+	public void setWallet(Set<CryptoWallet> wallet) {
+		this.wallet = wallet;
+	}
+	public FiatWallet getFiatwallet() {
+		return fiatwallet;
+	}
+	public void setFiatwallet(FiatWallet fiatwallet) {
+		this.fiatwallet = fiatwallet;
+	}
+	public Set<Role> getRole() {
+		return role;
+	}
+	public void setRole(Set<Role> role) {
+		this.role = role;
+	}
+	
 	
 }
