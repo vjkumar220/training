@@ -6,7 +6,6 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,11 +20,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 @Table(name = "user")
 //@EntityListeners(AuditingEntityListener.class)
@@ -53,20 +49,25 @@ public class User implements Serializable {
    @OneToMany(cascade = CascadeType.ALL,
            fetch = FetchType.EAGER,
            mappedBy = "user")
-   @JsonManagedReference
+  // @JsonManagedReference
+   @JsonBackReference(value="user-cryptowallet")
    private Set<CryptoWallet> cryptowallet = new HashSet<>();
    
    @OneToOne(fetch = FetchType.EAGER,
            cascade =  CascadeType.ALL,
            mappedBy = "user")
-   @JsonManagedReference
+   //@JsonManagedReference
+   @JsonBackReference(value="user-fiatwallet")
+   
    private FiatWallet fiatwallet;
    
    @ManyToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
    @JoinTable(name="User_Role", 
                joinColumns={@JoinColumn(name="id")}, 
                inverseJoinColumns={@JoinColumn(name="roleId")})
-   @JsonManagedReference
+  // @JsonManagedReference
+   @JsonBackReference(value="user-role")
+   
    private Set<Role> role;
 
 

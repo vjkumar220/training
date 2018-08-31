@@ -30,7 +30,7 @@ public class FiatWallet {
 	private String walletType;
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-	@JsonBackReference
+	//@JsonBackReference
     private User user;
 	public FiatWallet()
 	{
