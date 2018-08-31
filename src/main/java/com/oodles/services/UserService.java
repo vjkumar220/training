@@ -1,5 +1,8 @@
 package com.oodles.services;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +20,8 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 //create
-	public ResponseEntity<Object> createUser(User user) {
+	public Map<String, Object>  createUser(User user) {
+		Map<String, Object> result = new HashMap<String, Object>();
 		String name=user.getName();
 		String password=user.getPassword();
 		String country=user.getCountry();
@@ -33,9 +37,9 @@ public class UserService {
 			newUser.setPassword(password);
 			newUser.setCountry(country);
 			userRepository.save(newUser);
-			return new ResponseEntity<>("Sign-up has been done SUCCESFULLY",HttpStatus.OK);
+			result.put("responseMessage", "success");
 		}
-		return new ResponseEntity<>("Failed",HttpStatus.BAD_REQUEST);
+		return result;
 	}
 
 	}
