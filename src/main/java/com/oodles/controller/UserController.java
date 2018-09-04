@@ -11,18 +11,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.oodles.domain.Otp;
 import com.oodles.domain.User;
 import com.oodles.exception.ResourceNotFoundException;
 import com.oodles.service.UserService;
@@ -79,7 +78,7 @@ public class UserController {
 
 	// deleting user by id
 	@DeleteMapping(value = "/users/{id}")
-	public @ResponseBody Map deleteUser(@PathVariable String id) {
+	public Map<?, ?> deleteUser(@PathVariable String id) {
 		User delete = null;
 		try {
 			delete = userService.deleteUser(id);
@@ -96,20 +95,50 @@ public class UserController {
 	}
 
 	// update user by id
-	@PutMapping(value = "/users/{id}/{name}/{email}/{password}/{mobilenumber}/{country}")
-	public @ResponseBody Map updateUser(@PathVariable String id, @PathVariable String name, @PathVariable String email,
-			@PathVariable String password, @PathVariable String mobilenumber, @PathVariable String country,
-			@Valid @RequestBody User user) {
-		User update = null;
+	@PutMapping(value = "/users/{id}/{name}/{email}/{password}/{phoneNumber}/{country}")
+	public Map<?, ?> updateUser(@PathVariable String id ,@PathVariable String name,@PathVariable String email,@PathVariable String password,@PathVariable String phoneNumber ,@PathVariable String country)
+	{
+	User user=null;
+	try {
+		user = userService.updateUser(id,name,email,password,phoneNumber,country);
+		return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, user);
+	}
+	catch(ResourceNotFoundException exception){
+		return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, user);
+	}
+	catch(NoSuchElementException excep){
+		return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, user);
+	}
+	}
+	
+	//verify the user
+	@PostMapping(value = "/users/{userId}")
+	public Map<?, ?> sendOtp(@PathVariable String userId) {
+		String result=null;
 		try {
-			update = userService.updateUser(id, name, email, password, mobilenumber, country);
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, update);
-		} catch (ResourceNotFoundException ex) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, output);
-		} catch (NoSuchElementException ex) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, output);
-		}
-
+			result=userService.sendOTP(userId);
+		return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+	}
+	catch(ResourceNotFoundException exception){
+		return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+	}
+	catch(NoSuchElementException excep){
+		return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+	}
 	}
 
+	@RequestMapping(value = "/users/otp/{mobileNumber}", method = RequestMethod.PUT)
+	public Map<?, ?> verifyOtp(@PathVariable String mobileNumber , @RequestBody Otp requestOTP) {
+			String result=null;
+		try {
+	 result = userService.verifyOtp (mobileNumber,requestOTP);
+		return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+	}
+	catch(ResourceNotFoundException exception){
+		return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+	}
+	catch(NoSuchElementException excep){
+		return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+	}
+	}
 }

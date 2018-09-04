@@ -14,7 +14,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -24,11 +23,14 @@ import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
 public class User implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -56,20 +58,19 @@ public class User implements Serializable {
 	private String status = "inactive";
 
 	@OneToOne(mappedBy = "user")
-	// @JsonManagedReference	
-	@JsonBackReference(value ="for fiat wallet")
-	 private FiatWallet fiatWallet;
+	@JsonBackReference(value = "for fiat wallet")
+	private FiatWallet fiatWallet;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JsonBackReference(value  = "for cryptoWallet")
-	//@JsonManagedReference
+
 	private Set<CryptoWallet> cryptoWallets;
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "roleId"))
-	@JsonBackReference(value ="for role")
-	//@JsonManagedReference
 	private Set<Role> roles;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<CurrencyOrder> currencyOrders;
 
 	public Long getId() {
 		return id;
@@ -150,5 +151,14 @@ public class User implements Serializable {
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
+
+	public Set<CurrencyOrder> getCurrencyOrders() {
+		return currencyOrders;
+	}
+
+	public void setCurrencyOrders(Set<CurrencyOrder> currencyOrders) {
+		this.currencyOrders = currencyOrders;
+	}
+
 
 }

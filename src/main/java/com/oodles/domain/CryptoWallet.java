@@ -1,7 +1,8 @@
 package com.oodles.domain;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -9,30 +10,24 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+//@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
-public class CryptoWallet {
+public class CryptoWallet implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long cryptoWalletId;
 	private Long shadowBalance;
-	@NotNull
 	private Long balance;
-	@NotNull
 	private String coinName;
-	@NotNull
 	private String walletType;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne // (fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
-	//@JsonBackReference
+	@JsonBackReference(value = "for Crypto Wallet")
+
 	private User user;
 
 	public Long getCryptoWalletId() {

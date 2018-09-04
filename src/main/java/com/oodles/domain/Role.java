@@ -1,5 +1,6 @@
 package com.oodles.domain;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -14,7 +15,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
-public class Role {
+public class Role implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long roleId;
@@ -22,7 +27,7 @@ public class Role {
 	private String roleType;
 	
 	@ManyToMany(mappedBy = "roles")
-	//@JsonBackReference
+	@JsonBackReference(value = "for role")
 	private Set<User> users;
 	
 	public Long getRoleId() {
