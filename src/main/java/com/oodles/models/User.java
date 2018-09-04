@@ -54,14 +54,14 @@ public class User  {
            fetch = FetchType.EAGER,
            mappedBy = "user")
   // @JsonManagedReference
-   @JsonBackReference(value="user-cryptowallet")
+ //  @JsonBackReference(value="user-cryptowallet")
    private Set<CryptoWallet> cryptowallet = new HashSet<>();
    
    @OneToOne(fetch = FetchType.EAGER,
            cascade =  CascadeType.ALL,
            mappedBy = "user")
    //@JsonManagedReference
-   @JsonBackReference(value="user-fiatwallet")
+   //@JsonBackReference(value="user-fiatwallet")
    
    private FiatWallet fiatwallet;
    
@@ -70,7 +70,7 @@ public class User  {
                joinColumns={@JoinColumn(name="id")}, 
                inverseJoinColumns={@JoinColumn(name="roleId")})
   // @JsonManagedReference
-   @JsonBackReference(value="user-role")
+  // @JsonBackReference(value="user-role")
    
    private Set<Role> role;
 

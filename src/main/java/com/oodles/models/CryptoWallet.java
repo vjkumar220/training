@@ -30,6 +30,7 @@ public class CryptoWallet {
 	 @ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "user_id", nullable = false)
 	 //@JsonBackReference
+	 @JsonBackReference(value="user-cryptowallet")
 	    private User user;
 public CryptoWallet()
 {

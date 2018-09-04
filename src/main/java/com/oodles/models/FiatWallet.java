@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
         allowGetters = true)
 public class FiatWallet {
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long walletId;
 	private Long balance;
 	private Long shadowBalance;
@@ -31,6 +31,7 @@ public class FiatWallet {
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
 	//@JsonBackReference
+	@JsonBackReference(value="user-fiatwallet")
     private User user;
 	public FiatWallet()
 	{

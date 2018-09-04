@@ -26,7 +26,7 @@ public class CurrencyService {
 		Long price=cryptoCurrency.getPrice();
 		CryptoCurrency cryptoname = cryptoCurrencyRepository.findBycoinName(cryptoCurrency.getCoinName());
 		CryptoCurrency cryptosymbol=cryptoCurrencyRepository.findBySymbol(cryptoCurrency.getSymbol());
-		if(cryptoname == null&&cryptosymbol==null){
+		if(cryptoname == null && cryptosymbol==null){
 			CryptoCurrency currency=new CryptoCurrency();
 			currency.setCoinName(coinName);
 			currency.setSymbol(symbol);

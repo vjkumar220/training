@@ -27,6 +27,7 @@ public class Role {
     private String roleType;
     @ManyToMany(mappedBy="role")
     //@JsonBackReference
+    @JsonBackReference(value="user-role")
     private Set<User> user;
 	public Long getRoleId() {
 		return roleId;
