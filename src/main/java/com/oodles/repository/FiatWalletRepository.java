@@ -6,5 +6,5 @@ import com.oodles.models.FiatWallet;
 
 @Repository
 public interface FiatWalletRepository extends JpaRepository<FiatWallet,Long> {
-
+	FiatWallet findBywalletId(Long walletId);
 }

@@ -1,6 +1,5 @@
 
 package com.oodles.models;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,6 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 //@EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"}, 
         allowGetters = true)
-public class User implements Serializable {
+public class User  {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -45,6 +45,10 @@ public class User implements Serializable {
     private String password;
    @NotNull
     private String country;	
+   @Transient
+   private String otp;
+   @Transient
+   private Long expirytime;
 
    @OneToMany(cascade = CascadeType.ALL,
            fetch = FetchType.EAGER,
@@ -114,6 +118,18 @@ public Long getId() {
 	
 	
 	
+	public String getOtp() {
+		return otp;
+	}
+	public void setOtp(String otp) {
+		this.otp = otp;
+	}
+	public Long getExpirytime() {
+		return expirytime;
+	}
+	public void setExpirytime(Long expirytime) {
+		this.expirytime = expirytime;
+	}
 	public Set<CryptoWallet> getCryptowallet() {
 		return cryptowallet;
 	}

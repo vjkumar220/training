@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import com.oodles.models.CryptoWallet;
 @Repository
 public interface CryptoWalletRepository extends JpaRepository<CryptoWallet,Long> {
-		 
+	CryptoWallet findBywalletId(Long walletId);	 
 }
