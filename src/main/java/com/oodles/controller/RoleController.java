@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.domain.Role;
 import com.oodles.domain.User;
+import com.oodles.domain.UserRoleDto;
 import com.oodles.exception.ResourceNotFoundException;
 import com.oodles.service.RoleService;
 import com.oodles.util.ResponseHandler;
@@ -24,7 +25,8 @@ public class RoleController {
 	Logger logger = LoggerFactory.getLogger(UserController.class);
 	@Autowired
 	RoleService roleService;
-	//creting role
+
+	// creating role
 	@PostMapping(value = "/role")
 	public Map createUser(@Valid @RequestBody Role role) {
 		Map output = null;
@@ -39,16 +41,16 @@ public class RoleController {
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, output);
 		}
 	}
-	
-	//Assing role to user
-	@PostMapping(value ="/role/{roleType}/{userId}")
-	public Map assingRoleToUser(@PathVariable String roleId , @PathVariable String userId) {
-		Map output=null;
-		logger.info("Role controller - assing role to user");
+
+	// Assign role to user
+	@PostMapping(value = "/assignrole")
+	public Map assingRoleToUser(@RequestBody UserRoleDto userRoleDto) {
+		Map output = null;
+		logger.info("Role controller - assign role to user");
 		try {
-			//output = roleService.
-			
-		}catch(ResourceNotFoundException e) {
+			logger.info("Role controller - assign role try to user");
+			output = roleService.assignRole(userRoleDto);
+		} catch (ResourceNotFoundException e) {
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, output);
 		}
 		return null;

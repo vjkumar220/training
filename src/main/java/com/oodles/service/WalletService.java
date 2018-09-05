@@ -1,14 +1,22 @@
 package com.oodles.service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.oodles.domain.CryptoWallet;
+import com.oodles.domain.CryptoWalletDto;
+import com.oodles.domain.FiatWallet;
+import com.oodles.domain.FiatWalletDto;
 import com.oodles.domain.User;
 import com.oodles.repository.CryptoWalletRepository;
 import com.oodles.repository.FiatCurrencyRepository;
+import com.oodles.repository.FiatWalletRepository;
 import com.oodles.repository.UserRepository;
 
 @Service
@@ -17,31 +25,63 @@ public class WalletService {
 	@Autowired
 	CryptoWalletRepository cryptoWalletRepository;
 	@Autowired
-	FiatCurrencyRepository fiatCurrencyRepository;
+	FiatWalletRepository fiatWalletRepository;
 	@Autowired
 	UserRepository userRepository;
 
 	// Creating crypto Wallet
-	public String createCryptoWallet(CryptoWallet cryptoWallet) {
+	public Map createCryptoWallet(CryptoWalletDto cryptoWallet) {
+		Map<String, Object> result = new HashMap<String, Object>();
 		logger.info("In service crypto wallet");
 		String coinName = cryptoWallet.getCoinName();
 		String walletType = cryptoWallet.getWalletType();
-		User user = cryptoWallet.getUser();
-		Optional<User> userId = userRepository.findById(user.getId());
-		if (userId.isPresent()) {
-			CryptoWallet newCoinName = cryptoWalletRepository.findByCoinName(coinName);
-			CryptoWallet newWalletType = cryptoWalletRepository.findByWalletType(walletType);
-			CryptoWallet newUser= cryptoWalletRepository.findByUser(user);
-			if (newCoinName == null && newWalletType == null ) {
+		Long shadowBalance = cryptoWallet.getShadowBalance();
+		Long balance = cryptoWallet.getBalance();
+		Long userId = cryptoWallet.getUserId();
+		Optional<User> user = userRepository.findById(userId);
+		if (user.isPresent()) {
+			User foundUser = user.get();
+			CryptoWallet newWalletType = cryptoWalletRepository.findByWalletTypeAndUser(walletType, foundUser);
+			if (newWalletType != null) {
 				CryptoWallet wallet = new CryptoWallet();
 				wallet.setCoinName(coinName);
 				wallet.setWalletType(walletType);
-				wallet.setUser(userId.get());
+				wallet.setShadowBalance(shadowBalance);
+				wallet.setBalance(balance);
+				wallet.setUser(foundUser);
 				cryptoWalletRepository.save(wallet);
-				return "YOUR WALLET IS ADDED...";
+				result.put("responseMessage", "success");
 			}
-		}
-		return "Your wallet is not added";
 
+		}
+		return result;
+	}
+
+	// Creating fiat Wallet
+	public Map createFiatWallet(FiatWalletDto fiatWallet) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		logger.info("In service fiat wallet");
+		String coinName = fiatWallet.getCoinName();
+		String walletType = fiatWallet.getWalletType();
+		Long shadowBalance = fiatWallet.getShadowBalance();
+		Long balance = fiatWallet.getBalance();
+		Long userId = fiatWallet.getUserId();
+		Optional<User> user = userRepository.findById(userId);
+		if (user.isPresent()) {
+			User foundUser = user.get();
+			FiatWallet newWalletType = fiatWalletRepository.findByWalletTypeAndUser(walletType, foundUser);
+			if (newWalletType == null) {
+				FiatWallet wallet = new FiatWallet();
+				wallet.setCoinName(coinName);
+				wallet.setWalletType(walletType);
+				wallet.setShadowBalance(shadowBalance);
+				wallet.setBalance(balance);
+				wallet.setUser(foundUser);
+				fiatWalletRepository.save(wallet);
+				result.put("responseMessage", "success");
+			}
+
+		}
+		return result;
 	}
 }

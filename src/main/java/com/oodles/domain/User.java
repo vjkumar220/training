@@ -22,14 +22,10 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
 public class User implements Serializable {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -57,7 +53,7 @@ public class User implements Serializable {
 	@NotNull
 	private String status = "inactive";
 
-	@OneToOne(mappedBy = "user")
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JsonBackReference(value = "for fiat wallet")
 	private FiatWallet fiatWallet;
 
@@ -159,6 +155,4 @@ public class User implements Serializable {
 	public void setCurrencyOrders(Set<CurrencyOrder> currencyOrders) {
 		this.currencyOrders = currencyOrders;
 	}
-
-
 }

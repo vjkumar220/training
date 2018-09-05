@@ -1,6 +1,7 @@
 package com.oodles.service;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.oodles.domain.Role;
 import com.oodles.domain.User;
+import com.oodles.domain.UserRoleDto;
 import com.oodles.repository.RoleRepository;
 import com.oodles.repository.UserRepository;
 
@@ -19,7 +21,7 @@ public class RoleService {
 	@Autowired
 	UserRepository userRepository;
 
-	// Creting Role
+	// Creating Role
 	public Map<Object, Object> createRole(Role role) {
 		Map<Object, Object> result = new HashMap<>();
 		String roleType = role.getRoleType();
@@ -35,10 +37,30 @@ public class RoleService {
 		return result;
 	}
 
-	public Map<?, ?> assingUserToRole(String roleType, String id) {
-		Role role = roleRepository.findByRoleType(roleType);
-		Optional<User> user = userRepository.findById(Long.parseLong(id));
+	// Assign Role
+	public Map assignRole(UserRoleDto userRoleDto) {
+		Map<Object, Object> result = new HashMap<>();
+		Long userId = userRoleDto.getUserId();
+		Long roleId = userRoleDto.getRoleId();
 
-		return null;
+		Optional<User> userValue = userRepository.findById(userId);
+		Optional<Role> roleValue = roleRepository.findById(roleId);
+
+		if (userValue.isPresent() && roleValue.isPresent()) {
+			User foundUser = userValue.get();
+			Role foundRole = roleValue.get();
+			HashSet roleSet = new HashSet<>();
+			roleSet.add(foundRole);
+			HashSet userSet = new HashSet<>();
+			userSet.add(foundUser);
+			foundUser.setRoles(roleSet);
+			foundRole.setUsers(userSet);
+			userRepository.save(foundUser);
+			result.put("responseMessage", "success");
+			return result;
+		} else {
+			result.put("responseMessage", "error");
+			return result;
+		}
 	}
 }

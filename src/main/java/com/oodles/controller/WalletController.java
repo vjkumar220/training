@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.domain.CryptoWallet;
+import com.oodles.domain.CryptoWalletDto;
+import com.oodles.domain.FiatWalletDto;
 import com.oodles.exception.ResourceNotFoundException;
 import com.oodles.service.WalletService;
 import com.oodles.util.ResponseHandler;
@@ -19,12 +21,12 @@ import com.oodles.util.ResponseHandler;
 public class WalletController {
 	Logger logger = LoggerFactory.getLogger(WalletController.class);
 	@Autowired
-	WalletService walletService;
+	private WalletService walletService;
 
-	String result = null;
+	private Map result = null;
 
 	@PostMapping(value = "/cryptowallet")
-	public Map createCryptoWallet(@RequestBody CryptoWallet cryptoWallet) {
+	public Map createCryptoWallet(@RequestBody CryptoWalletDto  cryptoWallet) {
 		logger.info("in create waller");
 		try {
 			logger.info("In create wallet try");
@@ -35,4 +37,18 @@ public class WalletController {
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 		}
 	}
+	
+	@PostMapping(value = "/fiatowallet")
+	public Map createFiatWallet(@RequestBody FiatWalletDto fiatWalletDto) {
+		logger.info("in create waller");
+		try {
+			logger.info("In create wallet try");
+			result = walletService.createFiatWallet(fiatWalletDto);
+			logger.info("Getting result",result); 
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+		} catch (ResourceNotFoundException e) {
+			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+		}
+	}
+
 }

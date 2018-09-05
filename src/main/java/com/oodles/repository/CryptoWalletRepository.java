@@ -6,7 +6,6 @@ import com.oodles.domain.CryptoWallet;
 import com.oodles.domain.User;
 
 public interface CryptoWalletRepository extends JpaRepository<CryptoWallet, Long>{
-	CryptoWallet findByCoinName(String coinName);
-	CryptoWallet findByWalletType(String walletType);
-	CryptoWallet findByUser(User user);
+	CryptoWallet findByWalletTypeAndUser(String wallet, User id);
+
 }
