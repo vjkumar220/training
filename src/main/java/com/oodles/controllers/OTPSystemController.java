@@ -14,7 +14,7 @@ import com.oodles.services.OTPService;
 @RestController
 public class OTPSystemController {
 	@Autowired
-	OTPService otpService;
+	private OTPService otpService;
 	@RequestMapping(value="/v1/verifyUser/{id}",method=RequestMethod.POST)
 	public ResponseEntity<Object>sendOTP(@PathVariable Long id) 
 	{

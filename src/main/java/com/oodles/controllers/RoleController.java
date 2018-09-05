@@ -1,7 +1,5 @@
 package com.oodles.controllers;
-
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -10,9 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.oodles.exceptions.ResourceNotFound;
-import com.oodles.exceptions.UserNotFoundException;
+import com.oodles.exceptions.ResponseHandler;
+import com.oodles.exceptions.ResourceNotFoundException;
 import com.oodles.models.RoleDTO;
 import com.oodles.services.RoleService;
 
@@ -23,31 +20,31 @@ private RoleService roleService;
 
 
 //Create a new role
-@RequestMapping(method = RequestMethod.GET, value = "/rest/createrole/{roleType}")
+@RequestMapping(method = RequestMethod.POST, value = "/rest/createrole/{roleType}")
 @ResponseBody
 public Map createUser(@PathVariable String roleType)  {
 	 Map result=null;
 	
 	try{
 	 result=roleService.createRole(roleType);
-		return ResourceNotFound.generateResponse(HttpStatus.OK, false, "success", null, result);
+		return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 	}
-	catch(UserNotFoundException exception){
-		return ResourceNotFound.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+	catch(ResourceNotFoundException exception){
+		return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 	}
 }
 // Create a new admin
-@RequestMapping(method = RequestMethod.GET, value = "/rest/assignrole/")
+@RequestMapping(method = RequestMethod.POST, value = "/rest/assignrole/")
 @ResponseBody
-public Map createUser(@RequestBody RoleDTO roleDTO)  {
+public Map assignRole(@RequestBody RoleDTO userRoleDTO)  {
 	 Map result=null;
 	
 	try{
-	 result=roleService.assignRole(roleDTO);
-		return ResourceNotFound.generateResponse(HttpStatus.OK, false, "success", null, result);
+	 result=roleService.assignRole(userRoleDTO);
+		return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 	}
-	catch(UserNotFoundException exception){
-		return ResourceNotFound.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+	catch(ResourceNotFoundException exception){
+		return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 	}
 }
 }

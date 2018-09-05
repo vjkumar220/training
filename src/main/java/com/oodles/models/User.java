@@ -45,11 +45,11 @@ public class User  {
     private String password;
    @NotNull
     private String country;	
-   @Transient
+  
    private String otp;
-   @Transient
+   private String confirmationToken;
    private Long expirytime;
-
+  
    @OneToMany(cascade = CascadeType.ALL,
            fetch = FetchType.EAGER,
            mappedBy = "user")
@@ -118,6 +118,12 @@ public Long getId() {
 	
 	
 	
+	public String getConfirmationToken() {
+		return confirmationToken;
+	}
+	public void setConfirmationToken(String confirmationToken) {
+		this.confirmationToken = confirmationToken;
+	}
 	public String getOtp() {
 		return otp;
 	}

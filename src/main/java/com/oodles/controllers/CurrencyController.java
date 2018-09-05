@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import com.oodles.exceptions.ResourceNotFound;
-import com.oodles.exceptions.UserNotFoundException;
+import com.oodles.exceptions.ResponseHandler;
+import com.oodles.exceptions.ResourceNotFoundException;
 import com.oodles.models.CryptoCurrency;
 import com.oodles.services.CurrencyService;
 
@@ -33,10 +33,10 @@ public Map addCurrency(@Valid @RequestBody CryptoCurrency cryptoCurrency)  {
 	Map result=null;
 	try{
 		 result=currencyService.addCurrency(cryptoCurrency);
-		 return com.oodles.exceptions.ResourceNotFound.generateResponse(HttpStatus.OK, false, "success", null, result);
+		 return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 	}
-	catch(com.oodles.exceptions.UserNotFoundException exception){
-		return com.oodles.exceptions.ResourceNotFound.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+	catch(ResourceNotFoundException exception){
+		return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 	}		
 }
 //View Currency
@@ -53,13 +53,13 @@ public Map updateCurrency(@PathVariable Long currencyId,@PathVariable String coi
 	CryptoCurrency cryptocurrency=null;
 try {
 	cryptocurrency =currencyService.updateCurrency(currencyId,coinName,fees,symbol,initialSupply,price);
-	return ResourceNotFound.generateResponse(HttpStatus.OK, false, "success", null, cryptocurrency);
+	return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, cryptocurrency);
 }
-catch(UserNotFoundException exception){
-	return ResourceNotFound.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, cryptocurrency);
+catch(ResourceNotFoundException exception){
+	return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, cryptocurrency);
 }
 catch(NoSuchElementException excep){
-	return ResourceNotFound.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, cryptocurrency);
+	return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, cryptocurrency);
 }
 }
 //Delete Currency
@@ -71,13 +71,13 @@ public Map deleteCurrency(@PathVariable String currencyId)
 		
 		try{
 		 result=currencyService.deleteCurrency(currencyId);
-			return ResourceNotFound.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 		}
-		catch(UserNotFoundException exception){
-			return ResourceNotFound.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+		catch(ResourceNotFoundException exception){
+			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, result);
 		}
 		catch(NoSuchElementException excep){
-			return ResourceNotFound.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, result);
 		}
 }
 }

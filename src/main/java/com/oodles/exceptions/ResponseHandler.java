@@ -3,7 +3,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
-public class ResourceNotFound {
+public class ResponseHandler {
 	public static Map<String, Object> generateResponse(HttpStatus status, boolean error, String message, Object extendedMessage, Object responseObj) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {

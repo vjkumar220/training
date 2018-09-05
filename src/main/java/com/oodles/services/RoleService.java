@@ -1,9 +1,9 @@
 package com.oodles.services;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,6 @@ import com.oodles.models.RoleDTO;
 import com.oodles.models.User;
 import com.oodles.repository.RoleRepository;
 import com.oodles.repository.UserRepository;
-
 @Service
 public class RoleService {
 @Autowired
@@ -33,26 +32,33 @@ private UserRepository userRepository;
 		}
 		return result;
 	}
-	// create a new admin
-	public Map<Long,Object> assignRole(RoleDTO roleDTO)
-	{
-	Map<Long,Object> result=new HashMap<Long,Object>();
-	Long id=roleDTO.getUserId();
-	Long roleid=roleDTO.getRoleId(); 	
+	// Assign Role
+		public Map<String,Object> assignRole(RoleDTO userRoleDto) {
+			Map<String, Object> result = new HashMap<>();
+			Long userId = userRoleDto.getUserId();
+			Long roleId = userRoleDto.getRoleId();
+			
+			Optional<User> userValue=userRepository.findById(userId);
+			Optional<Role> roleValue=roleRepository.findByroleId(roleId);
+			
+			if(userValue.isPresent() && roleValue.isPresent())
+			{
+				User foundUser=userValue.get();
+				Role foundRole=roleValue.get();
+				
+				HashSet roleSet=new HashSet<>();
+				roleSet.add(foundRole);
+				HashSet userSet = new HashSet<>();
+				userSet.add(foundUser);
+				foundUser.setRole(roleSet);
+				foundRole.setUser(userSet);
+				userRepository.save(foundUser);
+				result.put("responseMessage", "success");
+				return result;
+			}
+			else
+			{
+				result.put("responseMessage", "error");
+			return result;
+			}}}
 		
-	//Role role=new Role();
-	
-	if(!(id==null) &&(!(roleid==null)))
-	{
-		User newuser=new User();
-        newuser.setId(id);
-        Optional<Role>role=roleRepository.findByroleId(roleid);
-		if(role.isPresent())
-		{
-		newuser.setRole((Set<Role>) role.get());
-		userRepository.save(newuser);
-		//result.put("responseMessage", "success");
-		}
-	}return result;
-	}}
-	
