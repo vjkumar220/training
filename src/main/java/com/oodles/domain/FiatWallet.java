@@ -19,10 +19,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 public class FiatWallet implements Serializable{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long fiatWalletId;
@@ -75,8 +71,5 @@ public class FiatWallet implements Serializable{
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-	//setters getters
-
 	
 }

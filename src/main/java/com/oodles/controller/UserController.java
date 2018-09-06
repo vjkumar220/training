@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.domain.Otp;
 import com.oodles.domain.User;
-import com.oodles.domain.VerifyEmail;
+import com.oodles.domain.EmailDto;
 import com.oodles.exception.ResourceNotFoundException;
 import com.oodles.service.UserService;
 import com.oodles.util.ResponseHandler;
@@ -155,7 +155,7 @@ public class UserController {
 
 	// Verify Email
 	@PutMapping(value = "signup/{emailAddress}/verification")
-	public Map<String, Object> verifyMail(@PathVariable String emailAddress, @RequestBody VerifyEmail verifyEmail) {
+	public Map<String, Object> verifyMail(@PathVariable String emailAddress, @RequestBody EmailDto verifyEmail) {
 		logger.info("Mail controller send mail");
 		String result = null;
 		try {

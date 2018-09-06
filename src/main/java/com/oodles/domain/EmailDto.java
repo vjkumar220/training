@@ -2,7 +2,7 @@ package com.oodles.domain;
 
 import javax.validation.constraints.Email;
 
-public class VerifyEmail {
+public class EmailDto {
 
 	@Email(message = "Enter Valid Email Id")
 	private String email;

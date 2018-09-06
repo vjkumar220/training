@@ -20,54 +20,50 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
 public class User implements Serializable {
-	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	@NotNull
 	@Size(min = 2, message = "Name should have atleast 2 characters")
 	private String name;
-	@NotNull
 	@Email(message = "Enter Valid Email Id")
 	private String email;
-	@NotNull
-	@NotBlank(message = "Enter Password")
 	// in this regexp checking atleast one upper and lower cases, number, special
 	// char
 	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&].{8,}$", message = " Enter Password Valid password")
 	private String Password;
 	// In this regexp we checking phone number length 10 and number starting with
 	// 6-9
-	@NotNull
 	@Pattern(regexp = "^[6-9]\\d{9}$")
 	private String phoneNumber;
-	@NotNull
 	@Size(min = 2, message = "Enter the valid country name")
 	private String country;
-	@NotNull
+	
 	private String status = "inactive";
 
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JsonBackReference(value = "for fiat wallet")
 	private FiatWallet fiatWallet;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-
 	private Set<CryptoWallet> cryptoWallets;
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<BuyOrder> buyOrder; 
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<SellOrder> sellOrder; 
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "roleId"))
 	private Set<Role> roles;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<CurrencyOrder> currencyOrders;
-
+	private String mobileCode;
+	private String emailCode;
+	
 	public Long getId() {
 		return id;
 	}
@@ -148,11 +144,36 @@ public class User implements Serializable {
 		this.roles = roles;
 	}
 
-	public Set<CurrencyOrder> getCurrencyOrders() {
-		return currencyOrders;
+	public Set<BuyOrder> getBuyOrder() {
+		return buyOrder;
 	}
 
-	public void setCurrencyOrders(Set<CurrencyOrder> currencyOrders) {
-		this.currencyOrders = currencyOrders;
+	public void setBuyOrder(Set<BuyOrder> buyOrder) {
+		this.buyOrder = buyOrder;
 	}
+
+	public Set<SellOrder> getSellOrder() {
+		return sellOrder;
+	}
+
+	public void setSellOrder(Set<SellOrder> sellOrder) {
+		this.sellOrder = sellOrder;
+	}
+
+	public String getMobileCode() {
+		return mobileCode;
+	}
+
+	public void setMobileCode(String mobileCode) {
+		this.mobileCode = mobileCode;
+	}
+
+	public String getEmailCode() {
+		return emailCode;
+	}
+
+	public void setEmailCode(String emailCode) {
+		this.emailCode = emailCode;
+	}
+	
 }

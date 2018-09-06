@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.oodles.domain.Otp;
 import com.oodles.domain.User;
-import com.oodles.domain.VerifyEmail;
+import com.oodles.domain.EmailDto;
 import com.oodles.repository.UserRepository;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
@@ -33,7 +33,8 @@ public class UserService {
 	}
 
 	private Map<String, Otp> otp_data = new HashMap<>();
-	private Map<String, VerifyEmail> email_data = new HashMap<>();
+	private Map<String, EmailDto> email_data = new HashMap<>();
+	private String id = null;
 	// get it from properties file
 	private final static String ACCOUNT_SID = "ACe2f058ec28715b76bdeaac2da52d1324";
 	private final static String AUTH_ID = "66384b401747451a0cf47404f3ae8d4c";
@@ -111,21 +112,25 @@ public class UserService {
 		}
 		return user;
 	}
-// Send OTP
+
+	// Send OTP
 	public String sendOTP(String userId) {
 		Optional<User> value = userRepository.findById(Long.parseLong(userId));
 		User user = value.get();
-		String mobilenumber = user.getPhoneNumber();
-		System.out.println(mobilenumber);
-		Otp otp = new Otp();
-		otp.setMobileNumber(user.getPhoneNumber());
-		otp.setOtp(String.valueOf((int) (Math.random() * (10000 - 1000)) + 1000));
-		otp.setExpirytime(System.currentTimeMillis() + 500000);
-		otp_data.put(user.getPhoneNumber(), otp);
-		Message.creator(new PhoneNumber("+918700153661"), new PhoneNumber("+19852384430"),
-				"Your OTP is" + "" + otp.getOtp()).create();
-		return "Yor OTP send successfully..!!";
+		if (value.isPresent() && user.getPhoneNumber() != null) {
+			Otp otp = new Otp();
+			otp.setMobileNumber(user.getPhoneNumber());
+			otp.setOtp(String.valueOf((int) (Math.random() * (10000 - 1000)) + 1000));
+			otp.setExpirytime(System.currentTimeMillis() + 500000);
+			otp_data.put(user.getPhoneNumber(), otp);
+			id = userId;
+			Message.creator(new PhoneNumber("+918700153661"), new PhoneNumber("+19852384430"),
+					"Your OTP is" + "" + otp.getOtp()).create();
+			return "Your OTP send successfully..!!";
+		}
+		return "User not found";
 	}
+
 	// verify otp
 	public String verifyOtp(String mobilenumber, Otp requestOTP) {
 		if (requestOTP.getOtp() == null || requestOTP.getOtp().trim().length() <= 0) {
@@ -136,7 +141,6 @@ public class UserService {
 			if (otp != null) {
 				if (otp.getExpirytime() >= System.currentTimeMillis()) {
 					if (requestOTP.getOtp().equals(otp.getOtp())) {
-						otp_data.remove(mobilenumber);
 						return "OTP is verified successfully";
 					}
 					return "OTP is invalid";
@@ -147,14 +151,15 @@ public class UserService {
 		}
 		return "Mobile number is not found";
 	}
-	//  Send mail
+
+	// Send mail
 	public String sendMail(String userId) {
 		Optional<User> value = userRepository.findById(Long.parseLong(userId));
 		User user = value.get();
 		String emailTo = user.getEmail();
 		String otpCode = String.valueOf((int) (Math.random() * (10000 - 1000)) + 1000);
 		String body = "Your Verification OTP-" + otpCode;
-		VerifyEmail verifyEmail = new VerifyEmail();
+		EmailDto verifyEmail = new EmailDto();
 		verifyEmail.setEmail(emailTo);
 		verifyEmail.setExpirytime(System.currentTimeMillis() + 200000);
 		verifyEmail.setOtp(otpCode);
@@ -167,18 +172,19 @@ public class UserService {
 		javaMailSender.send(mail);
 		return "Your verification code has been send to your mail";
 	}
-	
-	public String verifyEmail(String email , VerifyEmail verifyEmail) {
+
+	// Verify Email
+	public String verifyEmail(String email, EmailDto verifyEmail) {
 		if (verifyEmail.getOtp() == null || verifyEmail.getOtp().trim().length() <= 0) {
 			return "Please provide Verification code";
 		}
 		if (email_data.containsKey(email)) {
-			Otp otp = otp_data.get(email);
-			if (otp != null) {
-				if (otp.getExpirytime() >= System.currentTimeMillis()) {
-					if (verifyEmail.getOtp().equals(otp.getOtp())) {
+			EmailDto emailDto = email_data.get(email);
+			if (emailDto != null) {
+				if (emailDto.getExpirytime() >= System.currentTimeMillis()) {
+					if (verifyEmail.getOtp().equals(emailDto.getOtp())) {
 						email_data.remove(email);
-						return "OTP is verified successfully";
+						return "Verificarion code is verified successfully";
 					}
 					return "Verfication code is invalid";
 				}
@@ -188,5 +194,5 @@ public class UserService {
 		}
 		return "Email Address is not found";
 	}
-	
+
 }

@@ -3,6 +3,7 @@ package com.oodles.domain;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,7 +25,7 @@ public class CryptoWallet implements Serializable {
 	private String coinName;
 	private String walletType;
 
-	@ManyToOne // (fetch = FetchType.EAGER)
+	@ManyToOne (fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	@JsonBackReference(value = "for Crypto Wallet")
 
