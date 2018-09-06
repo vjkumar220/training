@@ -1,4 +1,4 @@
-package com.oodles.services;
+/*package com.oodles.services;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,7 +54,7 @@ public EmailService(JavaMailSender javaMailSender) {
 }return result
 }
 
-public Map<String,Object> verifyMail(User user) 
+public Map<String,Object> verifyaMail(User user) 
 {
 	Map<String, Object> result = new HashMap<String, Object>();
 
@@ -72,3 +72,4 @@ public Map<String,Object> verifyMail(User user)
 
 
 }
+*/
