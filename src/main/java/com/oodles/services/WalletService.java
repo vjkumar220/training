@@ -64,7 +64,8 @@ private CryptoWalletRepository cryptoWalletRepository;
 			result.put("responseMessage", "success");
 			}
 		
-	}return result;
+	}
+		return result;
 	}
 	
 	//Create Crypto Wallet	
@@ -102,7 +103,30 @@ private CryptoWalletRepository cryptoWalletRepository;
 			result.put("responseMessage", "success");
 			}
 		
-	}return result;
 	}
+		return result;
+	}
+	// Fiat wallet Deposit
+	/*public User fiatDeposit(Long userid,Long amount,String walletType)
+	{
+		Optional<User> value=userRepository.findById(userid);
+		 User user = value.get();
+		 if(value.isPresent())
+		{
+			 FiatWallet  fwType = fiatWalletRepository.findByWalletTypeAndUser(walletType,user);
+
+				if(fwType==null)
+				//if(fwType.equals(walletType))
+				{
+			 FiatWallet newFiatWallet=new FiatWallet();
+			 
+			 Long currentBalance=newFiatWallet.getBalance();
+			 Long updatedBalance=currentBalance+amount;
+			newFiatWallet.setBalance(updatedBalance);
+			 fiatWalletRepository.save(newFiatWallet);
+		}	*/	
+		
+	/*}
+		 return user;*/
 }
 

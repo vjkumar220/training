@@ -8,4 +8,5 @@ import com.oodles.models.User;
 @Repository
 public interface FiatWalletRepository extends JpaRepository<FiatWallet,Long> {
 	FiatWallet findByWalletTypeAndUser(String walletType,User userid);
+	/*FiatWallet findById(User userid);*/
 }

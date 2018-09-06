@@ -45,7 +45,7 @@ public class User  {
     private String password;
    @NotNull
     private String country;	
-  
+   private boolean enabled;
    private String otp;
    private String confirmationToken;
    private Long expirytime;
@@ -73,11 +73,22 @@ public class User  {
   // @JsonBackReference(value="user-role")
    
    private Set<Role> role;
-
+//mapping with buy order
+   @OneToMany(cascade = CascadeType.ALL,
+           fetch = FetchType.EAGER,
+           mappedBy = "user")
+   private Set<BuyOrder> buyorder = new HashSet<>();
+   // mapping with sell order
+   @OneToMany(cascade = CascadeType.ALL,
+           fetch = FetchType.EAGER,
+           mappedBy = "user")
+   private Set<SellOrder> sellorder = new HashSet<>();
 
    public User() {
-
-   } 
+       super();
+       
+       this.enabled = false;
+   }
 public Long getId() {
 		return id;
 	}
@@ -109,6 +120,24 @@ public Long getId() {
 		this.password = password;
 	}
 
+	public boolean isEnabled() {
+		return enabled;
+	}
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	public Set<BuyOrder> getBuyorder() {
+		return buyorder;
+	}
+	public void setBuyorder(Set<BuyOrder> buyorder) {
+		this.buyorder = buyorder;
+	}
+	public Set<SellOrder> getSellorder() {
+		return sellorder;
+	}
+	public void setSellorder(Set<SellOrder> sellorder) {
+		this.sellorder = sellorder;
+	}
 	public String getCountry() {
 		return country;
 	}
