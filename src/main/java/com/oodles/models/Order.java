@@ -4,75 +4,109 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
-public class SellOrder {
+@Table(name = "Orders")
+public class Order {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     
-	private Long sellOrderId;
+	private Long orderId;
+	@Enumerated(EnumType.STRING)
+   
+	private OrderType orderType; 
 	private Long amount;
-	private Long fee;
+	private Long coinQuantity;
 	private String coinName;
-	private String status;
+	  @Enumerated(EnumType.STRING)
+	    
+	    private  OrderStatus status;
+	
 	  @Column(name="timeStamp", columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
 	   @Temporal(TemporalType.TIMESTAMP)
 	private Date orderCreatedOn;
 	  
 	  @ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "user_id", nullable = false)
-	 //@JsonBackReference
-	 @JsonBackReference(value="user-sellorder")
+	 @JsonBackReference(value="user-order")
 	    private User user;
-	  
-	  
-	  
-	  
-	public Long getSellOrderId() {
-		return sellOrderId;
+
+	public Long getOrderId() {
+		return orderId;
 	}
-	public void setSellOrderId(Long sellOrderId) {
-		this.sellOrderId = sellOrderId;
+
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
 	}
+
+	public OrderType getOrderType() {
+		return orderType;
+	}
+
+	public void setOrderType(OrderType orderType) {
+		this.orderType = orderType;
+	}
+
 	public Long getAmount() {
 		return amount;
 	}
+
 	public void setAmount(Long amount) {
 		this.amount = amount;
 	}
-	public Long getFee() {
-		return fee;
-	}
-	public void setFee(Long fee) {
-		this.fee = fee;
-	}
+
 	public String getCoinName() {
 		return coinName;
 	}
+
 	public void setCoinName(String coinName) {
 		this.coinName = coinName;
 	}
-	public String getStatus() {
+
+	public OrderStatus getStatus() {
 		return status;
 	}
-	public void setStatus(String status) {
+
+	public void setStatus(OrderStatus status) {
 		this.status = status;
 	}
+
 	public Date getOrderCreatedOn() {
 		return orderCreatedOn;
 	}
+
 	public void setOrderCreatedOn(Date orderCreatedOn) {
 		this.orderCreatedOn = orderCreatedOn;
 	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Long getCoinQuantity() {
+		return coinQuantity;
+	}
+
+	public void setCoinQuantity(Long coinQuantity) {
+		this.coinQuantity = coinQuantity;
+	}
+	
 	
 	
 }
