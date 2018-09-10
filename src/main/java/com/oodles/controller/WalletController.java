@@ -38,7 +38,7 @@ public class WalletController {
 		}
 	}
 	
-	@PostMapping(value = "/fiatowallet")
+	@PostMapping(value = "/fiatwallet")
 	public Map createFiatWallet(@RequestBody FiatWalletDto fiatWalletDto) {
 		logger.info("in create waller");
 		try {

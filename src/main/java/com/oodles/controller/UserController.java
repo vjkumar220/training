@@ -42,7 +42,6 @@ public class UserController {
 		logger.info("UserController-create value start");
 		try {
 			logger.info("UserController - create value in try");
-
 			output = userService.createUser(user);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, output);
 		} catch (ResourceNotFoundException e) {
@@ -54,7 +53,6 @@ public class UserController {
 	// getting all user
 	@GetMapping(value = "/users")
 	public List<User> viewAllUsers() {
-
 		List<User> result = userService.retrieveAllUser();
 		return result;
 	}
@@ -66,10 +64,8 @@ public class UserController {
 		try {
 			result = userService.findUserById(id);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-
 		} catch (ResourceNotFoundException ex) {
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, output);
-
 		} catch (NoSuchElementException ex) {
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, output);
 

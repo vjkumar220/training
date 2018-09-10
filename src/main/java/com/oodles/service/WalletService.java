@@ -38,11 +38,16 @@ public class WalletService {
 		Long shadowBalance = cryptoWallet.getShadowBalance();
 		Long balance = cryptoWallet.getBalance();
 		Long userId = cryptoWallet.getUserId();
+		System.out.println(coinName+""+walletType+""+shadowBalance+""+balance+""+ userId);
+		
 		Optional<User> user = userRepository.findById(userId);
 		if (user.isPresent()) {
+			logger.info("in user if");
 			User foundUser = user.get();
 			CryptoWallet newWalletType = cryptoWalletRepository.findByWalletTypeAndUser(walletType, foundUser);
+			System.out.println(newWalletType);
 			if (newWalletType != null) {
+				logger.info("logger in newWalletType");
 				CryptoWallet wallet = new CryptoWallet();
 				wallet.setCoinName(coinName);
 				wallet.setWalletType(walletType);
@@ -50,6 +55,7 @@ public class WalletService {
 				wallet.setBalance(balance);
 				wallet.setUser(foundUser);
 				cryptoWalletRepository.save(wallet);
+				logger.info("seding result by service");
 				result.put("responseMessage", "success");
 			}
 

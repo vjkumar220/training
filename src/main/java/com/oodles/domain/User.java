@@ -59,6 +59,9 @@ public class User implements Serializable {
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Orders> orders;
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<FiatDeposit> fiatDeposit;
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "roleId"))
@@ -163,6 +166,22 @@ public class User implements Serializable {
 
 	public void setEmailCode(String emailCode) {
 		this.emailCode = emailCode;
+	}
+
+	public Set<Orders> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(Set<Orders> orders) {
+		this.orders = orders;
+	}
+
+	public Set<FiatDeposit> getFiatDeposit() {
+		return fiatDeposit;
+	}
+
+	public void setFiatDeposit(Set<FiatDeposit> fiatDeposit) {
+		this.fiatDeposit = fiatDeposit;
 	}
 
 }
