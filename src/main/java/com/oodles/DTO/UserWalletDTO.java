@@ -1,4 +1,4 @@
-package com.oodles.models;
+package com.oodles.DTO;
 public class UserWalletDTO {
 	private Long balance;
     private String coinName;

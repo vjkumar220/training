@@ -19,7 +19,7 @@ public class Transaction {
 	  private TransactionStatus status;
 	 private Long exchangeRate;
 	 private Long netAmount;
-	private Long fees;
+	private double fees;
 	 private Long grossAmount;
 	public Long getTransactionID() {
 		return transactionID;
@@ -57,10 +57,11 @@ public class Transaction {
 	public void setNetAmount(Long netAmount) {
 		this.netAmount = netAmount;
 	}
-	public Long getFees() {
+	
+	public double getFees() {
 		return fees;
 	}
-	public void setFees(Long fees) {
+	public void setFees(double fees) {
 		this.fees = fees;
 	}
 	public Long getGrossAmount() {

@@ -17,9 +17,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
-@Table(name = "Orders")
-public class Order {
+@Table(name="MarketOrders")
+public class MarketOrder {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     
@@ -27,7 +28,7 @@ public class Order {
 	@Enumerated(EnumType.STRING)
    
 	private OrderType orderType; 
-	private Long amount;
+	private Long MarketPrice;
 	private Long coinQuantity;
 	private String coinName;
 	  @Enumerated(EnumType.STRING)
@@ -59,12 +60,20 @@ public class Order {
 		this.orderType = orderType;
 	}
 
-	public Long getAmount() {
-		return amount;
+	public Long getMarketPrice() {
+		return MarketPrice;
 	}
 
-	public void setAmount(Long amount) {
-		this.amount = amount;
+	public void setMarketPrice(Long marketPrice) {
+		MarketPrice = marketPrice;
+	}
+
+	public Long getCoinQuantity() {
+		return coinQuantity;
+	}
+
+	public void setCoinQuantity(Long coinQuantity) {
+		this.coinQuantity = coinQuantity;
 	}
 
 	public String getCoinName() {
@@ -99,14 +108,5 @@ public class Order {
 		this.user = user;
 	}
 
-	public Long getCoinQuantity() {
-		return coinQuantity;
-	}
 
-	public void setCoinQuantity(Long coinQuantity) {
-		this.coinQuantity = coinQuantity;
-	}
-	
-	
-	
 }

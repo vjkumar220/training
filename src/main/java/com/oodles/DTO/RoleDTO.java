@@ -1,4 +1,4 @@
-package com.oodles.models;
+package com.oodles.DTO;
 public class RoleDTO {
 private Long userId;
 private Long roleId;

@@ -8,8 +8,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.oodles.DTO.RoleDTO;
 import com.oodles.models.Role;
-import com.oodles.models.RoleDTO;
 import com.oodles.models.User;
 import com.oodles.repository.RoleRepository;
 import com.oodles.repository.UserRepository;

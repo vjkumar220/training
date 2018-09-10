@@ -38,7 +38,9 @@ public class UserService {
 			newUser.setCountry(country);
 			userRepository.save(newUser);
 			result.put("responseMessage", "success");
+			return result;
 		}
+		result.put("responseMessage", "Email or mobile number exists");
 		return result;
 	}
 	//Get All detail

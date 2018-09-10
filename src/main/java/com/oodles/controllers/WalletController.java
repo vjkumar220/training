@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.oodles.DTO.FiatApprovalDTO;
+import com.oodles.DTO.FiatDepositDTO;
+import com.oodles.DTO.UserWalletDTO;
 import com.oodles.exceptions.ResourceNotFoundException;
 import com.oodles.exceptions.ResponseHandler;
-import com.oodles.models.UserWalletDTO;
 import com.oodles.services.WalletService;
 
 @RestController
@@ -51,6 +53,40 @@ public Map createCryptoWallet(@RequestBody UserWalletDTO userWalletDTO)  {
 	}
 	catch(ResourceNotFoundException exception){
 		return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+	}		
+}
+@RequestMapping(method = RequestMethod.POST, value = "/v1/deposit")
+
+public Map createFiatDeposit(@RequestBody FiatDepositDTO fiatDepositDTO)  {
+	Map result=null;
+	try{
+		logger.info("Entered in create fiatwallet");
+		logger.info("userWalletDTO ="+fiatDepositDTO);
+		 result=walletService.createFiatDeposit(fiatDepositDTO);
+		 logger.info("created fiatwallet");
+		 return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			
+			
+	}
+	catch(ResourceNotFoundException exception){	
+		return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
+	}		
+}
+//Admin Approval
+@RequestMapping(method = RequestMethod.POST, value = "/v1/deposit")
+
+public Map fiatDepositApproval(@RequestBody FiatApprovalDTO fiatApprovalDTO)  {
+	Map result=null;
+	try{
+		
+		 result=walletService.fiatDepositApproval(fiatApprovalDTO);
+		 
+		 return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			
+			
+	}
+	catch(ResourceNotFoundException exception){	
+		return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
 	}		
 }
 }

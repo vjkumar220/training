@@ -9,11 +9,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.oodles.DTO.FiatApprovalDTO;
+import com.oodles.DTO.FiatDepositDTO;
+import com.oodles.DTO.UserWalletDTO;
 import com.oodles.models.CryptoWallet;
+import com.oodles.models.DepositStatus;
+import com.oodles.models.FiatDeposit;
 import com.oodles.models.FiatWallet;
 import com.oodles.models.User;
-import com.oodles.models.UserWalletDTO;
 import com.oodles.repository.CryptoWalletRepository;
+import com.oodles.repository.FiatDepositRepository;
 import com.oodles.repository.FiatWalletRepository;
 import com.oodles.repository.UserRepository;
 
@@ -28,7 +33,8 @@ private CryptoWalletRepository cryptoWalletRepository;
 
 	@Autowired
 	private UserRepository userRepository;
-
+@Autowired
+private FiatDepositRepository fiatDepositRepository;
 
 //create a Fiat wallet
 	public Map<String, Object> createFiatWallet(UserWalletDTO userWalletDTO) {
@@ -106,8 +112,8 @@ private CryptoWalletRepository cryptoWalletRepository;
 	}
 		return result;
 	}
-	// Fiat wallet Deposit
-	/*public User fiatDeposit(Long userid,Long amount,String walletType)
+/*	// Fiat wallet Deposit
+	public User fiatDeposit(Long userid,Long amount,String walletType)
 	{
 		Optional<User> value=userRepository.findById(userid);
 		 User user = value.get();
@@ -124,9 +130,75 @@ private CryptoWalletRepository cryptoWalletRepository;
 			 Long updatedBalance=currentBalance+amount;
 			newFiatWallet.setBalance(updatedBalance);
 			 fiatWalletRepository.save(newFiatWallet);
-		}	*/	
+		}	
 		
-	/*}
-		 return user;*/
+	}
+		 return user;
+}*/
+//fiat Wallet Deposit
+	
+	public Map<String, Object> createFiatDeposit(FiatDepositDTO fiatDepositDTO) {
+		logger.info("create deposit request");
+		Map<String, Object> result = new HashMap<String, Object>();
+		String walletType=fiatDepositDTO.getWalletType();
+		Long amount=fiatDepositDTO.getAmount();
+		Long userId=fiatDepositDTO.getUserId();
+		//logger
+			Optional<User>user=userRepository.findById(userId);
+			
+			if(user.isPresent())
+			{
+			
+				User foundUser=user.get();
+				
+			FiatDeposit  fwType = fiatDepositRepository.findByWalletTypeAndUser(walletType,foundUser);
+			if(fwType==null)
+			{
+				FiatDeposit newFiatDeposit=new FiatDeposit();
+				newFiatDeposit.setAmount(amount);
+				newFiatDeposit.setWalletType(walletType);
+				DepositStatus status= newFiatDeposit.getStatus();
+				newFiatDeposit.setStatus(status.PENDING);
+				newFiatDeposit.setUser(foundUser);
+				fiatDepositRepository.save(newFiatDeposit);
+				result.put("responseMessage", "success");
+				return result;
+			}
+			
+	}
+			result.put("responseMessage", "user id donot exist");	
+		return result;
+	
+	}	
+	
+	
+	//Admin Approval 
+	
+	public Map<String, Object>fiatDepositApproval(FiatApprovalDTO fiatApprovalDTO)
+	{
+		Map<String, Object> result = new HashMap<String, Object>();
+		String newstatus= fiatApprovalDTO.getStatus().toString();
+		Long userId=fiatApprovalDTO.getUserId();
+	
+	Optional<FiatDeposit>user=fiatDepositRepository.findById(userId);
+	
+	
+	if(user.isPresent()) 
+	{
+		FiatDeposit foundUser=user.get();
+		if(newstatus.equalsIgnoreCase("APPROVED"))
+		{
+		FiatDeposit newfiatdeposit=new FiatDeposit();
+		Long amount=newfiatdeposit.getAmount();
+		 FiatWallet newFiatWallet=new FiatWallet();
+		 Long currentBalance=newFiatWallet.getBalance();
+		 
+		 Long updatedBalance=currentBalance+amount;
+		newFiatWallet.setBalance(updatedBalance);
+		 fiatWalletRepository.save(newFiatWallet);
+		
+	}	
 }
-
+	return result;
+}
+}

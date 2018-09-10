@@ -77,8 +77,14 @@ public class User  {
    @OneToMany(cascade = CascadeType.ALL,
            fetch = FetchType.EAGER,
            mappedBy = "user")
-   private Set<Order> order = new HashSet<>();
-
+   private Set<LimitOrder> order = new HashSet<>();
+//mapping with fiat deposit
+   @OneToOne(fetch = FetchType.EAGER,
+           cascade =  CascadeType.ALL,
+           mappedBy = "user")
+  
+   
+   private FiatDeposit fiatdeposit;
    public User() {
        super();
        
@@ -189,12 +195,20 @@ public void setRole(Set<Role> role) {
 	this.role = role;
 }
 
-public Set<Order> getOrder() {
+public Set<LimitOrder> getOrder() {
 	return order;
 }
 
-public void setOrder(Set<Order> order) {
+public void setOrder(Set<LimitOrder> order) {
 	this.order = order;
+}
+
+public FiatDeposit getFiatdeposit() {
+	return fiatdeposit;
+}
+
+public void setFiatdeposit(FiatDeposit fiatdeposit) {
+	this.fiatdeposit = fiatdeposit;
 }
 
 	

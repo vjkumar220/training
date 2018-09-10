@@ -1,9 +1,11 @@
-package com.oodles.models;
+package com.oodles.DTO;
+
+import com.oodles.models.OrderType;
 
 public class OrderDTO {
 	
 	private OrderType orderType; 
-	private Long amount;
+	private Long desiredPrice;
 	
 	private String coinName;
 	private Long coinQuantity;
@@ -22,13 +24,14 @@ public class OrderDTO {
 	public void setOrderType(OrderType orderType) {
 		this.orderType = orderType;
 	}
-	public Long getAmount() {
-		return amount;
-	}
-	public void setAmount(Long amount) {
-		this.amount = amount;
-	}
 	
+	
+	public Long getDesiredPrice() {
+		return desiredPrice;
+	}
+	public void setDesiredPrice(Long desiredPrice) {
+		this.desiredPrice = desiredPrice;
+	}
 	public String getCoinName() {
 		return coinName;
 	}
