@@ -7,5 +7,7 @@ import com.oodles.domain.CryptoCurrency;
 
 @Repository
 public interface CurrencyRepository extends JpaRepository<CryptoCurrency, Long> {
+	
+	CryptoCurrency findByCoinName(String coinName);
 
 }

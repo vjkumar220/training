@@ -15,7 +15,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -28,21 +27,28 @@ public class User implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	@NotNull(message = "Enter the name")
 	@Size(min = 2, message = "Name should have atleast 2 characters")
 	private String name;
+	@NotNull(message = "Enter the email")
 	@Email(message = "Enter Valid Email Id")
 	private String email;
+
 	// in this regexp checking atleast one upper and lower cases, number, special
 	// char
+	@NotNull(message = "Enter the password")
 	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&].{8,}$", message = " Enter Password Valid password")
 	private String Password;
+
 	// In this regexp we checking phone number length 10 and number starting with
 	// 6-9
+	@NotNull(message = "Enter the phone number")
 	@Pattern(regexp = "^[6-9]\\d{9}$")
 	private String phoneNumber;
+	@NotNull(message = "Enter the country")
 	@Size(min = 2, message = "Enter the valid country name")
 	private String country;
-	
+
 	private String status = "inactive";
 
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -52,17 +58,16 @@ public class User implements Serializable {
 	private Set<CryptoWallet> cryptoWallets;
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<BuyOrder> buyOrder; 
-	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<SellOrder> sellOrder; 
+	private Set<Orders> orders;
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "roleId"))
 	private Set<Role> roles;
 
 	private String mobileCode;
+	
 	private String emailCode;
+
 	
 	public Long getId() {
 		return id;
@@ -144,22 +149,6 @@ public class User implements Serializable {
 		this.roles = roles;
 	}
 
-	public Set<BuyOrder> getBuyOrder() {
-		return buyOrder;
-	}
-
-	public void setBuyOrder(Set<BuyOrder> buyOrder) {
-		this.buyOrder = buyOrder;
-	}
-
-	public Set<SellOrder> getSellOrder() {
-		return sellOrder;
-	}
-
-	public void setSellOrder(Set<SellOrder> sellOrder) {
-		this.sellOrder = sellOrder;
-	}
-
 	public String getMobileCode() {
 		return mobileCode;
 	}
@@ -175,5 +164,5 @@ public class User implements Serializable {
 	public void setEmailCode(String emailCode) {
 		this.emailCode = emailCode;
 	}
-	
+
 }

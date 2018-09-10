@@ -133,6 +133,7 @@ public class UserService {
 
 	// verify otp
 	public String verifyOtp(String mobilenumber, Otp requestOTP) {
+		User mobileNumber = userRepository.findByPhoneNumber(requestOTP.getMobileNumber());
 		if (requestOTP.getOtp() == null || requestOTP.getOtp().trim().length() <= 0) {
 			return "Please provide OTP";
 		}
@@ -141,6 +142,7 @@ public class UserService {
 			if (otp != null) {
 				if (otp.getExpirytime() >= System.currentTimeMillis()) {
 					if (requestOTP.getOtp().equals(otp.getOtp())) {
+						
 						return "OTP is verified successfully";
 					}
 					return "OTP is invalid";
