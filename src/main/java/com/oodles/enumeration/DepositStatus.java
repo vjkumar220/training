@@ -1,5 +1,5 @@
 package com.oodles.enumeration;
 
-public enum OrderStatus {
+public enum DepositStatus {
 	PENDING,COMPLETED,REJECTED,CANCELLED
 }
