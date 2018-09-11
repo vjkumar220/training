@@ -24,8 +24,12 @@ public class FiatDeposit {
 	
 	@NotNull
     private Long amount;
+	
 	 @Enumerated(EnumType.STRING)
 	private DepositStatus Status;
+	 
+	 
+	 
 	 @ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "user_id", nullable = false)
 	 @JsonBackReference(value="user-deposit")

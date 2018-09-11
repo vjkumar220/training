@@ -2,12 +2,12 @@ package com.oodles.DTO;
 
 public class CryptoDepositDTO {
 
-private double NumberOfCoin;
+private Double NumberOfCoin;
 private Long walletId;
-public double getNumberOfCoin() {
+public Double getNumberOfCoin() {
 	return NumberOfCoin;
 }
-public void setNumberOfCoin(double numberOfCoin) {
+public void setNumberOfCoin(Double numberOfCoin) {
 	NumberOfCoin = numberOfCoin;
 }
 public Long getWalletId() {
@@ -16,5 +16,6 @@ public Long getWalletId() {
 public void setWalletId(Long walletId) {
 	this.walletId = walletId;
 }
+
  
 }

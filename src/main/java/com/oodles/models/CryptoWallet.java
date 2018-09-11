@@ -28,8 +28,8 @@ public class CryptoWallet {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long walletId;
-	private Long balance;
-	private Long shadowBalance;
+	private Double balance;
+	private Double shadowBalance;
 	private String coinName;
 	private String walletType;
 	 @ManyToOne(fetch = FetchType.LAZY)
@@ -56,16 +56,18 @@ public Long getWalletId() {
 public void setWalletId(Long walletId) {
 	this.walletId = walletId;
 }
-public Long getBalance() {
+
+
+public Double getBalance() {
 	return balance;
 }
-public void setBalance(Long balance) {
+public void setBalance(Double balance) {
 	this.balance = balance;
 }
-public Long getShadowBalance() {
+public Double getShadowBalance() {
 	return shadowBalance;
 }
-public void setShadowBalance(Long shadowBalance) {
+public void setShadowBalance(Double shadowBalance) {
 	this.shadowBalance = shadowBalance;
 }
 public String getCoinName() {

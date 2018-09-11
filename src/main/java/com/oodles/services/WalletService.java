@@ -9,9 +9,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.oodles.DTO.CryptoApprovalDTO;
 import com.oodles.DTO.CryptoDepositDTO;
 import com.oodles.DTO.FiatApprovalDTO;
 import com.oodles.DTO.FiatDepositDTO;
+import com.oodles.DTO.FiatWalletDTO;
 import com.oodles.DTO.UserWalletDTO;
 import com.oodles.models.CryptoDeposit;
 import com.oodles.models.CryptoWallet;
@@ -41,7 +43,7 @@ public class WalletService {
 	@Autowired
   private CryptoDepositRepository cryptoDepositRepository;
 	// create a Fiat wallet
-	public Map<String, Object> createFiatWallet(UserWalletDTO userWalletDTO) {
+	public Map<String, Object> createFiatWallet(FiatWalletDTO userWalletDTO) {
 		logger.info("createFiatwallet entered");
 		Map<String, Object> result = new HashMap<String, Object>();
 		String coinName = userWalletDTO.getCoinName();
@@ -85,8 +87,8 @@ public class WalletService {
 		String coinName = userWalletDTO.getCoinName();
 		String walletType = userWalletDTO.getWalletType();
 		logger.info(" walletType in service =" + walletType);
-		Long balance = userWalletDTO.getBalance();
-		Long shadowBalance = userWalletDTO.getShadowBalance();
+		Double balance = userWalletDTO.getBalance();
+		Double shadowBalance = userWalletDTO.getShadowBalance();
 		Long userId = userWalletDTO.getUser_id();
 		// logger
 		Optional<User> user = userRepository.findById(userId);
@@ -201,7 +203,7 @@ public class WalletService {
 	public Map<String, Object> createCryptoDeposit(CryptoDepositDTO cryptoDepositDTO) {
 		logger.info("create deposit request");
 		Map<String, Object> result = new HashMap<String, Object>();
-		 double numberOfCoin = cryptoDepositDTO.getNumberOfCoin();
+		 Double numberOfCoin = cryptoDepositDTO.getNumberOfCoin();
 		 Long walletId=cryptoDepositDTO.getWalletId();
 		// logger
 		Optional<CryptoWallet> cryptowallet = cryptoWalletRepository.findById(walletId);
@@ -227,8 +229,55 @@ public class WalletService {
 
 	}
 
+	//Admin Approval for Crypto deposit
 	
-	
+	public Map<String, Object> CryptoDepositApproval(CryptoApprovalDTO cryptoApprovalDTO) {
+		logger.info(" Approve service entered");
+		Map<String, Object> result = new HashMap<String, Object>();
+		String newstatus = cryptoApprovalDTO.getStatus().toString();
+		Long walletid = cryptoApprovalDTO.getWalletId();
+		Long transId = cryptoApprovalDTO.getTransactionID();
+		Optional<CryptoWallet> wallet = cryptoWalletRepository.findById(walletid);
+
+		if (wallet.isPresent()) {
+			logger.info("user search");
+			CryptoWallet foundWallet = wallet.get();
+			logger.info("user found");
+			CryptoDeposit deposituser = cryptoDepositRepository.findByTransactionIdAndWalletId(transId,foundWallet.getWalletId());
+			logger.info("user for deposit");
+
+			if (deposituser != null) {
+				if (newstatus.equalsIgnoreCase("APPROVED")) {
+					logger.info("status ");
+					Double amount = deposituser.getNumberOfCoin();
+					logger.info("deposit amount" + amount);
+					DepositStatus status = deposituser.getStatus();
+					deposituser.setStatus(status.APPROVED);
+					CryptoWallet fwType = cryptoWalletRepository.findByWalletId(foundWallet.getWalletId());
+					Double currentBalance = fwType.getBalance();
+					logger.info("Current Amount" + currentBalance);
+					Double currentShadowBalance = fwType.getShadowBalance();
+					Double updatedBalance = (currentBalance + amount);
+					fwType.setBalance(updatedBalance);
+					Double updatedShadowBalance = currentShadowBalance + amount;
+					fwType.setShadowBalance(updatedShadowBalance);
+					cryptoWalletRepository.save(fwType);
+					logger.info("updation service done");
+					result.put("responseMessage", "success");
+					return result;
+				} else if (newstatus.equalsIgnoreCase("REJECT")) {
+					DepositStatus status = deposituser.getStatus();
+					deposituser.setStatus(status.REJECT);
+					result.put("responseMessage", "success");
+					return result;
+				}
+			}
+			result.put("responseMessage", "There is no request for Deposit");
+			return result;
+		}
+		return result;
+
+	}
 	
 	
 	

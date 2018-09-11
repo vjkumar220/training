@@ -25,7 +25,8 @@ public class CryptoDeposit {
 	    @JoinColumn(name = "wallet_id", nullable = false)
 	 //@JsonBackReference
 	 @JsonBackReference(value="cryptowallet-deposit")
-	    private CryptoWallet cryptowallet;
+	    
+	 private CryptoWallet cryptowallet;
 	public Long getTransactionId() {
 		return transactionId;
 	}
