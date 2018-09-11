@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.oodles.domain.CryptoCurrency;
-import com.oodles.domain.FiatCurrency;
+import com.oodles.domain.currency.CryptoCurrency;
+import com.oodles.domain.currency.FiatCurrency;
 import com.oodles.exception.ResourceNotFoundException;
 import com.oodles.service.CryptoCurrencyService;
 import com.oodles.service.FiatCurrencyService;

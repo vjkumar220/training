@@ -1,4 +1,6 @@
-package com.oodles.domain;
+package com.oodles.dto;
+
+import com.oodles.enumeration.OrderType;
 
 public class OrdersDto {
 	private OrderType orderType;

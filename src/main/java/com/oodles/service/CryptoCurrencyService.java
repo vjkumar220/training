@@ -8,7 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.oodles.domain.CryptoCurrency;
+import com.oodles.domain.currency.CryptoCurrency;
 import com.oodles.repository.CurrencyRepository;
 
 @Service

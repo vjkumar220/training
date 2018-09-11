@@ -1,7 +1,6 @@
-package com.oodles.domain;
+package com.oodles.dto;
 
-public class FiatWalletDto {
-	
+public class CryptoWalletDto {
 	private Long userId;
 	private Long shadowBalance;
 	private Long balance;
@@ -37,5 +36,5 @@ public class FiatWalletDto {
 	public void setWalletType(String walletType) {
 		this.walletType = walletType;
 	}
-
 }
+

@@ -10,9 +10,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import com.oodles.domain.Otp;
-import com.oodles.domain.User;
-import com.oodles.domain.EmailDto;
+import com.oodles.domain.user.User;
+import com.oodles.dto.EmailDto;
+import com.oodles.dto.Otp;
 import com.oodles.repository.UserRepository;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;

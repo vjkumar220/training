@@ -4,10 +4,10 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class FiatDepositDto {
-	//@NotNull
-	//@Min(value=0  ,message = " Enter amount is greater than zero")
+	@NotNull
+	@Min(value=0  ,message = " Enter amount is greater than zero")
 	private Double amount;
-	//@NotNull
+	@NotNull
 	private Long userId;
 	public Double getAmount() {
 		return amount;

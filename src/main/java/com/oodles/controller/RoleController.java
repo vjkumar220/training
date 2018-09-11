@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.oodles.domain.Role;
-import com.oodles.domain.User;
-import com.oodles.domain.UserRoleDto;
+import com.oodles.domain.user.Role;
+import com.oodles.domain.user.User;
+import com.oodles.dto.UserRoleDto;
 import com.oodles.exception.ResourceNotFoundException;
 import com.oodles.service.RoleService;
 import com.oodles.util.ResponseHandler;

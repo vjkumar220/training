@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.oodles.domain.CryptoWallet;
-import com.oodles.domain.CryptoWalletDto;
-import com.oodles.domain.FiatWalletDto;
+import com.oodles.domain.wallet.CryptoWallet;
+import com.oodles.dto.CryptoWalletDto;
+import com.oodles.dto.FiatWalletDto;
 import com.oodles.exception.ResourceNotFoundException;
 import com.oodles.service.WalletService;
 import com.oodles.util.ResponseHandler;

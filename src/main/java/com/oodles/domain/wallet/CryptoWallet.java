@@ -1,7 +1,9 @@
-package com.oodles.domain;
+package com.oodles.domain.wallet;
 
 import java.io.Serializable;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,9 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.oodles.domain.deposit.CryptoDeposit;
+import com.oodles.domain.user.User;
 
 //@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
@@ -28,8 +33,10 @@ public class CryptoWallet implements Serializable {
 	@ManyToOne (fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	@JsonBackReference(value = "for Crypto Wallet")
-
 	private User user;
+	
+	@OneToMany(mappedBy = "cryptoWallet", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<CryptoDeposit> cryptoDeposit;
 
 	public Long getCryptoWalletId() {
 		return cryptoWalletId;
@@ -79,4 +86,13 @@ public class CryptoWallet implements Serializable {
 		this.user = user;
 	}
 
+	public Set<CryptoDeposit> getCryptoDeposit() {
+		return cryptoDeposit;
+	}
+
+	public void setCryptoDeposit(Set<CryptoDeposit> cryptoDeposit) {
+		this.cryptoDeposit = cryptoDeposit;
+	}
+
+	
 }

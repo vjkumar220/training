@@ -1,4 +1,4 @@
-package com.oodles.domain;
+package com.oodles.domain.deposit;
 
 import java.util.Date;
 
@@ -19,6 +19,8 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.oodles.domain.user.User;
+import com.oodles.enumeration.DepositStatus;
 
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
@@ -35,7 +37,7 @@ public class FiatDeposit {
 	private Date depositOn;
 	@NotNull
 	@Enumerated(EnumType.STRING)
-	private OrderStatus depositStatus;
+	private DepositStatus depositStatus;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
@@ -66,14 +68,6 @@ public class FiatDeposit {
 		this.depositOn = depositOn;
 	}
 
-	public OrderStatus getDepositStatus() {
-		return depositStatus;
-	}
-
-	public void setDepositStatus(OrderStatus depositStatus) {
-		this.depositStatus = depositStatus;
-	}
-
 	public User getUser() {
 		return user;
 	}
@@ -81,5 +75,14 @@ public class FiatDeposit {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
+	public DepositStatus getDepositStatus() {
+		return depositStatus;
+	}
+
+	public void setDepositStatus(DepositStatus depositStatus) {
+		this.depositStatus = depositStatus;
+	}
+	
 
 }

@@ -1,4 +1,4 @@
-package com.oodles.domain;
+package com.oodles.domain.user;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -20,6 +20,10 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.oodles.domain.deposit.FiatDeposit;
+import com.oodles.domain.order.Orders;
+import com.oodles.domain.wallet.CryptoWallet;
+import com.oodles.domain.wallet.FiatWallet;
 
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity

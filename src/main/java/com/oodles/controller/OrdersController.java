@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.oodles.domain.OrdersDto;
+import com.oodles.dto.OrdersDto;
 import com.oodles.exception.ResourceNotFoundException;
 import com.oodles.service.OrdersService;
 import com.oodles.util.ResponseHandler;

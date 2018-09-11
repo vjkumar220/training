@@ -1,4 +1,4 @@
-package com.oodles.domain;
+package com.oodles.domain.user;
 
 import java.io.Serializable;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package com.oodles.domain;
+package com.oodles.domain.wallet;
 
 import java.io.Serializable;
 
@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.oodles.domain.user.User;
 
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
@@ -24,7 +25,7 @@ public class FiatWallet implements Serializable{
 	private Long fiatWalletId;
 	private Long shadowBalance;
 	@NotNull
-	private Long balance;
+	private Double balance;
 	@NotNull
 	private String coinName;
 	@NotNull
@@ -47,12 +48,6 @@ public class FiatWallet implements Serializable{
 	public void setShadowBalance(Long shadowBalance) {
 		this.shadowBalance = shadowBalance;
 	}
-	public Long getBalance() {
-		return balance;
-	}
-	public void setBalance(Long balance) {
-		this.balance = balance;
-	}
 	public String getCoinName() {
 		return coinName;
 	}
@@ -71,5 +66,12 @@ public class FiatWallet implements Serializable{
 	public void setUser(User user) {
 		this.user = user;
 	}
+	public Double getBalance() {
+		return balance;
+	}
+	public void setBalance(Double balance) {
+		this.balance = balance;
+	}
 	
+
 }

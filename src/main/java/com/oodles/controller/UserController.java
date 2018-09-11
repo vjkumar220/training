@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.oodles.domain.Otp;
-import com.oodles.domain.User;
-import com.oodles.domain.EmailDto;
+import com.oodles.domain.user.User;
+import com.oodles.dto.EmailDto;
+import com.oodles.dto.Otp;
 import com.oodles.exception.ResourceNotFoundException;
 import com.oodles.service.UserService;
 import com.oodles.util.ResponseHandler;

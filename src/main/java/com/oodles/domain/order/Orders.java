@@ -1,4 +1,4 @@
-package com.oodles.domain;
+package com.oodles.domain.order;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,6 +18,9 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.oodles.domain.user.User;
+import com.oodles.enumeration.OrderStatus;
+import com.oodles.enumeration.OrderType;
 
 @Entity
 public class Orders implements Serializable {

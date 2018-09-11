@@ -9,12 +9,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.oodles.domain.CryptoCurrency;
-import com.oodles.domain.OrderStatus;
-import com.oodles.domain.OrderType;
-import com.oodles.domain.Orders;
-import com.oodles.domain.OrdersDto;
-import com.oodles.domain.User;
+import com.oodles.domain.currency.CryptoCurrency;
+import com.oodles.domain.order.Orders;
+import com.oodles.domain.user.User;
+import com.oodles.dto.OrdersDto;
+import com.oodles.enumeration.OrderStatus;
+import com.oodles.enumeration.OrderType;
 import com.oodles.repository.CurrencyRepository;
 import com.oodles.repository.OrdersRepository;
 import com.oodles.repository.UserRepository;

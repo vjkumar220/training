@@ -9,11 +9,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.oodles.domain.CryptoWallet;
-import com.oodles.domain.CryptoWalletDto;
-import com.oodles.domain.FiatWallet;
-import com.oodles.domain.FiatWalletDto;
-import com.oodles.domain.User;
+import com.oodles.domain.user.User;
+import com.oodles.domain.wallet.CryptoWallet;
+import com.oodles.domain.wallet.FiatWallet;
+import com.oodles.dto.CryptoWalletDto;
+import com.oodles.dto.FiatWalletDto;
 import com.oodles.repository.CryptoWalletRepository;
 import com.oodles.repository.FiatCurrencyRepository;
 import com.oodles.repository.FiatWalletRepository;
@@ -45,7 +45,7 @@ public class WalletService {
 			logger.info("in user if");
 			User foundUser = user.get();
 			CryptoWallet newWalletType = cryptoWalletRepository.findByWalletTypeAndUser(walletType, foundUser);
-			System.out.println(newWalletType);
+			//System.out.println(newWalletType);
 			if (newWalletType != null) {
 				logger.info("logger in newWalletType");
 				CryptoWallet wallet = new CryptoWallet();
@@ -70,7 +70,7 @@ public class WalletService {
 		String coinName = fiatWallet.getCoinName();
 		String walletType = fiatWallet.getWalletType();
 		Long shadowBalance = fiatWallet.getShadowBalance();
-		Long balance = fiatWallet.getBalance();
+		Double balance = fiatWallet.getBalance();
 		Long userId = fiatWallet.getUserId();
 		Optional<User> user = userRepository.findById(userId);
 		if (user.isPresent()) {
