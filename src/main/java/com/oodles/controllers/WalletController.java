@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.oodles.DTO.CryptoDepositDTO;
 import com.oodles.DTO.FiatApprovalDTO;
 import com.oodles.DTO.FiatDepositDTO;
 import com.oodles.DTO.UserWalletDTO;
@@ -55,7 +56,10 @@ public Map createCryptoWallet(@RequestBody UserWalletDTO userWalletDTO)  {
 		return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 	}		
 }
-@RequestMapping(method = RequestMethod.POST, value = "/v1/deposit")
+
+//Deposit in fiat wallet
+
+@RequestMapping(method = RequestMethod.POST, value = "/v1/fiatdeposit")
 
 public Map createFiatDeposit(@RequestBody FiatDepositDTO fiatDepositDTO)  {
 	Map result=null;
@@ -72,8 +76,8 @@ public Map createFiatDeposit(@RequestBody FiatDepositDTO fiatDepositDTO)  {
 		return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
 	}		
 }
-//Admin Approval
-@RequestMapping(method = RequestMethod.POST, value = "/v1/depositapproval")
+//Admin Approval for Fiat wallet
+@RequestMapping(method = RequestMethod.POST, value = "/v1/fiatdepositapproval")
 
 public Map fiatDepositApproval(@RequestBody FiatApprovalDTO fiatApprovalDTO)  {
 	logger.info("Approval controller entered");
@@ -90,4 +94,26 @@ public Map fiatDepositApproval(@RequestBody FiatApprovalDTO fiatApprovalDTO)  {
 		return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
 	}		
 }
+//Deposit in Crypto wallet
+
+
+@RequestMapping(method = RequestMethod.POST, value = "/v1/cryptodeposit")
+
+public Map createCryptoDeposit(@RequestBody CryptoDepositDTO cryptoDepositDTO)  {
+	Map result=null;
+	try{
+		
+		 result=walletService.createCryptoDeposit(cryptoDepositDTO);
+		
+		 return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			
+			
+	}
+	catch(ResourceNotFoundException exception){	
+		return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
+	}		
+}
+
+
+
 }

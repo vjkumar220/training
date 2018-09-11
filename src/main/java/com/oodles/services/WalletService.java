@@ -9,14 +9,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.oodles.DTO.CryptoDepositDTO;
 import com.oodles.DTO.FiatApprovalDTO;
 import com.oodles.DTO.FiatDepositDTO;
 import com.oodles.DTO.UserWalletDTO;
+import com.oodles.models.CryptoDeposit;
 import com.oodles.models.CryptoWallet;
 import com.oodles.models.DepositStatus;
 import com.oodles.models.FiatDeposit;
 import com.oodles.models.FiatWallet;
 import com.oodles.models.User;
+import com.oodles.repository.CryptoDepositRepository;
 import com.oodles.repository.CryptoWalletRepository;
 import com.oodles.repository.FiatDepositRepository;
 import com.oodles.repository.FiatWalletRepository;
@@ -35,7 +38,8 @@ public class WalletService {
 	private UserRepository userRepository;
 	@Autowired
 	private FiatDepositRepository fiatDepositRepository;
-
+	@Autowired
+  private CryptoDepositRepository cryptoDepositRepository;
 	// create a Fiat wallet
 	public Map<String, Object> createFiatWallet(UserWalletDTO userWalletDTO) {
 		logger.info("createFiatwallet entered");
@@ -192,4 +196,48 @@ public class WalletService {
 		return result;
 
 	}
+	
+	//Create crypto deposit
+	public Map<String, Object> createCryptoDeposit(CryptoDepositDTO cryptoDepositDTO) {
+		logger.info("create deposit request");
+		Map<String, Object> result = new HashMap<String, Object>();
+		 double numberOfCoin = cryptoDepositDTO.getNumberOfCoin();
+		 Long walletId=cryptoDepositDTO.getWalletId();
+		// logger
+		Optional<CryptoWallet> cryptowallet = cryptoWalletRepository.findById(walletId);
+
+		if (cryptowallet.isPresent()) {
+
+			CryptoWallet foundUser = cryptowallet.get();
+
+			/*CryptoDeposit fwType = cryptoDepositRepository.findByWallet(foundUser);*/
+
+			CryptoDeposit newCryptoDeposit = new CryptoDeposit();
+			newCryptoDeposit.setNumberOfCoin(numberOfCoin);
+			
+			DepositStatus status = newCryptoDeposit.getStatus();
+			newCryptoDeposit.setStatus(status.PENDING);
+			newCryptoDeposit.setCryptowallet(foundUser);
+			cryptoDepositRepository.save(newCryptoDeposit);
+			result.put("responseMessage", "success");
+			return result;
+		}
+		result.put("responseMessage", "wallet id does not exist");
+		return result;
+
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

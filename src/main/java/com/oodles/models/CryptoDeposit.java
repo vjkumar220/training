@@ -17,7 +17,7 @@ public class CryptoDeposit {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long transactionId;
-	private String coinType;
+	
 	private Double NumberOfCoin;
 	 @Enumerated(EnumType.STRING)
 		private DepositStatus Status;
@@ -32,12 +32,7 @@ public class CryptoDeposit {
 	public void setTransactionId(Long transactionId) {
 		this.transactionId = transactionId;
 	}
-	public String getCoinType() {
-		return coinType;
-	}
-	public void setCoinType(String coinType) {
-		this.coinType = coinType;
-	}
+	
 	public Double getNumberOfCoin() {
 		return NumberOfCoin;
 	}
