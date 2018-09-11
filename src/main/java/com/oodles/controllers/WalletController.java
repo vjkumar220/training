@@ -73,14 +73,15 @@ public Map createFiatDeposit(@RequestBody FiatDepositDTO fiatDepositDTO)  {
 	}		
 }
 //Admin Approval
-@RequestMapping(method = RequestMethod.POST, value = "/v1/deposit")
+@RequestMapping(method = RequestMethod.POST, value = "/v1/depositapproval")
 
 public Map fiatDepositApproval(@RequestBody FiatApprovalDTO fiatApprovalDTO)  {
+	logger.info("Approval controller entered");
 	Map result=null;
 	try{
 		
 		 result=walletService.fiatDepositApproval(fiatApprovalDTO);
-		 
+		 logger.info("Approval controller end");
 		 return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 			
 			

@@ -1,5 +1,9 @@
 package com.oodles.models;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
@@ -8,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -32,6 +37,16 @@ public class CryptoWallet {
 	 //@JsonBackReference
 	 @JsonBackReference(value="user-cryptowallet")
 	    private User user;
+	 
+	 //mapping with deposit 
+	 @OneToMany(cascade = CascadeType.ALL,
+	           fetch = FetchType.EAGER,
+	           mappedBy = "cryptowallet")
+	  // @JsonManagedReference
+	 //  @JsonBackReference(value="user-cryptowallet")
+	   private Set<CryptoDeposit> cryptodeposit = new HashSet<>();
+	   
+	 
 public CryptoWallet()
 {
 }
@@ -70,6 +85,12 @@ public User getUser() {
 }
 public void setUser(User user) {
 	this.user = user;
+}
+public Set<CryptoDeposit> getCryptodeposit() {
+	return cryptodeposit;
+}
+public void setCryptodeposit(Set<CryptoDeposit> cryptodeposit) {
+	this.cryptodeposit = cryptodeposit;
 }
 
 }
