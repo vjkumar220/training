@@ -1,4 +1,4 @@
-package com.oodles.domain.order;
+/*package com.oodles.domain.order;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -22,7 +22,7 @@ import com.oodles.domain.user.User;
 import com.oodles.enumeration.OrderStatus;
 import com.oodles.enumeration.OrderType;
 
-@Entity
+//@Entity
 public class Orders implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -110,3 +110,4 @@ public class Orders implements Serializable {
 	}
 
 }
+*/

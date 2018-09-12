@@ -3,7 +3,7 @@ package com.oodles.dto;
 public class CryptoWalletDto {
 	private Long userId;
 	private Long shadowBalance;
-	private Long balance;
+	private Double balance;
 	private String coinName;
 	private String walletType;
 	public Long getUserId() {
@@ -18,12 +18,6 @@ public class CryptoWalletDto {
 	public void setShadowBalance(Long shadowBalance) {
 		this.shadowBalance = shadowBalance;
 	}
-	public Long getBalance() {
-		return balance;
-	}
-	public void setBalance(Long balance) {
-		this.balance = balance;
-	}
 	public String getCoinName() {
 		return coinName;
 	}
@@ -36,5 +30,12 @@ public class CryptoWalletDto {
 	public void setWalletType(String walletType) {
 		this.walletType = walletType;
 	}
+	public Double getBalance() {
+		return balance;
+	}
+	public void setBalance(Double balance) {
+		this.balance = balance;
+	}
+	
 }
 

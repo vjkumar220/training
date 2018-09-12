@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.domain.user.User;
 import com.oodles.dto.EmailDto;
+import com.oodles.dto.EmailVerifyDto;
 import com.oodles.dto.Otp;
 import com.oodles.exception.ResourceNotFoundException;
 import com.oodles.service.UserService;
@@ -156,6 +157,35 @@ public class UserController {
 		String result = null;
 		try {
 			result = userService.verifyEmail(emailAddress, verifyEmail);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+		} catch (ResourceNotFoundException exception) {
+			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+		} catch (NoSuchElementException excep) {
+			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+		}
+	}
+	
+	//Sending Mail for Reset password
+	@PostMapping(value = "/forgetPassword/{userId}")
+	public Map  forgetPasswordMail(@PathVariable String userId) {
+		
+		String result = null;
+		try {
+			result = userService.forgetPassword(userId);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+		} catch (ResourceNotFoundException exception) {
+			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+		} catch (NoSuchElementException excep) {
+			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+		}
+	}
+	
+	@PutMapping(value = "signup/{emailAddress}/updatePassword")
+	public Map<String, Object> updatePassword(@PathVariable String emailAddress, @RequestBody EmailVerifyDto verifyEmail) {
+		logger.info("Mail controller send mail");
+		String result = null;
+		try {
+			result = userService.verifyEmailAndUpdatePass(emailAddress, verifyEmail);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 		} catch (ResourceNotFoundException exception) {
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);

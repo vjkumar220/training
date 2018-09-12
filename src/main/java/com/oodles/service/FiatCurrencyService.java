@@ -12,7 +12,7 @@ import com.oodles.repository.FiatCurrencyRepository;
 public class FiatCurrencyService {
 
 	@Autowired
-	FiatCurrencyRepository fiatCurrencyRepository;
+	private FiatCurrencyRepository fiatCurrencyRepository;
 
 	// Add new Fiat Currency
 	public Map<?, ?> createFiatCurrency(FiatCurrency fiatCurrency) {

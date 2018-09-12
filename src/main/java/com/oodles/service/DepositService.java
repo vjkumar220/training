@@ -1,5 +1,8 @@
 package com.oodles.service;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,11 +16,15 @@ import org.springframework.stereotype.Service;
 import com.oodles.domain.deposit.CryptoDeposit;
 import com.oodles.domain.deposit.FiatDeposit;
 import com.oodles.domain.user.User;
+import com.oodles.domain.wallet.CryptoWallet;
 import com.oodles.domain.wallet.FiatWallet;
 import com.oodles.dto.ApprovalDto;
+import com.oodles.dto.CryptoApprovalDto;
 import com.oodles.dto.CryptoDepositDto;
 import com.oodles.dto.FiatDepositDto;
 import com.oodles.enumeration.DepositStatus;
+import com.oodles.repository.CryptoDepositRepository;
+import com.oodles.repository.CryptoWalletRepository;
 import com.oodles.repository.FiatDepositRepository;
 import com.oodles.repository.FiatWalletRepository;
 import com.oodles.repository.UserRepository;
@@ -31,11 +38,15 @@ public class DepositService {
 	private UserRepository userRepository;
 	@Autowired
 	private FiatWalletRepository fiatWalletRepository;
+	@Autowired
+	private CryptoWalletRepository cryptoWalletRepository;
+	@Autowired
+	private CryptoDepositRepository cryptoDepositRepository;
 
 	private HashMap<Object, Object> result = new HashMap<>();
 
 	// Fiat deposit request generate
-	
+
 	public Map<Object, Object> fiatDeposit(FiatDepositDto depositDto) {
 		log.info("In deposit service");
 		Long userId = depositDto.getUserId();
@@ -61,7 +72,7 @@ public class DepositService {
 	}
 
 	// Get all pending fiat deposit list
-	
+
 	public List<FiatDeposit> getAllPendingRequest() {
 		List<FiatDeposit> depositsStatus = fiatDepositRepository.findAllByDepositStatus(DepositStatus.PENDING);
 		return depositsStatus;
@@ -118,20 +129,73 @@ public class DepositService {
 		return result;
 	}
 
-//     Crypto deposit request Genrate
-	
-	public Map<Object, Object> cryptoDeposit(CryptoDepositDto cryptoDepositDto){
+	// Crypto deposit request Generate
+
+	public Map<Object, Object> cryptoDeposit(CryptoDepositDto cryptoDepositDto) {
 		String coinName = cryptoDepositDto.getCoinName();
-		Long userId = cryptoDepositDto.getUserId();
 		Double coinQuantity = cryptoDepositDto.getCoinQuantity();
-		return null;
+		Long cryptoWalletId = cryptoDepositDto.getCryptoWalletId();
+		Optional<CryptoWallet> foundWallet = cryptoWalletRepository.findById(cryptoWalletId);
+		if (foundWallet.isPresent()) {
+			CryptoDeposit cryptoDeposit = new CryptoDeposit();
+			cryptoDeposit.setCoinType(coinName);
+			cryptoDeposit.setCryptoWallet(foundWallet.get());
+			cryptoDeposit.setNumberOfCoin(coinQuantity);
+			cryptoDeposit.setDepositStatus(DepositStatus.PENDING);
+			cryptoDepositRepository.save(cryptoDeposit);
+			result.put("success", "Your crypto Deposit generated");
+			return result;
+		}
+		result.put("error", "Wallet is not found");
+		return result;
 	}
 
+	// Approved the crypto deposit request and update crypto wallet balanace
 
+	public Map approveCryptoRequest(CryptoApprovalDto cryptoApprovalDto) {
+		DepositStatus depositStatusDto = cryptoApprovalDto.getDepositStatus();
+		Long walletId = cryptoApprovalDto.getWalletId();
+		Long depositId = cryptoApprovalDto.getDepositId();
+		Optional<CryptoDeposit> foundDeposit = cryptoDepositRepository.findById(depositId);
+		Optional<CryptoWallet> foundWallet = cryptoWalletRepository.findById(walletId);
+		CryptoDeposit checkDeposit = cryptoDepositRepository
+				.findByCryptoWalletCryptoWalletIdAndCryptoDepositId(walletId, depositId);
+		CryptoWallet cryptoWallet = foundWallet.get();
+		Double coinBalance = cryptoWallet.getBalance();
+		String coinName = cryptoWallet.getCoinName();
+		log.info("coinBalance-", coinBalance);
+		CryptoDeposit cryptoDeposit = foundDeposit.get();
+		Double coinRequest = cryptoDeposit.getNumberOfCoin();
+		log.info("coin Request-", coinRequest);
+		DepositStatus status = cryptoDeposit.getDepositStatus();
+		log.info("coin status-",status);
+		Double updatedBalance = coinBalance + coinRequest;
+		log.info("updated balance-", updatedBalance);
+		if (foundDeposit.isPresent()) {
+			if (foundWallet.isPresent()) {
+				if (checkDeposit != null) {
+					if (status.equals(DepositStatus.PENDING)) {
+						if (depositStatusDto.equals(DepositStatus.APPROVED)) {
+							cryptoWallet.setBalance(updatedBalance);
+							cryptoDeposit.setDepositStatus(DepositStatus.APPROVED);
+							cryptoDepositRepository.save(cryptoDeposit);
+							cryptoWalletRepository.save(cryptoWallet);
+							result.put("success", "Your request is approved and balance is updated");
+						} else if (depositStatusDto.equals(DepositStatus.REJECTED)) {
+							cryptoDeposit.setDepositStatus(DepositStatus.REJECTED);
+							cryptoDepositRepository.save(cryptoDeposit);
+							result.put("sucess", "Your request is rejected");
+						}
 
+					}
+				}
+			}
+			result.put("error", "User is  not found");
 
+		}
+		result.put("error", "Order is not present");
 
-
-
+		return result;
+	}
 
 }

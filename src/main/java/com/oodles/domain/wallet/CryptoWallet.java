@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.oodles.domain.deposit.CryptoDeposit;
 import com.oodles.domain.user.User;
+import com.oodles.domain.withdraw.CryptoWithdraw;
 
 //@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
@@ -26,7 +27,7 @@ public class CryptoWallet implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long cryptoWalletId;
 	private Long shadowBalance;
-	private Long balance;
+	private Double balance;
 	private String coinName;
 	private String walletType;
 
@@ -37,6 +38,9 @@ public class CryptoWallet implements Serializable {
 	
 	@OneToMany(mappedBy = "cryptoWallet", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<CryptoDeposit> cryptoDeposit;
+	
+	@OneToMany(mappedBy = "cryptoWallet", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<CryptoWithdraw> cryptoWithdraw;
 
 	public Long getCryptoWalletId() {
 		return cryptoWalletId;
@@ -52,14 +56,6 @@ public class CryptoWallet implements Serializable {
 
 	public void setShadowBalance(Long shadowBalance) {
 		this.shadowBalance = shadowBalance;
-	}
-
-	public Long getBalance() {
-		return balance;
-	}
-
-	public void setBalance(Long balance) {
-		this.balance = balance;
 	}
 
 	public String getCoinName() {
@@ -92,6 +88,14 @@ public class CryptoWallet implements Serializable {
 
 	public void setCryptoDeposit(Set<CryptoDeposit> cryptoDeposit) {
 		this.cryptoDeposit = cryptoDeposit;
+	}
+
+	public Double getBalance() {
+		return balance;
+	}
+
+	public void setBalance(Double balance) {
+		this.balance = balance;
 	}
 
 	

@@ -19,9 +19,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.springframework.util.concurrent.SettableListenableFuture;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.oodles.domain.deposit.FiatDeposit;
-import com.oodles.domain.order.Orders;
+import com.oodles.domain.order.BuyOrder;
+import com.oodles.domain.order.SellOrder;
 import com.oodles.domain.wallet.CryptoWallet;
 import com.oodles.domain.wallet.FiatWallet;
 
@@ -62,7 +65,10 @@ public class User implements Serializable {
 	private Set<CryptoWallet> cryptoWallets;
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<Orders> orders;
+	private Set<BuyOrder> buyOrder;
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<SellOrder> sellOrder;
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<FiatDeposit> fiatDeposit;
@@ -74,6 +80,8 @@ public class User implements Serializable {
 	private String mobileCode;
 	
 	private String emailCode;
+	
+	private String passToken;
 
 	
 	public Long getId() {
@@ -172,14 +180,6 @@ public class User implements Serializable {
 		this.emailCode = emailCode;
 	}
 
-	public Set<Orders> getOrders() {
-		return orders;
-	}
-
-	public void setOrders(Set<Orders> orders) {
-		this.orders = orders;
-	}
-
 	public Set<FiatDeposit> getFiatDeposit() {
 		return fiatDeposit;
 	}
@@ -188,4 +188,29 @@ public class User implements Serializable {
 		this.fiatDeposit = fiatDeposit;
 	}
 
+	public String getPassToken() {
+		return passToken;
+	}
+
+	public void setPassToken(String passToken) {
+		this.passToken = passToken;
+	}
+
+	public Set<BuyOrder> getBuyOrder() {
+		return buyOrder;
+	}
+
+	public void setBuyOrder(Set<BuyOrder> buyOrder) {
+		this.buyOrder = buyOrder;
+	}
+
+	public Set<SellOrder> getSellOrder() {
+		return sellOrder;
+	}
+
+	public void setSellOrder(Set<SellOrder> sellOrder) {
+		this.sellOrder = sellOrder;
+	}
+	
+	
 }

@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.domain.deposit.FiatDeposit;
 import com.oodles.dto.ApprovalDto;
+import com.oodles.dto.CryptoApprovalDto;
+import com.oodles.dto.CryptoDepositDto;
 import com.oodles.dto.FiatDepositDto;
 import com.oodles.exception.ResourceNotFoundException;
 import com.oodles.service.DepositService;
@@ -35,7 +37,7 @@ public class DepositController {
 
 	// Generating deposit request for fiat wallet
 
-	@PostMapping(value = "/fiatDeposit")
+	@PostMapping(value = "/fiatDepositRequest")
 	public Map createFiatDeposit(@Valid @RequestBody FiatDepositDto depositDto) {
 		log.info("In deposit controller", depositDto);
 		try {
@@ -63,10 +65,42 @@ public class DepositController {
 	}
 
 	// Approval of the deposit request
-	@PostMapping(value = "/approvedDepositRequest")
+	@PostMapping(value = "/approvedFiatDepositRequest")
 	public Map approvalDepositRequest(@Valid @RequestBody ApprovalDto approvalDto) {
 		try {
 			result = depositService.approveDeposit(approvalDto);
+			log.info("result", result);
+			if (result.containsKey("success")) {
+				return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			} else {
+				return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+			}
+		} catch (ResourceNotFoundException e) {
+			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+		}
+	}
+	
+	//Creating the crypto deposit request
+	
+	@PostMapping(value = "/cryptoDepositRequest")
+	public Map cryptoDeposit(@Valid @RequestBody CryptoDepositDto cryptoDepositDto) {
+		try {
+			result = depositService.cryptoDeposit(cryptoDepositDto);
+			log.info("result", result);
+			if (result.containsKey("success")) {
+				return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			} else {
+				return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+			}
+		} catch (ResourceNotFoundException e) {
+			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+		}
+	}
+	
+	@PostMapping(value = "/approvedCryptoDepositRequest")
+	public Map approvalCryptoDepositRequest(@Valid @RequestBody CryptoApprovalDto cryptoApprovalDto) {
+		try {
+			result = depositService.approveCryptoRequest(cryptoApprovalDto);
 			log.info("result", result);
 			if (result.containsKey("success")) {
 				return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);

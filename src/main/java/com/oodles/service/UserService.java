@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.oodles.domain.user.User;
 import com.oodles.dto.EmailDto;
+import com.oodles.dto.EmailVerifyDto;
 import com.oodles.dto.Otp;
 import com.oodles.repository.UserRepository;
 import com.twilio.Twilio;
@@ -23,7 +24,7 @@ import com.twilio.type.PhoneNumber;
 public class UserService {
 
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 
 	private static JavaMailSender javaMailSender;
 
@@ -118,10 +119,13 @@ public class UserService {
 		Optional<User> value = userRepository.findById(Long.parseLong(userId));
 		User user = value.get();
 		if (value.isPresent() && user.getPhoneNumber() != null) {
+			String otpCode = String.valueOf((int) (Math.random() * (10000 - 1000)) + 1000);
 			Otp otp = new Otp();
 			otp.setMobileNumber(user.getPhoneNumber());
-			otp.setOtp(String.valueOf((int) (Math.random() * (10000 - 1000)) + 1000));
+			otp.setOtp(String.valueOf(otpCode));
 			otp.setExpirytime(System.currentTimeMillis() + 500000);
+			user.setMobileCode(otpCode);
+			userRepository.save(user);
 			otp_data.put(user.getPhoneNumber(), otp);
 			id = userId;
 			Message.creator(new PhoneNumber("+918700153661"), new PhoneNumber("+19852384430"),
@@ -171,6 +175,9 @@ public class UserService {
 		mail.setTo(emailTo);
 		mail.setSubject("Please verify your OTP");
 		mail.setText(body);
+		user.setEmailCode(otpCode);
+		userRepository.save(user);
+		id = userId;
 		javaMailSender.send(mail);
 		return "Your verification code has been send to your mail";
 	}
@@ -185,6 +192,7 @@ public class UserService {
 			if (emailDto != null) {
 				if (emailDto.getExpirytime() >= System.currentTimeMillis()) {
 					if (verifyEmail.getOtp().equals(emailDto.getOtp())) {
+						
 						email_data.remove(email);
 						return "Verificarion code is verified successfully";
 					}
@@ -196,5 +204,58 @@ public class UserService {
 		}
 		return "Email Address is not found";
 	}
-
+	
+	
+	//Forget Password sending verification password
+	public String forgetPassword(String userId) {
+		Optional<User> value = userRepository.findById(Long.parseLong(userId));
+		User user = value.get();
+		String emailTo = user.getEmail();
+		String otpCode = String.valueOf((int) (Math.random() * (10000 - 1000)) + 1000);
+		String body = "Your Verification OTP code for reset password -" + otpCode;
+		EmailDto verifyEmail = new EmailDto();
+		verifyEmail.setEmail(emailTo);
+		verifyEmail.setExpirytime(System.currentTimeMillis() + 200000);
+		verifyEmail.setOtp(otpCode);
+		email_data.put(emailTo, verifyEmail);
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setFrom("shivam4848@gmail.com");
+		mail.setTo(emailTo);
+		mail.setSubject("Please verify OTP for reset your password");
+		mail.setText(body);
+		user.setPassToken(otpCode);
+		userRepository.save(user);
+		id = userId;
+		javaMailSender.send(mail);
+		return "Your verification code has been send to your mail";
+	}
+	
+	
+	//Updating Password
+	public String verifyEmailAndUpdatePass(String email, EmailVerifyDto verifyEmail) {
+		String password = verifyEmail.getPassword();
+		if (verifyEmail.getOtp() == null || verifyEmail.getOtp().trim().length() <= 0) {
+			return "Please provide Verification code";
+		}
+		if (email_data.containsKey(email)) {
+			EmailDto emailDto = email_data.get(email);
+			if (emailDto != null) {
+				if (emailDto.getExpirytime() >= System.currentTimeMillis()) {
+					if (verifyEmail.getOtp().equals(emailDto.getOtp())) {
+						Optional<User> foundUser = userRepository.findById(Long.parseLong(id));
+						User user= foundUser.get();
+						user.setPassword(password);
+						userRepository.save(user);
+						email_data.remove(email);
+						return "Your Password is Updated";
+					}
+					return "Verfication code is invalid";
+				}
+				return "Verification code is expired";
+			}
+			return "Something went wrong";
+		 }
+		return "Email Address is not found";
+	}
+	
 }

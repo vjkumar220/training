@@ -13,4 +13,6 @@ public interface FiatDepositRepository extends JpaRepository<FiatDeposit, Long>{
 		List<FiatDeposit> findAllByDepositStatus(DepositStatus depositStatus);
 		
 		FiatDeposit findByUserIdAndDepositId(Long id, Long depositId);
+		
+		List<FiatDeposit> findAllByUserId(Long id);
 }

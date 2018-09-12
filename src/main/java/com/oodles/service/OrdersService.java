@@ -1,4 +1,4 @@
-package com.oodles.service;
+/*package com.oodles.service;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,12 +22,12 @@ import com.oodles.repository.UserRepository;
 @Service
 public class OrdersService {
 	Logger logger = LoggerFactory.getLogger(OrdersService.class);
+	//@Autowired
+	//private OrdersRepository ordersRepository;
 	@Autowired
-	OrdersRepository ordersRepository;
+	private UserRepository userRepository;
 	@Autowired
-	UserRepository userRepository;
-	@Autowired
-	CurrencyRepository currencyRepository;
+	private CurrencyRepository currencyRepository;
 
 	private Map response = new HashMap<>();
 
@@ -66,3 +66,4 @@ public class OrdersService {
 
 	}
 }
+*/

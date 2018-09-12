@@ -17,9 +17,9 @@ import com.oodles.repository.UserRepository;
 @Service
 public class RoleService {
 	@Autowired
-	RoleRepository roleRepository;
+	private RoleRepository roleRepository;
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 
 	// Creating Role
 	public Map<Object, Object> createRole(Role role) {

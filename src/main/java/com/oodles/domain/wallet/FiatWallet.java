@@ -1,6 +1,7 @@
 package com.oodles.domain.wallet;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -9,12 +10,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.oodles.domain.deposit.CryptoDeposit;
 import com.oodles.domain.user.User;
+import com.oodles.domain.withdraw.FiatWithdraw;
 
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
@@ -30,6 +34,9 @@ public class FiatWallet implements Serializable{
 	private String coinName;
 	@NotNull
 	private String walletType;
+	
+	@OneToMany(mappedBy = "fiatWallet", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<FiatWithdraw> fiatWithdraw;
 	
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
@@ -71,6 +78,12 @@ public class FiatWallet implements Serializable{
 	}
 	public void setBalance(Double balance) {
 		this.balance = balance;
+	}
+	public Set<FiatWithdraw> getFiatWithdraw() {
+		return fiatWithdraw;
+	}
+	public void setFiatWithdraw(Set<FiatWithdraw> fiatWithdraw) {
+		this.fiatWithdraw = fiatWithdraw;
 	}
 	
 

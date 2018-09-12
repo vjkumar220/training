@@ -1,6 +1,7 @@
 package com.oodles.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.oodles.domain.deposit.FiatDeposit;
 import com.oodles.domain.user.User;
 import com.oodles.domain.wallet.CryptoWallet;
 import com.oodles.domain.wallet.FiatWallet;
@@ -16,6 +18,7 @@ import com.oodles.dto.CryptoWalletDto;
 import com.oodles.dto.FiatWalletDto;
 import com.oodles.repository.CryptoWalletRepository;
 import com.oodles.repository.FiatCurrencyRepository;
+import com.oodles.repository.FiatDepositRepository;
 import com.oodles.repository.FiatWalletRepository;
 import com.oodles.repository.UserRepository;
 
@@ -23,11 +26,14 @@ import com.oodles.repository.UserRepository;
 public class WalletService {
 	Logger logger = LoggerFactory.getLogger(WalletService.class);
 	@Autowired
-	CryptoWalletRepository cryptoWalletRepository;
+	private CryptoWalletRepository cryptoWalletRepository;
 	@Autowired
-	FiatWalletRepository fiatWalletRepository;
+	private FiatWalletRepository fiatWalletRepository;
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
+	@Autowired
+	private FiatDepositRepository fiatDepositRepository;
+	
 
 	// Creating crypto Wallet
 	public Map createCryptoWallet(CryptoWalletDto cryptoWallet) {
@@ -36,7 +42,7 @@ public class WalletService {
 		String coinName = cryptoWallet.getCoinName();
 		String walletType = cryptoWallet.getWalletType();
 		Long shadowBalance = cryptoWallet.getShadowBalance();
-		Long balance = cryptoWallet.getBalance();
+		Double balance = cryptoWallet.getBalance();
 		Long userId = cryptoWallet.getUserId();
 		System.out.println(coinName+""+walletType+""+shadowBalance+""+balance+""+ userId);
 		
@@ -90,4 +96,15 @@ public class WalletService {
 		}
 		return result;
 	}
+	
+	//Fiat Wallet History
+	
+	public List<FiatDeposit> fiatWalletHistory(Long userId){
+		List<FiatDeposit> depositsList = fiatDepositRepository.findAllByUserId(userId);
+		return depositsList;
+	}
+	
+	
+	
+	
 }
