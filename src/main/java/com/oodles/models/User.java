@@ -47,6 +47,7 @@ public class User  {
    private String otp;
    private String confirmationToken;
    private Long expirytime;
+   private String passToken;
   
    @OneToMany(cascade = CascadeType.ALL,
            fetch = FetchType.EAGER,
@@ -83,8 +84,17 @@ public class User  {
            fetch = FetchType.EAGER,
            mappedBy = "user")
    private Set<FiatDeposit> fiatdeposit = new HashSet<>();
-   
-   
+  //mapping with Buy Order
+   @OneToMany(cascade = CascadeType.ALL,
+           fetch = FetchType.EAGER,
+           mappedBy = "user")
+   private Set<BuyOrder> buyorder = new HashSet<>();
+   //mapping with Sell Order
+   @OneToMany(cascade = CascadeType.ALL,
+           fetch = FetchType.EAGER,
+           mappedBy = "user")
+   private Set<SellOrder> sellorder = new HashSet<>();
+  
    public User() {
        super();
        
@@ -210,6 +220,31 @@ public Set<FiatDeposit> getFiatdeposit() {
 public void setFiatdeposit(Set<FiatDeposit> fiatdeposit) {
 	this.fiatdeposit = fiatdeposit;
 }
+
+public String getPassToken() {
+	return passToken;
+}
+
+public void setPassToken(String passToken) {
+	this.passToken = passToken;
+}
+
+public Set<BuyOrder> getBuyorder() {
+	return buyorder;
+}
+
+public void setBuyorder(Set<BuyOrder> buyorder) {
+	this.buyorder = buyorder;
+}
+
+public Set<SellOrder> getSellorder() {
+	return sellorder;
+}
+
+public void setSellorder(Set<SellOrder> sellorder) {
+	this.sellorder = sellorder;
+}
+
 
 
 	

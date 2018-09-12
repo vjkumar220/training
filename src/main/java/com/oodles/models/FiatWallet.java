@@ -1,5 +1,9 @@
 package com.oodles.models;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
@@ -7,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -33,6 +38,11 @@ public class FiatWallet {
 	//@JsonBackReference
 	@JsonBackReference(value="user-fiatwallet")
     private User user;
+	//mapping with fiat withdraw
+	 @OneToMany(cascade = CascadeType.ALL,
+	           fetch = FetchType.EAGER,
+	           mappedBy = "fiatWallet")
+	   private Set<FiatWithdraw> fiatwithdraw = new HashSet<>();
 	public FiatWallet()
 	{
 	}
@@ -73,5 +83,12 @@ public class FiatWallet {
 	public void setUser(User user) {
 		this.user = user;
 	}
+	public Set<FiatWithdraw> getFiatwithdraw() {
+		return fiatwithdraw;
+	}
+	public void setFiatwithdraw(Set<FiatWithdraw> fiatwithdraw) {
+		this.fiatwithdraw = fiatwithdraw;
+	}
+	
 
 }

@@ -11,20 +11,26 @@ import org.springframework.stereotype.Service;
 
 import com.oodles.DTO.CryptoApprovalDTO;
 import com.oodles.DTO.CryptoDepositDTO;
+import com.oodles.DTO.CryptoWithdrawDTO;
 import com.oodles.DTO.FiatApprovalDTO;
 import com.oodles.DTO.FiatDepositDTO;
 import com.oodles.DTO.FiatWalletDTO;
+import com.oodles.DTO.FiatWithdrawDTO;
 import com.oodles.DTO.UserWalletDTO;
 import com.oodles.models.CryptoDeposit;
 import com.oodles.models.CryptoWallet;
+import com.oodles.models.CryptoWithdraw;
 import com.oodles.models.DepositStatus;
 import com.oodles.models.FiatDeposit;
 import com.oodles.models.FiatWallet;
+import com.oodles.models.FiatWithdraw;
 import com.oodles.models.User;
 import com.oodles.repository.CryptoDepositRepository;
 import com.oodles.repository.CryptoWalletRepository;
+import com.oodles.repository.CryptoWithdrawRepository;
 import com.oodles.repository.FiatDepositRepository;
 import com.oodles.repository.FiatWalletRepository;
+import com.oodles.repository.FiatWithdrawRepository;
 import com.oodles.repository.UserRepository;
 
 @Service
@@ -41,7 +47,12 @@ public class WalletService {
 	@Autowired
 	private FiatDepositRepository fiatDepositRepository;
 	@Autowired
-  private CryptoDepositRepository cryptoDepositRepository;
+	private CryptoDepositRepository cryptoDepositRepository;
+	@Autowired
+	private FiatWithdrawRepository fiatWithdrawRepository;
+	@Autowired
+	private CryptoWithdrawRepository cryptoWithdrawRepository;
+
 	// create a Fiat wallet
 	public Map<String, Object> createFiatWallet(FiatWalletDTO userWalletDTO) {
 		logger.info("createFiatwallet entered");
@@ -96,7 +107,7 @@ public class WalletService {
 		if (user.isPresent()) {
 
 			User foundUser = user.get();
-logger.info("user found");
+			logger.info("user found");
 			CryptoWallet fwType = cryptoWalletRepository.findByWalletTypeAndUser(walletType, foundUser);
 
 			if (!(fwType == null))
@@ -200,13 +211,13 @@ logger.info("user found");
 		return result;
 
 	}
-	
-	//Create crypto deposit
+
+	// Create crypto deposit
 	public Map<String, Object> createCryptoDeposit(CryptoDepositDTO cryptoDepositDTO) {
 		logger.info("create deposit request");
 		Map<String, Object> result = new HashMap<String, Object>();
-		 Double numberOfCoin = cryptoDepositDTO.getNumberOfCoin();
-		 Long walletId=cryptoDepositDTO.getWalletId();
+		Double numberOfCoin = cryptoDepositDTO.getNumberOfCoin();
+		Long walletId = cryptoDepositDTO.getWalletId();
 		// logger
 		Optional<CryptoWallet> cryptowallet = cryptoWalletRepository.findById(walletId);
 
@@ -214,11 +225,11 @@ logger.info("user found");
 
 			CryptoWallet foundUser = cryptowallet.get();
 
-			/*CryptoDeposit fwType = cryptoDepositRepository.findByWallet(foundUser);*/
+			/* CryptoDeposit fwType = cryptoDepositRepository.findByWallet(foundUser); */
 
 			CryptoDeposit newCryptoDeposit = new CryptoDeposit();
 			newCryptoDeposit.setNumberOfCoin(numberOfCoin);
-			
+
 			DepositStatus status = newCryptoDeposit.getStatus();
 			newCryptoDeposit.setStatus(status.PENDING);
 			newCryptoDeposit.setCryptowallet(foundUser);
@@ -231,8 +242,8 @@ logger.info("user found");
 
 	}
 
-	//Admin Approval for Crypto deposit
-	
+	// Admin Approval for Crypto deposit
+
 	public Map<String, Object> CryptoDepositApproval(CryptoApprovalDTO cryptoApprovalDTO) {
 		logger.info(" Approve service entered");
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -245,9 +256,9 @@ logger.info("user found");
 			logger.info("user search");
 			CryptoWallet foundWallet = wallet.get();
 			logger.info("user found");
-			CryptoDeposit deposituser = cryptoDepositRepository.findByTransactionIdAndCryptowalletWalletId(transId,foundWallet.getWalletId());
+			CryptoDeposit deposituser = cryptoDepositRepository.findByTransactionIdAndCryptowalletWalletId(transId,
+					foundWallet.getWalletId());
 			logger.info("user for deposit");
-
 			if (deposituser != null) {
 				if (newstatus.equalsIgnoreCase("APPROVED")) {
 					logger.info("status ");
@@ -280,15 +291,84 @@ logger.info("user found");
 		return result;
 
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	// Fiat Withdraw
+	public Map<String, Object> createFiatWithdraw(FiatWithdrawDTO fiatWithdrawDTO) {
+		logger.info("create withdraw request");
+		Map<String, Object> result = new HashMap<String, Object>();
+		Double amount = fiatWithdrawDTO.getAmount();
+		Long walletId = fiatWithdrawDTO.getWalletId();
+		// logger
+		Optional<FiatWallet> fiatwallet = fiatWalletRepository.findById(walletId);
+
+		if (fiatwallet.isPresent()) {
+
+			FiatWallet foundUser = fiatwallet.get();
+
+			/* FiatWithdraw fwType = fiatWithdrawRepository.findByWallet(foundUser); */
+
+			FiatWithdraw newFiatWithdraw = new FiatWithdraw();
+			newFiatWithdraw.setAmount(amount);
+			newFiatWithdraw.setFiatWallet(foundUser);
+			fiatWithdrawRepository.save(newFiatWithdraw);
+			FiatWallet fwType = fiatWalletRepository.findByWalletId(foundUser.getWalletId());
+			Double currentBalance = fwType.getBalance();
+			logger.info("Current Amount" + currentBalance);
+			Double currentShadowBalance = fwType.getShadowBalance();
+			if ((currentBalance >= amount) && (currentShadowBalance >= amount)) {
+				Double updatedBalance = (currentBalance - amount);
+				fwType.setBalance(updatedBalance);
+				Double updatedShadowBalance = currentShadowBalance - amount;
+				fwType.setShadowBalance(updatedShadowBalance);
+				fiatWalletRepository.save(fwType);
+				result.put("responseMessage", "success");
+				return result;
+			}
+			result.put("responseMessage", "Not Sufficient Amount");
+			return result;
+		}
+		result.put("responseMessage", "Invalid ID");
+		return result;
+
+	}
+
+	// Crypto wallet Withdraw
+	public Map<String, Object> createCryptoWithdraw(CryptoWithdrawDTO cryptoWithdrawDTO) {
+		logger.info("create withdraw request");
+		Map<String, Object> result = new HashMap<String, Object>();
+		Double amount = cryptoWithdrawDTO.getNumberOfCoin();
+		Long walletId = cryptoWithdrawDTO.getWalletId();
+		// logger
+		Optional<CryptoWallet> cryptowallet = cryptoWalletRepository.findById(walletId);
+
+		if (cryptowallet.isPresent()) {
+
+			CryptoWallet foundUser = cryptowallet.get();
+
+			/* FiatWithdraw fwType = fiatWithdrawRepository.findByWallet(foundUser); */
+
+			CryptoWithdraw newCryptoWithdraw = new CryptoWithdraw();
+			newCryptoWithdraw.setQuantity(amount);
+			newCryptoWithdraw.setCryptowallet(foundUser);
+			cryptoWithdrawRepository.save(newCryptoWithdraw);
+			CryptoWallet fwType = cryptoWalletRepository.findByWalletId(foundUser.getWalletId());
+			Double currentBalance = fwType.getBalance();
+			logger.info("Current Amount" + currentBalance);
+			Double currentShadowBalance = fwType.getShadowBalance();
+			if ((currentBalance >= amount) && (currentShadowBalance >= amount)) {
+				Double updatedBalance = (currentBalance - amount);
+				fwType.setBalance(updatedBalance);
+				Double updatedShadowBalance = currentShadowBalance - amount;
+				fwType.setShadowBalance(updatedShadowBalance);
+				cryptoWalletRepository.save(fwType);
+				result.put("responseMessage", "success");
+				return result;
+			}
+			result.put("responseMessage", "Not Sufficient Amount");
+			return result;
+		}
+		result.put("responseMessage", "Invalid ID");
+		return result;
+
+	}
 }

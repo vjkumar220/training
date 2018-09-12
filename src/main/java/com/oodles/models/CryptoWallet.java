@@ -45,7 +45,11 @@ public class CryptoWallet {
 	  // @JsonManagedReference
 	 //  @JsonBackReference(value="user-cryptowallet")
 	   private Set<CryptoDeposit> cryptodeposit = new HashSet<>();
-	   
+	   //mapping with withdraw
+	 @OneToMany(cascade = CascadeType.ALL,
+	           fetch = FetchType.EAGER,
+	           mappedBy = "cryptowallet")
+	   private Set<CryptoWithdraw> cryptowithdraw = new HashSet<>();
 	 
 public CryptoWallet()
 {
@@ -93,6 +97,12 @@ public Set<CryptoDeposit> getCryptodeposit() {
 }
 public void setCryptodeposit(Set<CryptoDeposit> cryptodeposit) {
 	this.cryptodeposit = cryptodeposit;
+}
+public Set<CryptoWithdraw> getCryptowithdraw() {
+	return cryptowithdraw;
+}
+public void setCryptowithdraw(Set<CryptoWithdraw> cryptowithdraw) {
+	this.cryptowithdraw = cryptowithdraw;
 }
 
 }
