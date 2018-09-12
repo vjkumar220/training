@@ -1,15 +1,15 @@
 package com.oodles.DTO;
 
 public class FiatWalletDTO {
-	private Long balance;
+	private Double balance;
     private String coinName;
- private Long shadowBalance;
+ private Double shadowBalance;
 private Long user_id;
 private String walletType;
-public Long getBalance() {
+public Double getBalance() {
 	return balance;
 }
-public void setBalance(Long balance) {
+public void setBalance(Double balance) {
 	this.balance = balance;
 }
 public String getCoinName() {
@@ -18,10 +18,10 @@ public String getCoinName() {
 public void setCoinName(String coinName) {
 	this.coinName = coinName;
 }
-public Long getShadowBalance() {
+public Double getShadowBalance() {
 	return shadowBalance;
 }
-public void setShadowBalance(Long shadowBalance) {
+public void setShadowBalance(Double shadowBalance) {
 	this.shadowBalance = shadowBalance;
 }
 public Long getUser_id() {

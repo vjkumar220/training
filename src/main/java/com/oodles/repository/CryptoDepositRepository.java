@@ -10,5 +10,5 @@ import com.oodles.models.CryptoDeposit;
 		/*CryptoDeposit findByWallet(CryptoWallet walletId);*/
 		//CryptoDeposit findByTransactionIdAndWalletId(Long transactionId,Long Walletid);
 		CryptoDeposit findByTransactionId(Long transactionId);
-	CryptoDeposit findByTransactionIdAndWalletId(Long transactionId,Long walletId);
+	CryptoDeposit findByTransactionIdAndCryptowalletWalletId(Long transactionId,Long walletId);
 }

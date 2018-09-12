@@ -23,7 +23,7 @@ public class FiatDeposit {
 	private String walletType;
 	
 	@NotNull
-    private Long amount;
+    private Double amount;
 	
 	 @Enumerated(EnumType.STRING)
 	private DepositStatus Status;
@@ -63,11 +63,13 @@ public class FiatDeposit {
 
 	
 
-	public Long getAmount() {
+	
+
+	public Double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Long amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 

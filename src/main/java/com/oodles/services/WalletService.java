@@ -49,8 +49,8 @@ public class WalletService {
 		String coinName = userWalletDTO.getCoinName();
 		String walletType = userWalletDTO.getWalletType();
 		logger.info(" walletType in service =" + walletType);
-		Long balance = userWalletDTO.getBalance();
-		Long shadowBalance = userWalletDTO.getShadowBalance();
+		Double balance = userWalletDTO.getBalance();
+		Double shadowBalance = userWalletDTO.getShadowBalance();
 		Long userId = userWalletDTO.getUser_id();
 		// logger
 		Optional<User> user = userRepository.findById(userId);
@@ -82,7 +82,7 @@ public class WalletService {
 	// Create Crypto Wallet
 
 	public Map<String, Object> createCryptoWallet(UserWalletDTO userWalletDTO) {
-		logger.info("createFiatwallet entered");
+		logger.info("create Crypto wallet entered");
 		Map<String, Object> result = new HashMap<String, Object>();
 		String coinName = userWalletDTO.getCoinName();
 		String walletType = userWalletDTO.getWalletType();
@@ -96,12 +96,13 @@ public class WalletService {
 		if (user.isPresent()) {
 
 			User foundUser = user.get();
-
+logger.info("user found");
 			CryptoWallet fwType = cryptoWalletRepository.findByWalletTypeAndUser(walletType, foundUser);
 
 			if (!(fwType == null))
 			// if(fwType.equals(walletType))
 			{
+				logger.info("WalletType search done");
 				CryptoWallet newCryptoWallet = new CryptoWallet();
 				newCryptoWallet.setBalance(balance);
 				newCryptoWallet.setCoinName(coinName);
@@ -110,6 +111,7 @@ public class WalletService {
 
 				newCryptoWallet.setUser(foundUser);
 				cryptoWalletRepository.save(newCryptoWallet);
+				logger.info("save done");
 				result.put("responseMessage", "success");
 			}
 
@@ -123,7 +125,7 @@ public class WalletService {
 		logger.info("create deposit request");
 		Map<String, Object> result = new HashMap<String, Object>();
 		String walletType = fiatDepositDTO.getWalletType();
-		Long amount = fiatDepositDTO.getAmount();
+		Double amount = fiatDepositDTO.getAmount();
 		Long userId = fiatDepositDTO.getUserId();
 		// logger
 		Optional<User> user = userRepository.findById(userId);
@@ -169,17 +171,17 @@ public class WalletService {
 			if (deposituser != null) {
 				if (newstatus.equalsIgnoreCase("APPROVED")) {
 					logger.info("status ");
-					Long amount = deposituser.getAmount();
+					Double amount = deposituser.getAmount();
 					logger.info("deposit amount" + amount);
 					DepositStatus status = deposituser.getStatus();
 					deposituser.setStatus(status.APPROVED);
 					FiatWallet fwType = fiatWalletRepository.findByUserId(foundUser.getId());
-					Long currentBalance = fwType.getBalance();
+					Double currentBalance = fwType.getBalance();
 					logger.info("Current Amount" + currentBalance);
-					Long currentShadowBalance = fwType.getShadowBalance();
-					Long updatedBalance = currentBalance + amount;
+					Double currentShadowBalance = fwType.getShadowBalance();
+					Double updatedBalance = currentBalance + amount;
 					fwType.setBalance(updatedBalance);
-					Long updatedShadowBalance = currentShadowBalance + amount;
+					Double updatedShadowBalance = currentShadowBalance + amount;
 					fwType.setShadowBalance(updatedShadowBalance);
 					fiatWalletRepository.save(fwType);
 					logger.info("updation service done");
@@ -243,7 +245,7 @@ public class WalletService {
 			logger.info("user search");
 			CryptoWallet foundWallet = wallet.get();
 			logger.info("user found");
-			CryptoDeposit deposituser = cryptoDepositRepository.findByTransactionIdAndWalletId(transId,foundWallet.getWalletId());
+			CryptoDeposit deposituser = cryptoDepositRepository.findByTransactionIdAndCryptowalletWalletId(transId,foundWallet.getWalletId());
 			logger.info("user for deposit");
 
 			if (deposituser != null) {
