@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.oodles.domain.deposit.CryptoDeposit;
 import com.oodles.domain.user.User;
 import com.oodles.domain.withdraw.CryptoWithdraw;
+import com.oodles.enumeration.CryptoName;
 
 //@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
@@ -26,19 +29,19 @@ public class CryptoWallet implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long cryptoWalletId;
-	private Long shadowBalance;
+	private Double shadowBalance;
 	private Double balance;
 	private String coinName;
 	private String walletType;
 
-	@ManyToOne (fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	@JsonBackReference(value = "for Crypto Wallet")
 	private User user;
-	
+
 	@OneToMany(mappedBy = "cryptoWallet", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<CryptoDeposit> cryptoDeposit;
-	
+
 	@OneToMany(mappedBy = "cryptoWallet", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<CryptoWithdraw> cryptoWithdraw;
 
@@ -50,20 +53,12 @@ public class CryptoWallet implements Serializable {
 		this.cryptoWalletId = cryptoWalletId;
 	}
 
-	public Long getShadowBalance() {
-		return shadowBalance;
+	public Set<CryptoWithdraw> getCryptoWithdraw() {
+		return cryptoWithdraw;
 	}
 
-	public void setShadowBalance(Long shadowBalance) {
-		this.shadowBalance = shadowBalance;
-	}
-
-	public String getCoinName() {
-		return coinName;
-	}
-
-	public void setCoinName(String coinName) {
-		this.coinName = coinName;
+	public void setCryptoWithdraw(Set<CryptoWithdraw> cryptoWithdraw) {
+		this.cryptoWithdraw = cryptoWithdraw;
 	}
 
 	public String getWalletType() {
@@ -98,5 +93,20 @@ public class CryptoWallet implements Serializable {
 		this.balance = balance;
 	}
 
+	public Double getShadowBalance() {
+		return shadowBalance;
+	}
+
+	public void setShadowBalance(Double shadowBalance) {
+		this.shadowBalance = shadowBalance;
+	}
+
+	public String getCoinName() {
+		return coinName;
+	}
+
+	public void setCoinName(String coinName) {
+		this.coinName = coinName;
+	}
 	
 }

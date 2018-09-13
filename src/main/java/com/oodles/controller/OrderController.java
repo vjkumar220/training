@@ -36,7 +36,7 @@ public class OrderController {
 		}
 	}
 	
-	//Create the sell order request
+/*	//Create the sell order request
 	@PostMapping(value = "/sellOrder")
 	public Map sellOrderGenerated(@Valid @RequestBody OrderDto sellOrderDto) {
 
@@ -46,6 +46,6 @@ public class OrderController {
 		} catch (ResourceNotFoundException e) {
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 		}
-	}
+	}*/
 	
 }

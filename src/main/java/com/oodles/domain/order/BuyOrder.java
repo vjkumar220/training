@@ -18,6 +18,7 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.oodles.domain.user.User;
+import com.oodles.enumeration.CryptoName;
 import com.oodles.enumeration.OrderStatus;
 @Entity
 public class BuyOrder {
@@ -33,7 +34,7 @@ public class BuyOrder {
 	@NotNull
 	private Double buyPrice;
 	@NotNull
-	private String buyCoinName;
+	private CryptoName buyCoinName;
 	@NotNull
 	private Double buyCoinQuantity;
 	
@@ -66,12 +67,6 @@ public class BuyOrder {
 	public void setBuyPrice(Double buyPrice) {
 		this.buyPrice = buyPrice;
 	}
-	public String getBuyCoinName() {
-		return buyCoinName;
-	}
-	public void setBuyCoinName(String buyCoinName) {
-		this.buyCoinName = buyCoinName;
-	}
 	public Double getBuyCoinQuantity() {
 		return buyCoinQuantity;
 	}
@@ -83,6 +78,12 @@ public class BuyOrder {
 	}
 	public void setUser(User user) {
 		this.user = user;
+	}
+	public CryptoName getBuyCoinName() {
+		return buyCoinName;
+	}
+	public void setBuyCoinName(CryptoName buyCoinName) {
+		this.buyCoinName = buyCoinName;
 	}
 	
 }

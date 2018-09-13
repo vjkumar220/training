@@ -14,6 +14,7 @@ import com.oodles.domain.order.SellOrder;
 import com.oodles.domain.user.User;
 import com.oodles.domain.wallet.CryptoWallet;
 import com.oodles.dto.OrderDto;
+import com.oodles.enumeration.CryptoName;
 import com.oodles.enumeration.OrderStatus;
 import com.oodles.enumeration.OrderType;
 import com.oodles.repository.BuyOrderRepository;
@@ -40,15 +41,16 @@ public class OrderService {
 	// Buy Order request
 
 	public String createBuyOrder(OrderDto buyOrderDto) {
-		String coinName = buyOrderDto.getCoinName();
+		CryptoName coinName = buyOrderDto.getCoinName();
 		Double coinQuantity = buyOrderDto.getCoinQuantity();
 		Double price = buyOrderDto.getPrice();
 		Long userIdDto = buyOrderDto.getUserId();
+		Long walletIdDto = buyOrderDto.getWalletId();
 		Optional<User> findUser = userRepository.findById(userIdDto);
 		if (findUser.isPresent()) {
 			User user = findUser.get();
 			Long userId = user.getId();
-			CryptoWallet findCurrency = cryptoWalletRepository.findByUserId( userId);
+			CryptoWallet findCurrency = cryptoWalletRepository.findByCryptoWalletIdAndUserId(walletIdDto, userIdDto);
 			if (findCurrency != null) {
 				BuyOrder buyOrder = new BuyOrder();
 				buyOrder.setBuyCoinName(coinName);
@@ -58,13 +60,14 @@ public class OrderService {
 				buyOrderRepository.save(buyOrder);
 				return "Your Buy Order is genrated";
 			}
+			return "Coin Not Present";
 		}
 		return "User Not Found";
 	}
 
 	// Sell Order Request
 
-	public String createSellOrder(OrderDto sellOrderDto) {
+/*	public String createSellOrder(OrderDto sellOrderDto) {
 		String coinName = sellOrderDto.getCoinName();
 		Double coinQuantity = sellOrderDto.getCoinQuantity();
 		Double price = sellOrderDto.getPrice();
@@ -82,8 +85,7 @@ public class OrderService {
 				order.setSellPrice(price);
 				order.setUser(user);
 				sellOrderRepository.save(order);
-				return "Your sell order request is generated";
 			}return "Coin Not Present";
 		}return "User Not Found";
-	}
+	}*/
 }

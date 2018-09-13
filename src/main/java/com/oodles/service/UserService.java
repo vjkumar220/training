@@ -70,11 +70,14 @@ public class UserService {
 
 	// get all users
 	public List<User> retrieveAllUser() {
-		List<User> result = userRepository.findAll();
-		return result;
+		return userRepository.findAll();
 	}
 
-	// get all user by id
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public Optional<User> findUserById(String id) {
 		Optional<User> value = userRepository.findById(Long.parseLong(id));
 		User result = value.get();
@@ -146,7 +149,7 @@ public class UserService {
 			if (otp != null) {
 				if (otp.getExpirytime() >= System.currentTimeMillis()) {
 					if (requestOTP.getOtp().equals(otp.getOtp())) {
-						
+
 						return "OTP is verified successfully";
 					}
 					return "OTP is invalid";
@@ -192,7 +195,16 @@ public class UserService {
 			if (emailDto != null) {
 				if (emailDto.getExpirytime() >= System.currentTimeMillis()) {
 					if (verifyEmail.getOtp().equals(emailDto.getOtp())) {
-						
+						Optional<User> value = userRepository.findById(Long.parseLong(id));
+						if (value.isPresent()) {
+							User user = value.get();
+							String emailCode = user.getEmailCode();
+							String mobileCode = user.getMobileCode();
+							if (emailCode != null && mobileCode != null) {
+								user.setStatus("active");
+								userRepository.save(user);
+							}
+						}
 						email_data.remove(email);
 						return "Verificarion code is verified successfully";
 					}
@@ -204,9 +216,8 @@ public class UserService {
 		}
 		return "Email Address is not found";
 	}
-	
-	
-	//Forget Password sending verification password
+
+	// Forget Password sending verification password
 	public String forgetPassword(String userId) {
 		Optional<User> value = userRepository.findById(Long.parseLong(userId));
 		User user = value.get();
@@ -229,9 +240,8 @@ public class UserService {
 		javaMailSender.send(mail);
 		return "Your verification code has been send to your mail";
 	}
-	
-	
-	//Updating Password
+
+	// Updating Password
 	public String verifyEmailAndUpdatePass(String email, EmailVerifyDto verifyEmail) {
 		String password = verifyEmail.getPassword();
 		if (verifyEmail.getOtp() == null || verifyEmail.getOtp().trim().length() <= 0) {
@@ -243,7 +253,7 @@ public class UserService {
 				if (emailDto.getExpirytime() >= System.currentTimeMillis()) {
 					if (verifyEmail.getOtp().equals(emailDto.getOtp())) {
 						Optional<User> foundUser = userRepository.findById(Long.parseLong(id));
-						User user= foundUser.get();
+						User user = foundUser.get();
 						user.setPassword(password);
 						userRepository.save(user);
 						email_data.remove(email);
@@ -254,8 +264,8 @@ public class UserService {
 				return "Verification code is expired";
 			}
 			return "Something went wrong";
-		 }
+		}
 		return "Email Address is not found";
 	}
-	
+
 }

@@ -26,7 +26,7 @@ import com.oodles.service.DepositService;
 import com.oodles.util.ResponseHandler;
 
 @RestController
-@RequestMapping(value = "/v1")
+@RequestMapping(value = "/deposit")
 public class DepositController {
 	Logger log = LoggerFactory.getLogger(DepositController.class);
 
@@ -37,19 +37,12 @@ public class DepositController {
 
 	// Generating deposit request for fiat wallet
 
-	@PostMapping(value = "/fiatDepositRequest")
+	@PostMapping(value = "/create-fiat-deposit-request")
 	public Map createFiatDeposit(@Valid @RequestBody FiatDepositDto depositDto) {
 		log.info("In deposit controller", depositDto);
 		try {
 			result = depositService.fiatDeposit(depositDto);
-			log.info("result", result);
-			if (result.containsKey("success")) {
-				log.info("in if fiat deposit");
 				return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-			} else {
-				log.info("in else fiat deposit");
-				return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-			}
 		} catch (Exception e) {
 			log.info("in catch fiat deposit");
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
@@ -58,15 +51,17 @@ public class DepositController {
 	}
 
 	// Getting all pending fiat deposit request
-	@GetMapping(value = "/getPendingRequest")
+
+	@GetMapping(value = "/get-pending-request")
 	public List getAllPendingReq() {
 		List depositsList = depositService.getAllPendingRequest();
 		return depositsList;
 	}
 
 	// Approval of the deposit request
-	@PostMapping(value = "/approvedFiatDepositRequest")
-	public Map approvalDepositRequest(@Valid @RequestBody ApprovalDto approvalDto) {
+
+	@PostMapping(value = "/approve-update-fiat-deposit-request")
+	public Map approveFiatDepositRequest(@Valid @RequestBody ApprovalDto approvalDto) {
 		try {
 			result = depositService.approveDeposit(approvalDto);
 			log.info("result", result);
@@ -79,34 +74,28 @@ public class DepositController {
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 		}
 	}
-	
-	//Creating the crypto deposit request
-	
-	@PostMapping(value = "/cryptoDepositRequest")
-	public Map cryptoDeposit(@Valid @RequestBody CryptoDepositDto cryptoDepositDto) {
+
+	// Creating the crypto deposit request
+
+	@PostMapping(value = "/create-crypto-deposit-request")
+	public Map createCryptoDeposit(@Valid @RequestBody CryptoDepositDto cryptoDepositDto) {
 		try {
 			result = depositService.cryptoDeposit(cryptoDepositDto);
 			log.info("result", result);
-			if (result.containsKey("success")) {
 				return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-			} else {
-				return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-			}
 		} catch (ResourceNotFoundException e) {
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 		}
 	}
-	
-	@PostMapping(value = "/approvedCryptoDepositRequest")
-	public Map approvalCryptoDepositRequest(@Valid @RequestBody CryptoApprovalDto cryptoApprovalDto) {
+
+	// Approve and update balance crypto deposit request
+
+	@PostMapping(value = "/approve-crypto-deposit-request")
+	public Map approveCryptoDepositRequest(@Valid @RequestBody CryptoApprovalDto cryptoApprovalDto) {
 		try {
 			result = depositService.approveCryptoRequest(cryptoApprovalDto);
 			log.info("result", result);
-			if (result.containsKey("success")) {
 				return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-			} else {
-				return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-			}
 		} catch (ResourceNotFoundException e) {
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 		}

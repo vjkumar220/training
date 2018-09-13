@@ -22,6 +22,7 @@ import com.oodles.dto.ApprovalDto;
 import com.oodles.dto.CryptoApprovalDto;
 import com.oodles.dto.CryptoDepositDto;
 import com.oodles.dto.FiatDepositDto;
+import com.oodles.enumeration.CryptoName;
 import com.oodles.enumeration.DepositStatus;
 import com.oodles.repository.CryptoDepositRepository;
 import com.oodles.repository.CryptoWalletRepository;
@@ -118,35 +119,44 @@ public class DepositService {
 							fiatWallet.setBalance(updatedBalance);
 							fiatWalletRepository.save(fiatWallet);
 							fiatDepositRepository.save(deposit);
-							result.put("success", "Your request is Approved and Balance is Updated");
+							result.put("responseMessage", "Your request is Approved and Balance is Updated");
+							return result;
+						}
+						else if(depositStatus.equals(DepositStatus.REJECTED)) {
+							foundDeposit.setDepositStatus(depositStatus.REJECTED);
+							fiatDepositRepository.save(foundDeposit);
+							result.put("responseMessage", "Your request is Rejected");
+							return result;
+							
 						}
 					}
 				}
 			}
-			result.put("error", "Deposit Request Not Found");
+			result.put("responseMessage", "Deposit Request Not Found");
+			return result;
 		}
-		result.put("error", "User Not Found");
+		result.put("responseMessage", "User Not Found");
 		return result;
 	}
 
 	// Crypto deposit request Generate
 
 	public Map<Object, Object> cryptoDeposit(CryptoDepositDto cryptoDepositDto) {
-		String coinName = cryptoDepositDto.getCoinName();
+		CryptoName coinName = cryptoDepositDto.getCoinName();
 		Double coinQuantity = cryptoDepositDto.getCoinQuantity();
 		Long cryptoWalletId = cryptoDepositDto.getCryptoWalletId();
 		Optional<CryptoWallet> foundWallet = cryptoWalletRepository.findById(cryptoWalletId);
 		if (foundWallet.isPresent()) {
 			CryptoDeposit cryptoDeposit = new CryptoDeposit();
-			cryptoDeposit.setCoinType(coinName);
+			cryptoDeposit.setCoinType(coinName.toString());
 			cryptoDeposit.setCryptoWallet(foundWallet.get());
 			cryptoDeposit.setNumberOfCoin(coinQuantity);
 			cryptoDeposit.setDepositStatus(DepositStatus.PENDING);
 			cryptoDepositRepository.save(cryptoDeposit);
-			result.put("success", "Your crypto Deposit generated");
+			result.put("responseMessage", "Your crypto Deposit generated");
 			return result;
 		}
-		result.put("error", "Wallet is not found");
+		result.put("responseMessage", "Wallet is not found");
 		return result;
 	}
 
@@ -184,16 +194,16 @@ public class DepositService {
 						} else if (depositStatusDto.equals(DepositStatus.REJECTED)) {
 							cryptoDeposit.setDepositStatus(DepositStatus.REJECTED);
 							cryptoDepositRepository.save(cryptoDeposit);
-							result.put("sucess", "Your request is rejected");
+							result.put("responseMessage", "Your request is rejected");
 						}
 
 					}
 				}
 			}
-			result.put("error", "User is  not found");
+			result.put("responseMessage", "User is  not found");
 
 		}
-		result.put("error", "Order is not present");
+		result.put("responseMessage", "Order is not present");
 
 		return result;
 	}

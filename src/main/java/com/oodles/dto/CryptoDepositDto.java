@@ -1,20 +1,14 @@
 package com.oodles.dto;
 
+import com.oodles.enumeration.CryptoName;
+
 public class CryptoDepositDto {
 	
-	private String coinName;
+	private CryptoName coinName;
 	
 	private Double coinQuantity;
 	
 	private Long cryptoWalletId;
-
-	public String getCoinName() {
-		return coinName;
-	}
-
-	public void setCoinName(String coinName) {
-		this.coinName = coinName;
-	}
 
 	public Double getCoinQuantity() {
 		return coinQuantity;
@@ -30,6 +24,14 @@ public class CryptoDepositDto {
 
 	public void setCryptoWalletId(Long cryptoWalletId) {
 		this.cryptoWalletId = cryptoWalletId;
+	}
+
+	public CryptoName getCoinName() {
+		return coinName;
+	}
+
+	public void setCoinName(CryptoName coinName) {
+		this.coinName = coinName;
 	}
 										
 }

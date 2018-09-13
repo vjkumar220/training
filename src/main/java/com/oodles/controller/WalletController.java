@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.dto.CryptoWalletDto;
@@ -20,6 +21,7 @@ import com.oodles.service.WalletService;
 import com.oodles.util.ResponseHandler;
 
 @RestController
+@RequestMapping("/wallet")
 public class WalletController {
 	Logger logger = LoggerFactory.getLogger(WalletController.class);
 	@Autowired
@@ -27,7 +29,7 @@ public class WalletController {
 
 	private Map result = null;
 
-	@PostMapping(value = "/cryptowallet")
+	@PostMapping(value = "/create-crypto-wallet")
 	public Map createCryptoWallet(@RequestBody CryptoWalletDto  cryptoWallet) {
 		logger.info("in create waller");
 		try {
@@ -40,7 +42,7 @@ public class WalletController {
 		}
 	}
 	
-	@PostMapping(value = "/fiatwallet")
+	@PostMapping(value = "/create-fiat-wallet")
 	public Map createFiatWallet(@RequestBody FiatWalletDto fiatWalletDto) {
 		logger.info("in create waller");
 		try {

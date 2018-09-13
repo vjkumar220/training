@@ -1,13 +1,17 @@
 package com.oodles.dto;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import com.oodles.enumeration.CryptoName;
 import com.oodles.enumeration.OrderType;
 
 public class OrderDto {
 	@NotNull
-	private String coinName; 
+	@Enumerated(EnumType.STRING)
+	private CryptoName coinName; 
 	@NotNull
 	@Min(value=0  ,message = " Enter coinQuantity is greater than zero")
 	private Double coinQuantity;
@@ -16,11 +20,14 @@ public class OrderDto {
 	private Double price;
 	@NotNull
 	private Long userId;
+	@NotNull
+	private Long walletId;
 	
-	public String getCoinName() {
+
+	public CryptoName getCoinName() {
 		return coinName;
 	}
-	public void setCoinName(String coinName) {
+	public void setCoinName(CryptoName coinName) {
 		this.coinName = coinName;
 	}
 	public Double getCoinQuantity() {
@@ -41,5 +48,12 @@ public class OrderDto {
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
+	public Long getWalletId() {
+		return walletId;
+	}
+	public void setWalletId(Long walletId) {
+		this.walletId = walletId;
+	}
+	
 	
 }

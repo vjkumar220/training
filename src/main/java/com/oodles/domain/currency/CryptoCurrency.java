@@ -1,12 +1,15 @@
 package com.oodles.domain.currency;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.oodles.enumeration.CryptoName;
 
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
@@ -20,8 +23,10 @@ public class CryptoCurrency {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long currencyId;
+	
 	@NotNull
-	private String coinName;
+	@Enumerated(EnumType.STRING)
+	private CryptoName coinName;
 	@NotNull
 	private String symbol;
 	@NotNull
@@ -38,14 +43,6 @@ public class CryptoCurrency {
 
 	public void setCurrencyId(Long currencyId) {
 		this.currencyId = currencyId;
-	}
-
-	public String getCoinName() {
-		return coinName;
-	}
-
-	public void setCoinName(String coinName) {
-		this.coinName = coinName;
 	}
 
 	public String getSymbol() {
@@ -66,6 +63,15 @@ public class CryptoCurrency {
 
 	public String getInitialSupply() {
 		return initialSupply;
+	}
+	
+
+	public CryptoName getCoinName() {
+		return coinName;
+	}
+
+	public void setCoinName(CryptoName coinName) {
+		this.coinName = coinName;
 	}
 
 	public void setInitialSupply(String initialSupply) {

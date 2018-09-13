@@ -25,8 +25,10 @@ public class WithdrawController {
 	private WithdrawService withdrawService;
 
 	private Map result = null;
+	
+	//Withdraw from fiat wallet
 
-	@PostMapping(value = "/fiatWithdraw")
+	@PostMapping(value = "/withdraw-from-fiat-wallet")
 	public Map fiatWithdraw(@Valid @RequestBody FiatWithrawDto fiatWithrawDto) {
 
 		try {
@@ -41,7 +43,9 @@ public class WithdrawController {
 		}
 	}
 	
-	@PostMapping(value = "cryptoWithdraw")
+	//Withdraw from crypto Wallet
+	
+	@PostMapping(value = "withdraw-from-crypto-wallet")
 	public Map cryptoWithdraw(@Valid @RequestBody CryptoWithdrawDto cryptoWithdrawDto) {
 		
 		try {

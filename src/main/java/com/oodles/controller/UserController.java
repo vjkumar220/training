@@ -30,7 +30,7 @@ import com.oodles.service.UserService;
 import com.oodles.util.ResponseHandler;
 
 @RestController
-@RequestMapping("v1/")
+@RequestMapping("/user")
 public class UserController {
 	Logger logger = LoggerFactory.getLogger(UserController.class);
 	@Autowired
@@ -52,14 +52,14 @@ public class UserController {
 	}
 
 	// getting all user
-	@GetMapping(value = "/users")
+	@GetMapping(value = "/get-all-users")
 	public List<User> viewAllUsers() {
 		List<User> result = userService.retrieveAllUser();
 		return result;
 	}
 
 	// getting all user by id
-	@GetMapping(value = "/users/{id}")
+	@GetMapping(value = "/get-users-by-id/{id}")
 	public Map<String, Object> findUserById(@PathVariable String id) {
 		Optional<User> result = null;
 		try {
@@ -75,7 +75,7 @@ public class UserController {
 	}
 
 	// deleting user by id
-	@DeleteMapping(value = "/users/{id}")
+	@DeleteMapping(value = "/delete-users-by-id/{id}")
 	public Map deleteUser(@PathVariable String id) {
 		User delete = null;
 		try {
@@ -93,7 +93,7 @@ public class UserController {
 	}
 
 	// update user by id
-	@PutMapping(value = "/users/{id}/{name}/{email}/{password}/{phoneNumber}/{country}")
+	@PutMapping(value = "/update-user-feild/{id}/{name}/{email}/{password}/{phoneNumber}/{country}")
 	public Map updateUser(@PathVariable String id, @PathVariable String name, @PathVariable String email,
 			@PathVariable String password, @PathVariable String phoneNumber, @PathVariable String country) {
 		User user = null;
@@ -108,7 +108,7 @@ public class UserController {
 	}
 
 	// verify the user
-	@PostMapping(value = "/users/{userId}")
+	@PostMapping(value = "/send-otp/{userId}")
 	public Map sendOtp(@PathVariable String userId) {
 		String result = null;
 		try {
@@ -121,7 +121,7 @@ public class UserController {
 		}
 	}
 
-	@RequestMapping(value = "/users/otp/{mobileNumber}", method = RequestMethod.PUT)
+	@PutMapping(value = "/veify-users/otp/{mobileNumber}")
 	public Map verifyOtp(@PathVariable String mobileNumber, @RequestBody Otp requestOTP) {
 		String result = null;
 		try {
@@ -136,7 +136,7 @@ public class UserController {
 
 	// Sending Mail
 
-	@PostMapping(value = "signup/sendmail/{userId}")
+	@PostMapping(value = "/send-mail-to-user /{userId}")
 	public Map<String, Object> sendMail(@PathVariable String userId) {
 		logger.info("Mail controller send mail");
 		String result = null;
@@ -151,7 +151,7 @@ public class UserController {
 	}
 
 	// Verify Email
-	@PutMapping(value = "signup/{emailAddress}/verification")
+	@PutMapping(value = "/verify-mail/{emailAddress}/verification")
 	public Map<String, Object> verifyMail(@PathVariable String emailAddress, @RequestBody EmailDto verifyEmail) {
 		logger.info("Mail controller send mail");
 		String result = null;
@@ -166,7 +166,7 @@ public class UserController {
 	}
 	
 	//Sending Mail for Reset password
-	@PostMapping(value = "/forgetPassword/{userId}")
+	@PostMapping(value = "verification-mail-forget-password-send/{userId}")
 	public Map  forgetPasswordMail(@PathVariable String userId) {
 		
 		String result = null;
@@ -180,7 +180,7 @@ public class UserController {
 		}
 	}
 	
-	@PutMapping(value = "signup/{emailAddress}/updatePassword")
+	@PutMapping(value = "/{emailAddress}/update-password")
 	public Map<String, Object> updatePassword(@PathVariable String emailAddress, @RequestBody EmailVerifyDto verifyEmail) {
 		logger.info("Mail controller send mail");
 		String result = null;

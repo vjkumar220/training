@@ -27,7 +27,7 @@ public class FiatWallet implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long fiatWalletId;
-	private Long shadowBalance;
+	private Double shadowBalance;
 	@NotNull
 	private Double balance;
 	@NotNull
@@ -48,12 +48,6 @@ public class FiatWallet implements Serializable{
 	}
 	public void setFiatWalletId(Long fiatWalletId) {
 		this.fiatWalletId = fiatWalletId;
-	}
-	public Long getShadowBalance() {
-		return shadowBalance;
-	}
-	public void setShadowBalance(Long shadowBalance) {
-		this.shadowBalance = shadowBalance;
 	}
 	public String getCoinName() {
 		return coinName;
@@ -84,6 +78,12 @@ public class FiatWallet implements Serializable{
 	}
 	public void setFiatWithdraw(Set<FiatWithdraw> fiatWithdraw) {
 		this.fiatWithdraw = fiatWithdraw;
+	}
+	public Double getShadowBalance() {
+		return shadowBalance;
+	}
+	public void setShadowBalance(Double shadowBalance) {
+		this.shadowBalance = shadowBalance;
 	}
 	
 
