@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.oodles.enums.TransactionStatus;
+
 @Entity
 public class Transaction {
 	@Id

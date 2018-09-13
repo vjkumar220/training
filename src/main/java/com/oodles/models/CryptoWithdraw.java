@@ -1,5 +1,8 @@
 package com.oodles.models;
 
+import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -7,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -25,6 +30,9 @@ public class CryptoWithdraw {
 	 @JsonBackReference(value="cryptowallet-withdraw")
 	    private CryptoWallet cryptowallet;
 
+	  @Column(name="timeStamp", columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+	   @Temporal(TemporalType.TIMESTAMP)
+	private Date withdrawtime;
 	public Long getTransactionId() {
 		return transactionId;
 	}
@@ -48,6 +56,14 @@ public class CryptoWithdraw {
 
 	public void setCryptowallet(CryptoWallet cryptowallet) {
 		this.cryptowallet = cryptowallet;
+	}
+
+	public Date getWithdrawtime() {
+		return withdrawtime;
+	}
+
+	public void setWithdrawtime(Date withdrawtime) {
+		this.withdrawtime = withdrawtime;
 	}
 
 }

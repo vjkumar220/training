@@ -8,7 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.oodles.DTO.RoleDTO;
+import com.oodles.dto.RoleDto;
 import com.oodles.models.Role;
 import com.oodles.models.User;
 import com.oodles.repository.RoleRepository;
@@ -33,7 +33,7 @@ private UserRepository userRepository;
 		return result;
 	}
 	// Assign Role
-		public Map<String,Object> assignRole(RoleDTO userRoleDto) {
+		public Map<String,Object> assignRole(RoleDto userRoleDto) {
 			Map<String, Object> result = new HashMap<>();
 			Long userId = userRoleDto.getUserId();
 			Long roleId = userRoleDto.getRoleId();

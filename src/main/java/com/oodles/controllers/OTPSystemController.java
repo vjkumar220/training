@@ -1,35 +1,47 @@
 package com.oodles.controllers;
 
+import java.util.Map;
+import java.util.NoSuchElementException;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.oodles.models.User;
+import com.oodles.dto.OtpDto;
+import com.oodles.exceptions.ResourceNotFoundException;
+import com.oodles.exceptions.ResponseHandler;
 import com.oodles.services.OTPService;
 
 @RestController
 public class OTPSystemController {
 	@Autowired
 	private OTPService otpService;
-	@RequestMapping(value="/v1/verifyUser/{id}",method=RequestMethod.POST)
-	public ResponseEntity<Object>sendOTP(@PathVariable Long id) 
-	{
-		ResponseEntity<Object> result = otpService.sendOTP(id);
-
-		return result;
-
+	@RequestMapping(value="/v1/verifyUser/{userId}",method=RequestMethod.POST)
+	public Map sendOtp(@PathVariable String userId) {
+		String result = null;
+		try {
+			result = otpService.sendOTP(userId);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+		} catch (ResourceNotFoundException exception) {
+			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
+		} catch (NoSuchElementException excep) {
+			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
+		}
 	}
-	@RequestMapping(value="/v1/verifyUser/{id}",method=RequestMethod.PUT)
-	public ResponseEntity<Object> verifyOTP(@PathVariable Long id,@RequestBody User requestBodyOTPSystem)
-	{
-		ResponseEntity<Object> result = otpService.verifyOtp(id, requestBodyOTPSystem);
-
-
-
-		return result;
+	@RequestMapping(value="/v1/verifyUser/{mobileNumber}",method=RequestMethod.PUT)
+	public Map verifyOtp(@PathVariable String mobileNumber, @RequestBody OtpDto requestOTP) {
+		String result = null;
+		try {
+			result = otpService.verifyOtp(mobileNumber, requestOTP);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+		} catch (ResourceNotFoundException exception) {
+			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
+		} catch (NoSuchElementException excep) {
+			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
+		}
 	}
 	}

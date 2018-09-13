@@ -11,7 +11,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import com.oodles.DTO.EmailPasswordDTO;
+import com.oodles.dto.EmailPasswordDto;
 import com.oodles.models.User;
 import com.oodles.repository.UserRepository;
 
@@ -53,7 +53,7 @@ public class ForgotPasswordService {
 		return "Your code has been sent to your mail";
 	}
 
-	public String forgotPassword(EmailPasswordDTO verifyEmail) {
+	public String forgotPassword(EmailPasswordDto verifyEmail) {
 		String password = verifyEmail.getPassword();
 		logger.info("entered in verification block");
 		if (verifyEmail.getPassToken() == null || verifyEmail.getPassToken().trim().length() <= 0) {

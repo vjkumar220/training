@@ -1,7 +1,11 @@
-package com.oodles.DTO;
+package com.oodles.dto;
 
-public class FiatWithdrawDTO {
+import javax.validation.constraints.NotNull;
+
+public class FiatWithdrawDto {
+	@NotNull
 	private Double amount;
+	@NotNull
 	private Long walletId;
 	public Double getAmount() {
 		return amount;

@@ -1,17 +1,19 @@
-package com.oodles.DTO;
+package com.oodles.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-public class EmailPasswordDTO {
-	
+public class EmailPasswordDto {
+	@NotNull
 		@Email(message = "Enter Valid Email Id")
 		private String email;
+	@NotNull
 		private String passToken;
+	@NotNull
 		private Long expirytime;
 		@NotNull(message = "Enter the password")
-		@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&].{8,}$", message = " Enter Password Valid password")
+		@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&].{8,}$", message = "The password should have contain minimum 1 lowercase, maximum 1 uppercase, 1 digit and 1 special character(Minimum Length=8) ")
 		private String password;
 		public String getEmail() {
 			return email;

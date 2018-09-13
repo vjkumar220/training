@@ -22,9 +22,7 @@ import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name = "user")
-//@EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"}, 
-        allowGetters = true)
+
 public class User  {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)

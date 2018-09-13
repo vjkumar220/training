@@ -10,15 +10,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.oodles.DTO.BuyOrderDTO;
-import com.oodles.DTO.MarketOrderDTO;
-import com.oodles.DTO.OrderDTO;
-import com.oodles.DTO.SellOrderDTO;
+import com.oodles.dto.BuyOrderDto;
+import com.oodles.dto.MarketOrderDto;
+import com.oodles.dto.OrderDto;
+import com.oodles.dto.SellOrderDto;
+import com.oodles.enums.OrderStatus;
+import com.oodles.enums.OrderType;
 import com.oodles.models.BuyOrder;
 import com.oodles.models.LimitOrder;
 import com.oodles.models.MarketOrder;
-import com.oodles.models.OrderStatus;
-import com.oodles.models.OrderType;
 import com.oodles.models.SellOrder;
 import com.oodles.models.User;
 import com.oodles.repository.BuyOrderRepository;
@@ -41,7 +41,7 @@ public class OrderService {
 	@Autowired
 	private SellOrderRepository sellOrderRepository;
 
-	public Map<String, Object> createLimitOrder(OrderDTO orderDTO) {
+	public Map<String, Object> createLimitOrder(OrderDto orderDTO) {
 		logger.info("createOrder service entered");
 		Map<String, Object> result = new HashMap<String, Object>();
 		OrderType orderType = orderDTO.getOrderType();
@@ -56,7 +56,7 @@ public class OrderService {
 				User foundUser = user.get();
 				LimitOrder newOrder = new LimitOrder();
 				newOrder.setDesiredPrice(amount);
-				;
+				
 				newOrder.setCoinName(coinName);
 				newOrder.setOrderType(orderType);
 				newOrder.setCoinQuantity(quantity);
@@ -77,7 +77,7 @@ public class OrderService {
 	}
 
 	// Create Market Order
-	public Map<String, Object> createMarketOrder(MarketOrderDTO marketOrderDTO) {
+	public Map<String, Object> createMarketOrder(MarketOrderDto marketOrderDTO) {
 		logger.info("createOrder service entered");
 		Map<String, Object> result = new HashMap<String, Object>();
 		OrderType orderType = marketOrderDTO.getOrderType();
@@ -110,7 +110,7 @@ public class OrderService {
 	}
 	// Create Buy Order
 
-	public Map<String, Object> createBuyOrder(BuyOrderDTO buyOrderDTO) {
+	public Map<String, Object> createBuyOrder(BuyOrderDto buyOrderDTO) {
 		logger.info("createOrder service entered");
 		Map<String, Object> result = new HashMap<String, Object>();
 		Long amount = buyOrderDTO.getDesiredPrice();
@@ -145,7 +145,7 @@ public class OrderService {
 
 	// Create Sell Order
 
-	public Map<String, Object> createSellOrder(SellOrderDTO sellOrderDTO) {
+	public Map<String, Object> createSellOrder(SellOrderDto sellOrderDTO) {
 		logger.info("createOrder service entered");
 		Map<String, Object> result = new HashMap<String, Object>();
 		Long amount = sellOrderDTO.getDesiredPrice();

@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.oodles.DTO.CryptoApprovalDTO;
-import com.oodles.DTO.CryptoDepositDTO;
-import com.oodles.DTO.CryptoWithdrawDTO;
-import com.oodles.DTO.FiatApprovalDTO;
-import com.oodles.DTO.FiatDepositDTO;
-import com.oodles.DTO.FiatWalletDTO;
-import com.oodles.DTO.FiatWithdrawDTO;
-import com.oodles.DTO.UserWalletDTO;
+import com.oodles.dto.CryptoApprovalDto;
+import com.oodles.dto.CryptoDepositDto;
+import com.oodles.dto.CryptoWithdrawDto;
+import com.oodles.dto.FiatApprovalDto;
+import com.oodles.dto.FiatDepositDto;
+import com.oodles.dto.FiatWalletDto;
+import com.oodles.dto.FiatWithdrawDto;
+import com.oodles.dto.UserWalletDto;
 import com.oodles.exceptions.ResourceNotFoundException;
 import com.oodles.exceptions.ResponseHandler;
 import com.oodles.services.WalletService;
@@ -32,7 +32,7 @@ public class WalletController {
 	// Create a fiat wallet
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/fiatwallet")
 
-	public Map createFiatWallet(@RequestBody FiatWalletDTO userWalletDTO) {
+	public Map createFiatWallet(@RequestBody FiatWalletDto userWalletDTO) {
 		Map result = null;
 		try {
 			logger.info("Entered in create fiatwallet");
@@ -51,7 +51,7 @@ public class WalletController {
 	// Create a crypto wallet
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/cryptowallet")
 
-	public Map createCryptoWallet(@RequestBody UserWalletDTO userWalletDTO) {
+	public Map createCryptoWallet(@RequestBody UserWalletDto userWalletDTO) {
 		Map result = null;
 		try {
 			result = walletService.createCryptoWallet(userWalletDTO);
@@ -65,7 +65,7 @@ public class WalletController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/fiatdeposit")
 
-	public Map createFiatDeposit(@RequestBody FiatDepositDTO fiatDepositDTO) {
+	public Map createFiatDeposit(@RequestBody FiatDepositDto fiatDepositDTO) {
 		Map result = null;
 		try {
 			logger.info("Entered in create fiatwallet");
@@ -82,7 +82,7 @@ public class WalletController {
 	// Admin Approval for Fiat wallet
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/fiatdepositapproval")
 
-	public Map fiatDepositApproval(@RequestBody FiatApprovalDTO fiatApprovalDTO) {
+	public Map fiatDepositApproval(@RequestBody FiatApprovalDto fiatApprovalDTO) {
 		logger.info("Approval controller entered");
 		Map result = null;
 		try {
@@ -99,7 +99,7 @@ public class WalletController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/cryptodeposit")
 
-	public Map createCryptoDeposit(@RequestBody CryptoDepositDTO cryptoDepositDTO) {
+	public Map createCryptoDeposit(@RequestBody CryptoDepositDto cryptoDepositDTO) {
 		Map result = null;
 		try {
 
@@ -115,12 +115,12 @@ public class WalletController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/cryptodepositapproval")
 
-	public Map CryptoDepositApproval(@RequestBody CryptoApprovalDTO cryptoApprovalDTO) {
+	public Map cryptoDepositApproval(@RequestBody CryptoApprovalDto cryptoApprovalDTO) {
 		logger.info("Approval controller entered");
 		Map result = null;
 		try {
 
-			result = walletService.CryptoDepositApproval(cryptoApprovalDTO);
+			result = walletService.cryptoDepositApproval(cryptoApprovalDTO);
 			logger.info("Approval controller end");
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 
@@ -132,7 +132,7 @@ public class WalletController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/fiatwithdraw")
 
-	public Map createFiatWithdraw(@RequestBody FiatWithdrawDTO fiatWithdrawDTO) {
+	public Map createFiatWithdraw(@RequestBody FiatWithdrawDto fiatWithdrawDTO) {
 		logger.info("Approval controller entered");
 		Map result = null;
 		try {
@@ -149,7 +149,7 @@ public class WalletController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/cryptowithdraw")
 
-	public Map createCryptoWithdraw(@RequestBody CryptoWithdrawDTO cryptoWithdrawDTO) {
+	public Map createCryptoWithdraw(@RequestBody CryptoWithdrawDto cryptoWithdrawDTO) {
 		logger.info("Approval controller entered");
 		Map result = null;
 		try {

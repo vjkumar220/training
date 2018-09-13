@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.oodles.dto.VerifyEmailDto;
 import com.oodles.exceptions.ResourceNotFoundException;
 import com.oodles.exceptions.ResponseHandler;
-import com.oodles.models.User;
 import com.oodles.services.VerifyEmailService;
 
 @RestController
@@ -25,12 +25,12 @@ public class VerifyEmailController {
 private VerifyEmailService verifyemailService;
 // Sending Mail
 
-@PostMapping(value = "v1/verify/sendmail/{id}")
-public Map<String, Object> sendMail(@PathVariable String id) {
+@PostMapping(value = "v1/verify/sendmail/{userId}")
+public Map<String, Object> sendMail(@PathVariable String userId) {
 	logger.info("Mail controller send mail");
 	String result = null;
 	try {
-		result = verifyemailService.sendMail(id);
+		result = verifyemailService.sendMail(userId);
 		logger.info("send controller try block");
 		return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 	} catch (ResourceNotFoundException exception) {
@@ -43,12 +43,12 @@ public Map<String, Object> sendMail(@PathVariable String id) {
 }
 
 // Verify Email
-@PutMapping(value = "v1/verifymail")
-public Map<String, Object> verifyMail(@RequestBody User verifyEmail) {
+@PutMapping(value = "v1/verifymail/{emailAddress}")
+public Map<String, Object> verifyMail(@PathVariable String emailAddress,@RequestBody VerifyEmailDto verifyEmail) {
 	logger.info("Mail controller verify mail start");
 	String result = null;
 	try {
-		result = verifyemailService.verifyEmail(verifyEmail);
+		result = verifyemailService.verifyEmail(emailAddress,verifyEmail);
 		logger.info("Mail verify controller end");
 		return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 	} catch (ResourceNotFoundException exception) {

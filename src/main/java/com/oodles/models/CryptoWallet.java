@@ -21,9 +21,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name = "cryptowallet")
-//@EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"}, 
-        allowGetters = true)
+
 public class CryptoWallet {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)

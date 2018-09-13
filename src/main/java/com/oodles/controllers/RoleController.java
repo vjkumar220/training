@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.oodles.DTO.RoleDTO;
+import com.oodles.dto.RoleDto;
 import com.oodles.exceptions.ResourceNotFoundException;
 import com.oodles.exceptions.ResponseHandler;
 import com.oodles.services.RoleService;
@@ -38,7 +38,7 @@ public Map createUser(@PathVariable String roleType)  {
 // Create a new admin
 @RequestMapping(method = RequestMethod.POST, value = "/rest/assignrole/")
 @ResponseBody
-public Map assignRole(@RequestBody RoleDTO userRoleDTO)  {
+public Map assignRole(@RequestBody RoleDto userRoleDTO)  {
 	 Map result=null;
 	
 	try{

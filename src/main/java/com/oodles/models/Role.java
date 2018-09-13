@@ -17,9 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "role")
-//@EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"}, 
-        allowGetters = true)
+
 public class Role {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)

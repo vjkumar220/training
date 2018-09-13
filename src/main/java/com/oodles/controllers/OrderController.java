@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.oodles.DTO.BuyOrderDTO;
-import com.oodles.DTO.MarketOrderDTO;
-import com.oodles.DTO.OrderDTO;
-import com.oodles.DTO.SellOrderDTO;
+import com.oodles.dto.BuyOrderDto;
+import com.oodles.dto.MarketOrderDto;
+import com.oodles.dto.OrderDto;
+import com.oodles.dto.SellOrderDto;
 import com.oodles.exceptions.ResourceNotFoundException;
 import com.oodles.exceptions.ResponseHandler;
 import com.oodles.models.BuyOrder;
@@ -32,7 +32,7 @@ public class OrderController {
 	// Create Limit Order
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/createlimitorder")
 
-	public Map createLimitOrder(@RequestBody OrderDTO orderDTO) {
+	public Map createLimitOrder(@RequestBody OrderDto orderDTO) {
 		Map result = null;
 		try {
 			logger.info("Entered in create order");
@@ -50,7 +50,7 @@ public class OrderController {
 	// Create Market Order
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/createmarketorder")
 
-	public Map createMarketOrder(@RequestBody MarketOrderDTO marketOrderDTO) {
+	public Map createMarketOrder(@RequestBody MarketOrderDto marketOrderDTO) {
 		Map result = null;
 		try {
 			logger.info("Entered in create order");
@@ -68,7 +68,7 @@ public class OrderController {
 	// Create Buy Order
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/createbuyorder")
 
-	public Map createBuyOrder(@RequestBody BuyOrderDTO orderDTO) {
+	public Map createBuyOrder(@RequestBody BuyOrderDto orderDTO) {
 		Map result = null;
 		try {
 			logger.info("Entered in create order");
@@ -86,7 +86,7 @@ public class OrderController {
 	// Create Sell Order
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/createsellorder")
 
-	public Map createSellOrder(@RequestBody SellOrderDTO orderDTO) {
+	public Map createSellOrder(@RequestBody SellOrderDto orderDTO) {
 		Map result = null;
 		try {
 			logger.info("Entered in create order");
@@ -101,15 +101,16 @@ public class OrderController {
 		}
 	}
 	//Get All Sell Order
-	
-		@GetMapping(value = "/allsellorder")
+	@RequestMapping(method = RequestMethod.GET, value = "/v1/allsellorder")
+		
 		public List<SellOrder> viewAllSellOrder() {
 			List<SellOrder> result = orderService.retrieveAllSellOrder();
 			return result;
 		}
      
 		//Get All Buy Order
-		@GetMapping(value = "/allbuyorder")
+	@RequestMapping(method = RequestMethod.GET, value = "/v1/allbuyorder")
+		
 		public List<BuyOrder> viewAllBuyOrder() {
 			List<BuyOrder> result = orderService.retrieveAllBuyOrder();
 			return result;

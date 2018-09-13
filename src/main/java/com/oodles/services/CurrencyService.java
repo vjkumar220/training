@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.oodles.models.CryptoCurrency;
-import com.oodles.models.User;
 import com.oodles.repository.CryptoCurrencyRepository;
 
 @Service

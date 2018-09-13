@@ -36,6 +36,7 @@ public class UserService {
 			newUser.setMobilenumber(mobilenumber);
 			newUser.setPassword(password);
 			newUser.setCountry(country);
+			newUser.setEnabled(false);
 			userRepository.save(newUser);
 			result.put("responseMessage", "success");
 			return result;

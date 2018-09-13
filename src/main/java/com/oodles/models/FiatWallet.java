@@ -6,6 +6,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,15 +24,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "fiatwallet")
-//@EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"}, 
-        allowGetters = true)
+
 public class FiatWallet {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long walletId;
 	private Double balance;
 	private Double shadowBalance;
+	 
+	    
 	private String coinName;
 	private String walletType;
 	@OneToOne(fetch = FetchType.LAZY)
@@ -65,6 +67,8 @@ public class FiatWallet {
 	public void setShadowBalance(Double shadowBalance) {
 		this.shadowBalance = shadowBalance;
 	}
+	
+	
 	public String getCoinName() {
 		return coinName;
 	}

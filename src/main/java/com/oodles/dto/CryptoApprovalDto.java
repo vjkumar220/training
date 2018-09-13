@@ -1,10 +1,15 @@
-package com.oodles.DTO;
+package com.oodles.dto;
 
-import com.oodles.models.DepositStatus;
+import javax.validation.constraints.NotNull;
 
-public class CryptoApprovalDTO {
+import com.oodles.enums.DepositStatus;
+
+public class CryptoApprovalDto {
+	@NotNull
 	private Long walletId;
+	@NotNull
 	private DepositStatus status;
+	@NotNull
 	private Long transactionID;
 	public Long getWalletId() {
 		return walletId;

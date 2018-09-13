@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.oodles.DTO.EmailPasswordDTO;
+import com.oodles.dto.EmailPasswordDto;
 import com.oodles.exceptions.ResourceNotFoundException;
 import com.oodles.exceptions.ResponseHandler;
 import com.oodles.services.ForgotPasswordService;
@@ -25,7 +25,7 @@ public class ChangePasswordController {
 	private ForgotPasswordService verifyemailService;
 	// Sending Mail
 
-	@PostMapping(value = "v1/forgotpassword/sendmail/{id}")
+	@PostMapping(value = "v1/updatepassword/sendmail/{id}")
 	public Map<String, Object> sendMail(@PathVariable String id) {
 		logger.info("Mail controller send mail");
 		String result = null;
@@ -42,10 +42,10 @@ public class ChangePasswordController {
 		}
 	}
 
-	// Verify Email
-	@PutMapping(value = "v1/forgotpassword/{newassword}")
+	// Change Password
+	@PutMapping(value = "v1/updatepassword/{newpassword}")
 	
-	public Map<String, Object> forgotPassword(@RequestBody EmailPasswordDTO verifyEmail) {
+	public Map<String, Object> forgotPassword(@RequestBody EmailPasswordDto verifyEmail) {
 		logger.info("Mail controller verify mail start");
 		String result = null;
 		try {

@@ -1,5 +1,8 @@
 package com.oodles.models;
 
+import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -10,9 +13,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.oodles.enums.DepositStatus;
 
 @Entity
 public class FiatDeposit {
@@ -28,7 +34,10 @@ public class FiatDeposit {
 	 @Enumerated(EnumType.STRING)
 	private DepositStatus Status;
 	 
-	 
+
+	  @Column(name="timeStamp", columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+	   @Temporal(TemporalType.TIMESTAMP)
+	private Date deposittime;
 	 
 	 @ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "user_id", nullable = false)
@@ -79,6 +88,14 @@ public class FiatDeposit {
 
 	public void setStatus(DepositStatus status) {
 		Status = status;
+	}
+
+	public Date getDeposittime() {
+		return deposittime;
+	}
+
+	public void setDeposittime(Date deposittime) {
+		this.deposittime = deposittime;
 	}
 
 	

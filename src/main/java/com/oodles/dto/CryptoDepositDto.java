@@ -1,9 +1,12 @@
-package com.oodles.DTO;
+package com.oodles.dto;
 
-public class CryptoDepositDTO {
+import javax.validation.constraints.NotNull;
 
+public class CryptoDepositDto {
+	@NotNull
 private Double NumberOfCoin;
-private Long walletId;
+	@NotNull
+	private Long walletId;
 public Double getNumberOfCoin() {
 	return NumberOfCoin;
 }

@@ -1,11 +1,23 @@
-package com.oodles.DTO;
+package com.oodles.dto;
 
-public class BuyOrderDTO {
+import javax.validation.constraints.NotNull;
 
+public class SellOrderDto {
+	@NotNull
 	private String coinName;
+	@NotNull
 	private Long coinQuantity;
-	private Long desiredPrice;
+	@NotNull
 	  private Long userId;
+	@NotNull
+	  private Long desiredPrice;
+	public Long getDesiredPrice() {
+		return desiredPrice;
+	}
+
+	public void setDesiredPrice(Long desiredPrice) {
+		this.desiredPrice = desiredPrice;
+	}
 
 	public String getCoinName() {
 		return coinName;
@@ -31,12 +43,4 @@ public class BuyOrderDTO {
 		this.userId = userId;
 	}
 
-	public Long getDesiredPrice() {
-		return desiredPrice;
-	}
-
-	public void setDesiredPrice(Long desiredPrice) {
-		this.desiredPrice = desiredPrice;
-	}
-	  
 }

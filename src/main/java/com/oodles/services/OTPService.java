@@ -2,12 +2,12 @@ package com.oodles.services;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.oodles.dto.OtpDto;
 import com.oodles.models.User;
 import com.oodles.repository.UserRepository;
 import com.twilio.Twilio;
@@ -18,7 +18,8 @@ import com.twilio.type.PhoneNumber;
 public class OTPService {
 	@Autowired
 	private UserRepository userRepository;
-	public Map<String,User> otp_data=new HashMap<>();
+	public Map<String,OtpDto> otp_data=new HashMap<>();
+	private String id=null;
 	private final static String ACCOUNT_SID="ACe46a7e8c2e88ee736b1eece22bb8e74b";
 	private final static String AUTH_ID="1e709fed396e810515968114c50e87e6";
 	static
@@ -26,45 +27,56 @@ public class OTPService {
 		Twilio.init(ACCOUNT_SID,AUTH_ID);
 
 	}
-	public ResponseEntity<Object> sendOTP(Long id) {
-		User otpSystem =new User();
-		otpSystem.setId(id);
-		//otpSystem.setMobilenumber(mobilenumber);
-		String mobilenumber=otpSystem.getMobilenumber();
-		otpSystem.setOtp(String.valueOf((int)(Math.random()*(10000-1000))+1000));
-		otpSystem.setExpirytime(System.currentTimeMillis()+20000);
-		userRepository.save(otpSystem);
-		otp_data.put(mobilenumber,otpSystem);
-		Message.creator(new PhoneNumber("+917985253313"),new PhoneNumber("+13203145689"),"Your OTP is"+otpSystem.getOtp()).create();
-		return new ResponseEntity<>("OTP IS SENT SUCCESFULLY",HttpStatus.OK);
-	}
-	public ResponseEntity<Object> verifyOtp(Long id, User requestBodyOTPSystem) {
-		if(requestBodyOTPSystem.getOtp()==null||requestBodyOTPSystem.getOtp().trim().length()<=0)
-		{
-			return new ResponseEntity<>("PLEASE PROVIDE OTP",HttpStatus.BAD_REQUEST);
+	public String sendOTP(String userId) {
+		Optional<User> value = userRepository.findById(Long.parseLong(userId));
+		User user = value.get();
+		if (value.isPresent() && user.getMobilenumber() != null) {
+			String otpCode = String.valueOf((int) (Math.random() * (10000 - 1000)) + 1000);
+			OtpDto otp = new OtpDto();
+			otp.setMobileNumber(user.getMobilenumber());
+			otp.setOtp(String.valueOf(otpCode));
+			otp.setExpirytime(System.currentTimeMillis() + 500000);
+			user.setOtp(otpCode);
+			userRepository.save(user);
+			otp_data.put(user.getMobilenumber(),otp);
+			id = userId;
+			Message.creator(new PhoneNumber("+917985253313"),new PhoneNumber("+13203145689"),"Your OTP is"+otp.getOtp()).create();
+			return "Your OTP send successfully..!!";
 		}
-		String mobilenumber=requestBodyOTPSystem.getMobilenumber();
-		if(otp_data.containsKey(mobilenumber))
-		{
-			User otpSystem=otp_data.get(mobilenumber);
-			if(otpSystem!=null)
-			{
-				if(otpSystem.getExpirytime()>=System.currentTimeMillis())
-				{
-					if(requestBodyOTPSystem.getOtp().equals(otpSystem.getOtp()))
-					{
-						otp_data.remove(mobilenumber);
-						//User user=new User();
-						requestBodyOTPSystem.setEnabled(true);
-						userRepository.save(requestBodyOTPSystem);
-						return new ResponseEntity<>("OTP is verified successfully",HttpStatus.OK);
+		return "User not found";
+	}
+
+	// verify otp
+	public String verifyOtp(String mobilenumber, OtpDto requestOTP) {
+		User mobileNumber = userRepository.findByMobilenumber(requestOTP.getMobileNumber());
+		if (requestOTP.getOtp() == null || requestOTP.getOtp().trim().length() <= 0) {
+			return "Please provide OTP";
+		}
+		if (otp_data.containsKey(mobilenumber)) {
+			OtpDto otp = otp_data.get(mobilenumber);
+			if (otp != null) {
+				if (otp.getExpirytime() >= System.currentTimeMillis()) {
+					if (requestOTP.getOtp().equals(otp.getOtp())) {
+						Optional<User> foundUser = userRepository.findById(Long.parseLong(id));
+						User user = foundUser.get();
+						user.setEnabled(true);
+						userRepository.save(user);
+						return "OTP is verified successfully";
 					}
-					return new ResponseEntity<>("Invalid OTP",HttpStatus.BAD_REQUEST);
+					return "OTP is invalid";
 				}
-				return new ResponseEntity<>("OTP is expired",HttpStatus.BAD_REQUEST);	
+				return "OTP is expired";
 			}
-			return new ResponseEntity<>("Something went wrong",HttpStatus.BAD_REQUEST);
+			return "Something went wrong";
 		}
-		return new ResponseEntity<>("ID does not exist",HttpStatus.NOT_FOUND);
+		return "Mobile number is not found";
 	}
+	
 }
+	
+	
+	
+	
+	
+	
+	

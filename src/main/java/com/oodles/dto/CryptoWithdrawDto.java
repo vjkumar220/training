@@ -1,8 +1,11 @@
-package com.oodles.DTO;
+package com.oodles.dto;
 
-public class CryptoWithdrawDTO {
+import javax.validation.constraints.NotNull;
 
+public class CryptoWithdrawDto {
+	@NotNull
 private Double NumberOfCoin;
+	@NotNull
 private Long walletId;
 public Double getNumberOfCoin() {
 	return NumberOfCoin;

@@ -17,6 +17,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.oodles.enums.OrderStatus;
+import com.oodles.enums.OrderType;
 @Entity
 @Table(name = "LimitOrders")
 public class LimitOrder {

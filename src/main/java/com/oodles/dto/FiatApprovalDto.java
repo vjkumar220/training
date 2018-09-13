@@ -1,12 +1,16 @@
-package com.oodles.DTO;
+package com.oodles.dto;
 
-import com.oodles.models.DepositStatus;
+import javax.validation.constraints.NotNull;
 
-public class FiatApprovalDTO {
-	
+import com.oodles.enums.DepositStatus;
+
+public class FiatApprovalDto {
+	@NotNull
 		private Long userId;
-		private DepositStatus status;
-		private Long transactionID;
+	@NotNull
+	private DepositStatus status;
+	@NotNull
+	private Long transactionID;
 		public Long getUserId() {
 			return userId;
 		}

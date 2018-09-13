@@ -9,18 +9,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.oodles.DTO.CryptoApprovalDTO;
-import com.oodles.DTO.CryptoDepositDTO;
-import com.oodles.DTO.CryptoWithdrawDTO;
-import com.oodles.DTO.FiatApprovalDTO;
-import com.oodles.DTO.FiatDepositDTO;
-import com.oodles.DTO.FiatWalletDTO;
-import com.oodles.DTO.FiatWithdrawDTO;
-import com.oodles.DTO.UserWalletDTO;
+import com.oodles.dto.CryptoApprovalDto;
+import com.oodles.dto.CryptoDepositDto;
+import com.oodles.dto.CryptoWithdrawDto;
+import com.oodles.dto.FiatApprovalDto;
+import com.oodles.dto.FiatDepositDto;
+import com.oodles.dto.FiatWalletDto;
+import com.oodles.dto.FiatWithdrawDto;
+import com.oodles.dto.UserWalletDto;
+import com.oodles.enums.DepositStatus;
 import com.oodles.models.CryptoDeposit;
 import com.oodles.models.CryptoWallet;
 import com.oodles.models.CryptoWithdraw;
-import com.oodles.models.DepositStatus;
 import com.oodles.models.FiatDeposit;
 import com.oodles.models.FiatWallet;
 import com.oodles.models.FiatWithdraw;
@@ -54,11 +54,11 @@ public class WalletService {
 	private CryptoWithdrawRepository cryptoWithdrawRepository;
 
 	// create a Fiat wallet
-	public Map<String, Object> createFiatWallet(FiatWalletDTO userWalletDTO) {
+	public Map<String, Object> createFiatWallet(FiatWalletDto userWalletDTO) {
 		logger.info("createFiatwallet entered");
 		Map<String, Object> result = new HashMap<String, Object>();
-		String coinName = userWalletDTO.getCoinName();
-		String walletType = userWalletDTO.getWalletType();
+		String coinName = (userWalletDTO.getCoinName()).toString();
+		String walletType = (userWalletDTO.getWalletType()).toString();
 		logger.info(" walletType in service =" + walletType);
 		Double balance = userWalletDTO.getBalance();
 		Double shadowBalance = userWalletDTO.getShadowBalance();
@@ -92,11 +92,11 @@ public class WalletService {
 
 	// Create Crypto Wallet
 
-	public Map<String, Object> createCryptoWallet(UserWalletDTO userWalletDTO) {
+	public Map<String, Object> createCryptoWallet(UserWalletDto userWalletDTO) {
 		logger.info("create Crypto wallet entered");
 		Map<String, Object> result = new HashMap<String, Object>();
-		String coinName = userWalletDTO.getCoinName();
-		String walletType = userWalletDTO.getWalletType();
+		String coinName = (userWalletDTO.getCoinName()).toString();
+		String walletType = (userWalletDTO.getWalletType()).toString();
 		logger.info(" walletType in service =" + walletType);
 		Double balance = userWalletDTO.getBalance();
 		Double shadowBalance = userWalletDTO.getShadowBalance();
@@ -132,11 +132,11 @@ public class WalletService {
 
 	// fiat Wallet Deposit
 
-	public Map<String, Object> createFiatDeposit(FiatDepositDTO fiatDepositDTO) {
+	public Map<String, Object> createFiatDeposit(FiatDepositDto fiatDepositDTO) {
 		logger.info("create deposit request");
 		Map<String, Object> result = new HashMap<String, Object>();
-		String walletType = fiatDepositDTO.getWalletType();
-		Double amount = fiatDepositDTO.getAmount();
+		String walletType = (fiatDepositDTO.getWalletType()).toString();
+		Double depositamount = fiatDepositDTO.getAmount();
 		Long userId = fiatDepositDTO.getUserId();
 		// logger
 		Optional<User> user = userRepository.findById(userId);
@@ -148,7 +148,7 @@ public class WalletService {
 			FiatDeposit fwType = fiatDepositRepository.findByWalletTypeAndUser(walletType, foundUser);
 
 			FiatDeposit newFiatDeposit = new FiatDeposit();
-			newFiatDeposit.setAmount(amount);
+			newFiatDeposit.setAmount(depositamount);
 			newFiatDeposit.setWalletType(walletType);
 			DepositStatus status = newFiatDeposit.getStatus();
 			newFiatDeposit.setStatus(status.PENDING);
@@ -164,7 +164,7 @@ public class WalletService {
 
 	// Admin Approval
 
-	public Map<String, Object> fiatDepositApproval(FiatApprovalDTO fiatApprovalDTO) {
+	public Map<String, Object> fiatDepositApproval(FiatApprovalDto fiatApprovalDTO) {
 		logger.info(" Approve service entered");
 		Map<String, Object> result = new HashMap<String, Object>();
 		String newstatus = fiatApprovalDTO.getStatus().toString();
@@ -182,17 +182,17 @@ public class WalletService {
 			if (deposituser != null) {
 				if (newstatus.equalsIgnoreCase("APPROVED")) {
 					logger.info("status ");
-					Double amount = deposituser.getAmount();
-					logger.info("deposit amount" + amount);
+					Double depositamount = deposituser.getAmount();
+					logger.info("deposit amount" + depositamount);
 					DepositStatus status = deposituser.getStatus();
 					deposituser.setStatus(status.APPROVED);
 					FiatWallet fwType = fiatWalletRepository.findByUserId(foundUser.getId());
 					Double currentBalance = fwType.getBalance();
 					logger.info("Current Amount" + currentBalance);
 					Double currentShadowBalance = fwType.getShadowBalance();
-					Double updatedBalance = currentBalance + amount;
+					Double updatedBalance = currentBalance + depositamount;
 					fwType.setBalance(updatedBalance);
-					Double updatedShadowBalance = currentShadowBalance + amount;
+					Double updatedShadowBalance = currentShadowBalance + depositamount;
 					fwType.setShadowBalance(updatedShadowBalance);
 					fiatWalletRepository.save(fwType);
 					logger.info("updation service done");
@@ -201,6 +201,7 @@ public class WalletService {
 				} else if (newstatus.equalsIgnoreCase("REJECT")) {
 					DepositStatus status = deposituser.getStatus();
 					deposituser.setStatus(status.REJECT);
+					fiatDepositRepository.save(deposituser);
 					result.put("responseMessage", "success");
 					return result;
 				}
@@ -213,7 +214,7 @@ public class WalletService {
 	}
 
 	// Create crypto deposit
-	public Map<String, Object> createCryptoDeposit(CryptoDepositDTO cryptoDepositDTO) {
+	public Map<String, Object> createCryptoDeposit(CryptoDepositDto cryptoDepositDTO) {
 		logger.info("create deposit request");
 		Map<String, Object> result = new HashMap<String, Object>();
 		Double numberOfCoin = cryptoDepositDTO.getNumberOfCoin();
@@ -244,7 +245,7 @@ public class WalletService {
 
 	// Admin Approval for Crypto deposit
 
-	public Map<String, Object> CryptoDepositApproval(CryptoApprovalDTO cryptoApprovalDTO) {
+	public Map<String, Object> cryptoDepositApproval(CryptoApprovalDto cryptoApprovalDTO) {
 		logger.info(" Approve service entered");
 		Map<String, Object> result = new HashMap<String, Object>();
 		String newstatus = cryptoApprovalDTO.getStatus().toString();
@@ -281,6 +282,7 @@ public class WalletService {
 				} else if (newstatus.equalsIgnoreCase("REJECT")) {
 					DepositStatus status = deposituser.getStatus();
 					deposituser.setStatus(status.REJECT);
+					cryptoDepositRepository.save(deposituser);
 					result.put("responseMessage", "success");
 					return result;
 				}
@@ -293,10 +295,10 @@ public class WalletService {
 	}
 
 	// Fiat Withdraw
-	public Map<String, Object> createFiatWithdraw(FiatWithdrawDTO fiatWithdrawDTO) {
+	public Map<String, Object> createFiatWithdraw(FiatWithdrawDto fiatWithdrawDTO) {
 		logger.info("create withdraw request");
 		Map<String, Object> result = new HashMap<String, Object>();
-		Double amount = fiatWithdrawDTO.getAmount();
+		Double withdrawnamount = fiatWithdrawDTO.getAmount();
 		Long walletId = fiatWithdrawDTO.getWalletId();
 		// logger
 		Optional<FiatWallet> fiatwallet = fiatWalletRepository.findById(walletId);
@@ -308,17 +310,17 @@ public class WalletService {
 			/* FiatWithdraw fwType = fiatWithdrawRepository.findByWallet(foundUser); */
 
 			FiatWithdraw newFiatWithdraw = new FiatWithdraw();
-			newFiatWithdraw.setAmount(amount);
+			newFiatWithdraw.setAmount(withdrawnamount);
 			newFiatWithdraw.setFiatWallet(foundUser);
 			fiatWithdrawRepository.save(newFiatWithdraw);
 			FiatWallet fwType = fiatWalletRepository.findByWalletId(foundUser.getWalletId());
 			Double currentBalance = fwType.getBalance();
 			logger.info("Current Amount" + currentBalance);
 			Double currentShadowBalance = fwType.getShadowBalance();
-			if ((currentBalance >= amount) && (currentShadowBalance >= amount)) {
-				Double updatedBalance = (currentBalance - amount);
+			if (currentShadowBalance >= withdrawnamount) {
+				Double updatedBalance = (currentBalance - withdrawnamount);
 				fwType.setBalance(updatedBalance);
-				Double updatedShadowBalance = currentShadowBalance - amount;
+				Double updatedShadowBalance = currentShadowBalance - withdrawnamount;
 				fwType.setShadowBalance(updatedShadowBalance);
 				fiatWalletRepository.save(fwType);
 				result.put("responseMessage", "success");
@@ -333,10 +335,10 @@ public class WalletService {
 	}
 
 	// Crypto wallet Withdraw
-	public Map<String, Object> createCryptoWithdraw(CryptoWithdrawDTO cryptoWithdrawDTO) {
+	public Map<String, Object> createCryptoWithdraw(CryptoWithdrawDto cryptoWithdrawDTO) {
 		logger.info("create withdraw request");
 		Map<String, Object> result = new HashMap<String, Object>();
-		Double amount = cryptoWithdrawDTO.getNumberOfCoin();
+		Double withdrawnamount = cryptoWithdrawDTO.getNumberOfCoin();
 		Long walletId = cryptoWithdrawDTO.getWalletId();
 		// logger
 		Optional<CryptoWallet> cryptowallet = cryptoWalletRepository.findById(walletId);
@@ -348,17 +350,17 @@ public class WalletService {
 			/* FiatWithdraw fwType = fiatWithdrawRepository.findByWallet(foundUser); */
 
 			CryptoWithdraw newCryptoWithdraw = new CryptoWithdraw();
-			newCryptoWithdraw.setQuantity(amount);
+			newCryptoWithdraw.setQuantity(withdrawnamount);
 			newCryptoWithdraw.setCryptowallet(foundUser);
 			cryptoWithdrawRepository.save(newCryptoWithdraw);
 			CryptoWallet fwType = cryptoWalletRepository.findByWalletId(foundUser.getWalletId());
 			Double currentBalance = fwType.getBalance();
 			logger.info("Current Amount" + currentBalance);
 			Double currentShadowBalance = fwType.getShadowBalance();
-			if ((currentBalance >= amount) && (currentShadowBalance >= amount)) {
-				Double updatedBalance = (currentBalance - amount);
+			if  (currentShadowBalance >= withdrawnamount){
+				Double updatedBalance = (currentBalance - withdrawnamount);
 				fwType.setBalance(updatedBalance);
-				Double updatedShadowBalance = currentShadowBalance - amount;
+				Double updatedShadowBalance = currentShadowBalance - withdrawnamount;
 				fwType.setShadowBalance(updatedShadowBalance);
 				cryptoWalletRepository.save(fwType);
 				result.put("responseMessage", "success");
