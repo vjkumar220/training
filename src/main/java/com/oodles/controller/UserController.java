@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.oodles.domain.user.User;
+import com.oodles.domain.User;
 import com.oodles.dto.EmailDto;
 import com.oodles.dto.EmailVerifyDto;
 import com.oodles.dto.Otp;
@@ -40,7 +40,6 @@ public class UserController {
 	// creating user
 	@PostMapping(value = "/signup")
 	public Map createUser(@Valid @RequestBody User user) {
-		logger.info("UserController-create value start");
 		try {
 			logger.info("UserController - create value in try");
 			output = userService.createUser(user);
@@ -59,7 +58,7 @@ public class UserController {
 	}
 
 	// getting all user by id
-	@GetMapping(value = "/get-users-by-id/{id}")
+	@GetMapping(value = "/users/by/id/{id}")
 	public Map<String, Object> findUserById(@PathVariable String id) {
 		Optional<User> result = null;
 		try {
@@ -153,7 +152,6 @@ public class UserController {
 	// Verify Email
 	@PutMapping(value = "/verify-mail/{emailAddress}/verification")
 	public Map<String, Object> verifyMail(@PathVariable String emailAddress, @RequestBody EmailDto verifyEmail) {
-		logger.info("Mail controller send mail");
 		String result = null;
 		try {
 			result = userService.verifyEmail(emailAddress, verifyEmail);
@@ -182,7 +180,6 @@ public class UserController {
 	
 	@PutMapping(value = "/{emailAddress}/update-password")
 	public Map<String, Object> updatePassword(@PathVariable String emailAddress, @RequestBody EmailVerifyDto verifyEmail) {
-		logger.info("Mail controller send mail");
 		String result = null;
 		try {
 			result = userService.verifyEmailAndUpdatePass(emailAddress, verifyEmail);

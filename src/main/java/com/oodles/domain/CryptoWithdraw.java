@@ -1,4 +1,4 @@
-package com.oodles.domain.withdraw;
+package com.oodles.domain;
 
 import java.util.Date;
 
@@ -16,7 +16,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.oodles.domain.wallet.CryptoWallet;
 @Entity
 public class CryptoWithdraw {
 	

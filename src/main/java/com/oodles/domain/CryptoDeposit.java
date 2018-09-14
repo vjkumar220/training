@@ -1,4 +1,4 @@
-package com.oodles.domain.deposit;
+package com.oodles.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,7 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.oodles.domain.wallet.CryptoWallet;
 import com.oodles.enumeration.DepositStatus;
 
 @Entity

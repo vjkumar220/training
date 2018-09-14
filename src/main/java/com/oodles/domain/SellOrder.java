@@ -1,4 +1,4 @@
-package com.oodles.domain.order;
+package com.oodles.domain;
 
 import java.util.Date;
 
@@ -17,7 +17,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.oodles.domain.user.User;
 import com.oodles.enumeration.OrderStatus;
 @Entity
 public class SellOrder {
@@ -36,6 +35,8 @@ public class SellOrder {
 	private String sellCoinName;
 	@NotNull
 	private Double sellCoinQuantity;
+	@NotNull
+	private Double orderPrice;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
@@ -97,5 +98,30 @@ public class SellOrder {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
+	public Double getOrderPrice() {
+		return orderPrice;
+	}
+
+	public void setOrderPrice(Double orderPrice) {
+		this.orderPrice = orderPrice;
+	}
+
+	public SellOrder(OrderStatus sellOrderStatus, @NotNull Double sellPrice, @NotNull String sellCoinName,
+			@NotNull Double sellCoinQuantity, @NotNull Double orderPrice, User user) {
+		super();
+		this.sellOrderStatus = sellOrderStatus;
+		this.sellPrice = sellPrice;
+		this.sellCoinName = sellCoinName;
+		this.sellCoinQuantity = sellCoinQuantity;
+		this.orderPrice = orderPrice;
+		this.user = user;
+	}
+
+	public SellOrder() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
 
 }

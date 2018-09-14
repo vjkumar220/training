@@ -1,4 +1,4 @@
-package com.oodles.domain.deposit;
+package com.oodles.domain;
 
 import java.util.Date;
 
@@ -19,7 +19,6 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.oodles.domain.user.User;
 import com.oodles.enumeration.DepositStatus;
 
 @Entity

@@ -1,8 +1,5 @@
 package com.oodles.service;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,11 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.oodles.domain.deposit.CryptoDeposit;
-import com.oodles.domain.deposit.FiatDeposit;
-import com.oodles.domain.user.User;
-import com.oodles.domain.wallet.CryptoWallet;
-import com.oodles.domain.wallet.FiatWallet;
+import com.oodles.domain.CryptoDeposit;
+import com.oodles.domain.CryptoWallet;
+import com.oodles.domain.FiatDeposit;
+import com.oodles.domain.FiatWallet;
+import com.oodles.domain.User;
 import com.oodles.dto.ApprovalDto;
 import com.oodles.dto.CryptoApprovalDto;
 import com.oodles.dto.CryptoDepositDto;
@@ -44,12 +41,10 @@ public class DepositService {
 	@Autowired
 	private CryptoDepositRepository cryptoDepositRepository;
 
-	private HashMap<Object, Object> result = new HashMap<>();
-
 	// Fiat deposit request generate
 
 	public Map<Object, Object> fiatDeposit(FiatDepositDto depositDto) {
-		log.info("In deposit service");
+		HashMap<Object, Object> result = new HashMap<>();
 		Long userId = depositDto.getUserId();
 		log.info("user value", userId);
 		Double amount = depositDto.getAmount();
@@ -82,6 +77,7 @@ public class DepositService {
 	// Approving the Deposit Request and update the fiat balance
 
 	public Map<Object, Object> approveDeposit(ApprovalDto approvalDto) {
+		HashMap<Object, Object> result = new HashMap<>();
 		Long userIdDto = approvalDto.getUserId();
 		DepositStatus depositStatus = approvalDto.getDepositStatus();
 		Long depositId = approvalDto.getDepositId();
@@ -111,23 +107,25 @@ public class DepositService {
 							String walletType = fiatWallet.getWalletType();
 							String coinName = fiatWallet.getCoinName();
 							Double balance = fiatWallet.getBalance();
+							Double shadowBalance = fiatWallet.getShadowBalance();
 							fiatWallet.setFiatWalletId(fiatWalletId);
 							fiatWallet.setWalletType(walletType);
 							fiatWallet.setCoinName(coinName);
 							fiatWallet.setUser(foundUser);
-							Double updatedBalance = balance + amount;
+							Double updatedBalance = (balance + amount);
 							fiatWallet.setBalance(updatedBalance);
+							Double updatedShadowBalance = (shadowBalance + amount);
+							fiatWallet.setShadowBalance(updatedShadowBalance);
 							fiatWalletRepository.save(fiatWallet);
 							fiatDepositRepository.save(deposit);
 							result.put("responseMessage", "Your request is Approved and Balance is Updated");
 							return result;
-						}
-						else if(depositStatus.equals(DepositStatus.REJECTED)) {
+						} else if (depositStatus.equals(DepositStatus.REJECTED)) {
 							foundDeposit.setDepositStatus(depositStatus.REJECTED);
 							fiatDepositRepository.save(foundDeposit);
 							result.put("responseMessage", "Your request is Rejected");
 							return result;
-							
+
 						}
 					}
 				}
@@ -142,6 +140,7 @@ public class DepositService {
 	// Crypto deposit request Generate
 
 	public Map<Object, Object> cryptoDeposit(CryptoDepositDto cryptoDepositDto) {
+		HashMap<Object, Object> result = new HashMap<>();
 		CryptoName coinName = cryptoDepositDto.getCoinName();
 		Double coinQuantity = cryptoDepositDto.getCoinQuantity();
 		Long cryptoWalletId = cryptoDepositDto.getCryptoWalletId();
@@ -163,30 +162,30 @@ public class DepositService {
 	// Approved the crypto deposit request and update crypto wallet balanace
 
 	public Map approveCryptoRequest(CryptoApprovalDto cryptoApprovalDto) {
+		HashMap<Object, Object> result = new HashMap<>();
 		DepositStatus depositStatusDto = cryptoApprovalDto.getDepositStatus();
 		Long walletId = cryptoApprovalDto.getWalletId();
 		Long depositId = cryptoApprovalDto.getDepositId();
 		Optional<CryptoDeposit> foundDeposit = cryptoDepositRepository.findById(depositId);
-		Optional<CryptoWallet> foundWallet = cryptoWalletRepository.findById(walletId);
-		CryptoDeposit checkDeposit = cryptoDepositRepository
-				.findByCryptoWalletCryptoWalletIdAndCryptoDepositId(walletId, depositId);
-		CryptoWallet cryptoWallet = foundWallet.get();
-		Double coinBalance = cryptoWallet.getBalance();
-		String coinName = cryptoWallet.getCoinName();
-		log.info("coinBalance-", coinBalance);
-		CryptoDeposit cryptoDeposit = foundDeposit.get();
-		Double coinRequest = cryptoDeposit.getNumberOfCoin();
-		log.info("coin Request-", coinRequest);
-		DepositStatus status = cryptoDeposit.getDepositStatus();
-		log.info("coin status-",status);
-		Double updatedBalance = coinBalance + coinRequest;
-		log.info("updated balance-", updatedBalance);
 		if (foundDeposit.isPresent()) {
+			CryptoDeposit cryptoDeposit = foundDeposit.get();
+			Double coinRequest = cryptoDeposit.getNumberOfCoin();
+			DepositStatus status = cryptoDeposit.getDepositStatus();
+			Optional<CryptoWallet> foundWallet = cryptoWalletRepository.findById(walletId);
 			if (foundWallet.isPresent()) {
+				CryptoWallet cryptoWallet = foundWallet.get();
+				Double coinBalance = cryptoWallet.getBalance();
+				Double coinShadowBalance = cryptoWallet.getShadowBalance();
+				String coinName = cryptoWallet.getCoinName();
+				CryptoDeposit checkDeposit = cryptoDepositRepository
+						.findByCryptoWalletCryptoWalletIdAndCryptoDepositId(walletId, depositId);
 				if (checkDeposit != null) {
 					if (status.equals(DepositStatus.PENDING)) {
 						if (depositStatusDto.equals(DepositStatus.APPROVED)) {
+							Double updatedBalance = coinBalance + coinRequest;
+							Double updatedShadowBalance = coinShadowBalance + coinRequest;
 							cryptoWallet.setBalance(updatedBalance);
+							cryptoWallet.setShadowBalance(updatedShadowBalance);
 							cryptoDeposit.setDepositStatus(DepositStatus.APPROVED);
 							cryptoDepositRepository.save(cryptoDeposit);
 							cryptoWalletRepository.save(cryptoWallet);

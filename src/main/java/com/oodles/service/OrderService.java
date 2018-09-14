@@ -1,29 +1,32 @@
 package com.oodles.service;
 
-import java.util.Map;
 import java.util.Optional;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.oodles.domain.order.BuyOrder;
-import com.oodles.domain.order.SellOrder;
-import com.oodles.domain.user.User;
-import com.oodles.domain.wallet.CryptoWallet;
-import com.oodles.dto.OrderDto;
+import com.oodles.domain.BuyOrder;
+import com.oodles.domain.CryptoWallet;
+import com.oodles.domain.FiatWallet;
+import com.oodles.domain.SellOrder;
+import com.oodles.domain.User;
+import com.oodles.dto.BuyOrderDto;
+import com.oodles.dto.SellOrderDto;
 import com.oodles.enumeration.CryptoName;
 import com.oodles.enumeration.OrderStatus;
-import com.oodles.enumeration.OrderType;
 import com.oodles.repository.BuyOrderRepository;
 import com.oodles.repository.CryptoWalletRepository;
+import com.oodles.repository.FiatWalletRepository;
 import com.oodles.repository.SellOrderRepository;
 import com.oodles.repository.UserRepository;
 
 @Service
 public class OrderService {
+
+	Logger log = LoggerFactory.getLogger(OrderService.class);
+
 	@Autowired
 	private BuyOrderRepository buyOrderRepository;
 
@@ -32,60 +35,101 @@ public class OrderService {
 
 	@Autowired
 	private CryptoWalletRepository cryptoWalletRepository;
-	
+
 	@Autowired
 	private SellOrderRepository sellOrderRepository;
 
-	private Map result = null;
+	@Autowired
+	private FiatWalletRepository fiatWalletRepository;
 
-	// Buy Order request
+	/**
+	 * This function is working for placing buy order
+	 */
 
-	public String createBuyOrder(OrderDto buyOrderDto) {
-		CryptoName coinName = buyOrderDto.getCoinName();
+	public String buyOrder(BuyOrderDto buyOrderDto) {
+		CryptoName coinNameDto = buyOrderDto.getCoinName();
 		Double coinQuantity = buyOrderDto.getCoinQuantity();
-		Double price = buyOrderDto.getPrice();
-		Long userIdDto = buyOrderDto.getUserId();
-		Long walletIdDto = buyOrderDto.getWalletId();
-		Optional<User> findUser = userRepository.findById(userIdDto);
+		Double buyPrice = buyOrderDto.getBuyDesiredPrice();
+		Long userId = buyOrderDto.getUserId();
+		Long fiatWalletId = buyOrderDto.getFiatWalletId();
+		Optional<User> findUser = userRepository.findById(userId);
 		if (findUser.isPresent()) {
+			log.info("User is verified");
 			User user = findUser.get();
-			Long userId = user.getId();
-			CryptoWallet findCurrency = cryptoWalletRepository.findByCryptoWalletIdAndUserId(walletIdDto, userIdDto);
-			if (findCurrency != null) {
-				BuyOrder buyOrder = new BuyOrder();
-				buyOrder.setBuyCoinName(coinName);
-				buyOrder.setBuyCoinQuantity(coinQuantity);
-				buyOrder.setBuyOrderStatus(OrderStatus.PENDING);
-				buyOrder.setBuyPrice(price);
-				buyOrderRepository.save(buyOrder);
-				return "Your Buy Order is genrated";
+			Optional<FiatWallet> findWallet = fiatWalletRepository.findById(fiatWalletId);
+			if (findWallet.isPresent()) {
+				log.info("wallet found");
+				FiatWallet fiatWallet = findWallet.get();
+				Double shadowBalance = fiatWallet.getShadowBalance();
+				Double orderPrice = (buyPrice * coinQuantity);
+				CryptoWallet findUserAndCoin = cryptoWalletRepository.findByCoinNameAndUserId(coinNameDto.toString(),
+						userId);
+				if (findUserAndCoin != null) {
+					log.info("Coin and user find");
+					if (shadowBalance >= orderPrice) {
+						log.info(coinNameDto.toString());
+						Double updateShadowBalance = (shadowBalance - orderPrice);
+						BuyOrder buyOrder = new BuyOrder(OrderStatus.PENDING, buyPrice, coinNameDto.toString(),
+								coinQuantity, orderPrice, user);
+						fiatWallet.setShadowBalance(updateShadowBalance);
+						fiatWalletRepository.save(fiatWallet);
+						buyOrderRepository.save(buyOrder);
+						return "Your Buy Order is Placed";
+					}
+					return "Your Account is not sufficent amount to place order";
+				}
+				return "Coin Not Found";
 			}
-			return "Coin Not Present";
+			return "Fiat Wallet Not Found";
 		}
 		return "User Not Found";
+
 	}
+	
+	/**
+	 * This function is working for creating sell order
+	 * @param sellOrderDto
+	 * @return
+	 */
 
-	// Sell Order Request
-
-/*	public String createSellOrder(OrderDto sellOrderDto) {
-		String coinName = sellOrderDto.getCoinName();
+	public String sellOrder(SellOrderDto sellOrderDto) {
+		CryptoName coinName = sellOrderDto.getCoinName();
 		Double coinQuantity = sellOrderDto.getCoinQuantity();
-		Double price = sellOrderDto.getPrice();
-		Long userIdDto = sellOrderDto.getUserId();
-		Optional<User> findUser = userRepository.findById(userIdDto);
+		Double sellPrice = sellOrderDto.getSellDesiredPrice();
+		Long userId = sellOrderDto.getUserId();
+		Long cryptoWalletId = sellOrderDto.getCryptoWalletId();
+		Optional<User> findUser = userRepository.findById(userId);
 		if (findUser.isPresent()) {
 			User user = findUser.get();
-			Long userId = user.getId();
-			CryptoWallet findCurrency = cryptoWalletRepository.findByCoinNameAndUserId(coinName, userId);
-			if (findCurrency != null) {
-				SellOrder order = new SellOrder();
-				order.setSellCoinName(coinName);
-				order.setSellCoinQuantity(coinQuantity);
-				order.setSellOrderStatus(OrderStatus.PENDING);
-				order.setSellPrice(price);
-				order.setUser(user);
-				sellOrderRepository.save(order);
-			}return "Coin Not Present";
-		}return "User Not Found";
-	}*/
+			Optional<CryptoWallet> findWallet = cryptoWalletRepository.findById(cryptoWalletId);
+			if (findWallet.isPresent()) {
+				CryptoWallet cryptoWallet = findWallet.get();
+				Double shadowBalance = cryptoWallet.getShadowBalance();
+				CryptoWallet findUserAndCoin = cryptoWalletRepository.findByCoinNameAndUserId(coinName.toString(),
+						userId);
+				if (findUserAndCoin != null) {
+					Double orderPrice = (sellPrice * coinQuantity);
+					if(shadowBalance >= coinQuantity) {
+						Double updatedShadowBalance = (shadowBalance - coinQuantity);
+						SellOrder sellOrder = new SellOrder();
+						sellOrder.setOrderPrice(orderPrice);
+						sellOrder.setSellCoinName(coinName.toString());
+						sellOrder.setSellCoinQuantity(coinQuantity);
+						sellOrder.setSellOrderStatus(OrderStatus.PENDING);
+						sellOrder.setSellPrice(sellPrice);
+						sellOrder.setUser(user);
+						cryptoWallet.setShadowBalance(updatedShadowBalance);
+						cryptoWalletRepository.save(cryptoWallet);
+						sellOrderRepository.save(sellOrder);
+						return "Your sell Order is generated";
+					}
+					return "Low Balance in your crypto wallet ";
+				}
+				return "Coin not found";
+			}
+			return "Crypto Wallet is not found";
+		}
+		return "User Not Found";
+
+	}
 }

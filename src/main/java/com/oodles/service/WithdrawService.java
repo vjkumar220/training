@@ -9,10 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.oodles.domain.wallet.CryptoWallet;
-import com.oodles.domain.wallet.FiatWallet;
-import com.oodles.domain.withdraw.CryptoWithdraw;
-import com.oodles.domain.withdraw.FiatWithdraw;
+import com.oodles.domain.CryptoWallet;
+import com.oodles.domain.CryptoWithdraw;
+import com.oodles.domain.FiatWallet;
+import com.oodles.domain.FiatWithdraw;
 import com.oodles.dto.CryptoWithdrawDto;
 import com.oodles.dto.FiatWithrawDto;
 import com.oodles.repository.CryptoWalletRepository;

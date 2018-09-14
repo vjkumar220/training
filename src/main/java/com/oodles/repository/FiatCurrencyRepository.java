@@ -3,7 +3,7 @@ package com.oodles.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.oodles.domain.currency.FiatCurrency;
+import com.oodles.domain.FiatCurrency;
 
 @Repository
 public interface FiatCurrencyRepository extends JpaRepository<FiatCurrency, Long> {

@@ -1,4 +1,4 @@
-package com.oodles.domain.wallet;
+package com.oodles.domain;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -16,9 +16,6 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.oodles.domain.deposit.CryptoDeposit;
-import com.oodles.domain.user.User;
-import com.oodles.domain.withdraw.FiatWithdraw;
 
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity

@@ -1,4 +1,4 @@
-package com.oodles.domain.order;
+package com.oodles.domain;
 
 import java.util.Date;
 
@@ -17,7 +17,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.oodles.domain.user.User;
 import com.oodles.enumeration.CryptoName;
 import com.oodles.enumeration.OrderStatus;
 @Entity
@@ -34,15 +33,21 @@ public class BuyOrder {
 	@NotNull
 	private Double buyPrice;
 	@NotNull
-	private CryptoName buyCoinName;
+	private String buyCoinName;
 	@NotNull
 	private Double buyCoinQuantity;
+	@NotNull
+	private Double orderPrice;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	@JsonBackReference(value = "for Orders")
 	private User user;
 	
+	public BuyOrder() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	public Long getBuyOrderId() {
 		return buyOrderId;
 	}
@@ -79,11 +84,30 @@ public class BuyOrder {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	public CryptoName getBuyCoinName() {
+	public Double getOrderPrice() {
+		return orderPrice;
+	}
+	public void setOrderPrice(Double orderPrice) {
+		this.orderPrice = orderPrice;
+	}
+	public String getBuyCoinName() {
 		return buyCoinName;
 	}
-	public void setBuyCoinName(CryptoName buyCoinName) {
+	public void setBuyCoinName(String buyCoinName) {
 		this.buyCoinName = buyCoinName;
 	}
+	public BuyOrder(OrderStatus buyOrderStatus, @NotNull Double buyPrice, @NotNull String buyCoinName,
+			@NotNull Double buyCoinQuantity, @NotNull Double orderPrice, User user) {
+		super();
+		this.buyOrderStatus = buyOrderStatus;
+		this.buyPrice = buyPrice;
+		this.buyCoinName = buyCoinName;
+		this.buyCoinQuantity = buyCoinQuantity;
+		this.orderPrice = orderPrice;
+		this.user = user;
+	}
+	
+	
+	
 	
 }

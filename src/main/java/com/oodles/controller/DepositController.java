@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.oodles.domain.deposit.FiatDeposit;
+import com.oodles.domain.FiatDeposit;
 import com.oodles.dto.ApprovalDto;
 import com.oodles.dto.CryptoApprovalDto;
 import com.oodles.dto.CryptoDepositDto;

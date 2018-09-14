@@ -1,4 +1,4 @@
-package com.oodles.domain.currency;
+package com.oodles.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;

@@ -1,4 +1,4 @@
-package com.oodles.domain.currency;
+package com.oodles.domain;
 
 import java.io.Serializable;
 
