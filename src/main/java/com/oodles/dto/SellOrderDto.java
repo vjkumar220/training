@@ -6,41 +6,34 @@ public class SellOrderDto {
 	@NotNull
 	private String coinName;
 	@NotNull
-	private Long coinQuantity;
+	private Double coinQuantity;
 	@NotNull
 	  private Long userId;
 	@NotNull
-	  private Long desiredPrice;
-	public Long getDesiredPrice() {
-		return desiredPrice;
-	}
-
-	public void setDesiredPrice(Long desiredPrice) {
-		this.desiredPrice = desiredPrice;
-	}
-
+	  private Double desiredPrice;
 	public String getCoinName() {
 		return coinName;
 	}
-
 	public void setCoinName(String coinName) {
 		this.coinName = coinName;
 	}
-
-	public Long getCoinQuantity() {
+	public Double getCoinQuantity() {
 		return coinQuantity;
 	}
-
-	public void setCoinQuantity(Long coinQuantity) {
+	public void setCoinQuantity(Double coinQuantity) {
 		this.coinQuantity = coinQuantity;
 	}
-
 	public Long getUserId() {
 		return userId;
 	}
-
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
-
+	public Double getDesiredPrice() {
+		return desiredPrice;
+	}
+	public void setDesiredPrice(Double desiredPrice) {
+		this.desiredPrice = desiredPrice;
+	}
+	
 }

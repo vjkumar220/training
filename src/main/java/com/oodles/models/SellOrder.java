@@ -24,8 +24,8 @@ public class SellOrder {
     @GeneratedValue(strategy = GenerationType.AUTO)
     
 	private Long orderId; 
-	private Long desiredPrice;
-	private Long coinQuantity;
+	private Double desiredPrice;
+	private Double coinQuantity;
 	private String coinName;
 	 @Enumerated(EnumType.STRING)
 	    
@@ -49,22 +49,7 @@ public class SellOrder {
 		this.orderId = orderId;
 	}
 
-	public Long getDesiredPrice() {
-		return desiredPrice;
-	}
-
-	public void setDesiredPrice(Long desiredPrice) {
-		this.desiredPrice = desiredPrice;
-	}
-
-	public Long getCoinQuantity() {
-		return coinQuantity;
-	}
-
-	public void setCoinQuantity(Long coinQuantity) {
-		this.coinQuantity = coinQuantity;
-	}
-
+	
 	public String getCoinName() {
 		return coinName;
 	}
@@ -95,6 +80,22 @@ public class SellOrder {
 
 	public void setStatus(OrderStatus status) {
 		this.status = status;
+	}
+
+	public Double getDesiredPrice() {
+		return desiredPrice;
+	}
+
+	public void setDesiredPrice(Double desiredPrice) {
+		this.desiredPrice = desiredPrice;
+	}
+
+	public Double getCoinQuantity() {
+		return coinQuantity;
+	}
+
+	public void setCoinQuantity(Double coinQuantity) {
+		this.coinQuantity = coinQuantity;
 	}
 	  
 }

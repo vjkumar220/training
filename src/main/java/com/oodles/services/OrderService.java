@@ -17,11 +17,15 @@ import com.oodles.dto.SellOrderDto;
 import com.oodles.enums.OrderStatus;
 import com.oodles.enums.OrderType;
 import com.oodles.models.BuyOrder;
+import com.oodles.models.CryptoWallet;
+import com.oodles.models.FiatWallet;
 import com.oodles.models.LimitOrder;
 import com.oodles.models.MarketOrder;
 import com.oodles.models.SellOrder;
 import com.oodles.models.User;
 import com.oodles.repository.BuyOrderRepository;
+import com.oodles.repository.CryptoWalletRepository;
+import com.oodles.repository.FiatWalletRepository;
 import com.oodles.repository.LimitOrderRepository;
 import com.oodles.repository.MarketOrderRepository;
 import com.oodles.repository.SellOrderRepository;
@@ -40,6 +44,10 @@ public class OrderService {
 	private BuyOrderRepository buyOrderRepository;
 	@Autowired
 	private SellOrderRepository sellOrderRepository;
+	@Autowired
+	private FiatWalletRepository fiatWalletRepository;
+	@Autowired
+	private CryptoWalletRepository cryptoWalletRepository;
 
 	public Map<String, Object> createLimitOrder(OrderDto orderDTO) {
 		logger.info("createOrder service entered");
@@ -56,7 +64,7 @@ public class OrderService {
 				User foundUser = user.get();
 				LimitOrder newOrder = new LimitOrder();
 				newOrder.setDesiredPrice(amount);
-				
+
 				newOrder.setCoinName(coinName);
 				newOrder.setOrderType(orderType);
 				newOrder.setCoinQuantity(quantity);
@@ -113,34 +121,48 @@ public class OrderService {
 	public Map<String, Object> createBuyOrder(BuyOrderDto buyOrderDTO) {
 		logger.info("createOrder service entered");
 		Map<String, Object> result = new HashMap<String, Object>();
-		Long amount = buyOrderDTO.getDesiredPrice();
-
-		Long quantity = buyOrderDTO.getCoinQuantity();
+		Double amount = (buyOrderDTO.getDesiredPrice());
+		Double quantity = buyOrderDTO.getCoinQuantity();
 		String coinName = buyOrderDTO.getCoinName();
 		Long userId = buyOrderDTO.getUserId();
 		Optional<User> user = userRepository.findById(userId);
 		if ((quantity > 0)) {
+			logger.info("Quantity" + quantity);
 			if (user.isPresent()) {
-
 				User foundUser = user.get();
-				BuyOrder newOrder = new BuyOrder();
-				newOrder.setCoinName(coinName);
-				newOrder.setDesiredPrice(amount);
-				newOrder.setCoinQuantity(quantity);
-				OrderStatus status = newOrder.getStatus();
-				newOrder.setStatus(status.PENDING);
-				newOrder.setUser(foundUser);
-				buyOrderRepository.save(newOrder);
-				result.put("responseMessage", "success");
-				logger.info("Create order service end");
+				FiatWallet fwType = fiatWalletRepository.findByUserId(foundUser.getId());
+
+				if (fwType.getShadowBalance() >= (quantity * amount))
+
+				{
+					logger.info("amount checking done");
+                    Double currentShadowBalance=fwType.getShadowBalance();
+                    Double updatedShadowBalance=currentShadowBalance-(quantity * amount);
+                    fwType.setShadowBalance(updatedShadowBalance);
+                    fiatWalletRepository.save(fwType);
+					BuyOrder newOrder = new BuyOrder();
+
+					newOrder.setCoinName(coinName);
+					newOrder.setDesiredPrice(amount);
+					newOrder.setCoinQuantity(quantity);
+					OrderStatus status = newOrder.getStatus();
+					newOrder.setStatus(status.PENDING);
+					newOrder.setUser(foundUser);
+					buyOrderRepository.save(newOrder);
+					result.put("responseMessage", "success");
+					logger.info("Create order service end");
+					return result;
+				}
+				result.put("responseMessage", "Not sufficient amount");
 				return result;
 			}
 			result.put("responseMessage", "User does not exist");
 			return result;
 
 		}
-		result.put("responseMessage", "Enter  quantity more than zero");
+		result.put("responseMessage", "Enter quantity more than zero");
 		return result;
+
 	}
 
 	// Create Sell Order
@@ -148,8 +170,8 @@ public class OrderService {
 	public Map<String, Object> createSellOrder(SellOrderDto sellOrderDTO) {
 		logger.info("createOrder service entered");
 		Map<String, Object> result = new HashMap<String, Object>();
-		Long amount = sellOrderDTO.getDesiredPrice();
-		Long quantity = sellOrderDTO.getCoinQuantity();
+		Double amount = sellOrderDTO.getDesiredPrice();
+		Double quantity = sellOrderDTO.getCoinQuantity();
 		String coinName = sellOrderDTO.getCoinName();
 		Long userId = sellOrderDTO.getUserId();
 		Optional<User> user = userRepository.findById(userId);
@@ -157,50 +179,47 @@ public class OrderService {
 			if (user.isPresent()) {
 
 				User foundUser = user.get();
-				SellOrder newOrder = new SellOrder();
-				newOrder.setCoinName(coinName);
-				newOrder.setDesiredPrice(amount);
-				newOrder.setCoinQuantity(quantity);
-				OrderStatus status = newOrder.getStatus();
-				newOrder.setStatus(status.PENDING);
-				newOrder.setUser(foundUser);
-				sellOrderRepository.save(newOrder);
-				result.put("responseMessage", "success");
-				logger.info("Create order service end");
+				CryptoWallet fwType = cryptoWalletRepository.findByCoinNameAndUserId(coinName, foundUser.getId());
+				if (fwType.getShadowBalance() >= quantity)
+
+				{
+					 Double currentShadowBalance=fwType.getShadowBalance();
+	                    Double updatedShadowBalance=currentShadowBalance-quantity;
+	                    fwType.setShadowBalance(updatedShadowBalance);
+	                    cryptoWalletRepository.save(fwType);
+					SellOrder newOrder = new SellOrder();
+					newOrder.setCoinName(coinName);
+					newOrder.setDesiredPrice(amount);
+					newOrder.setCoinQuantity(quantity);
+					OrderStatus status = newOrder.getStatus();
+					newOrder.setStatus(status.PENDING);
+					newOrder.setUser(foundUser);
+					sellOrderRepository.save(newOrder);
+					result.put("responseMessage", "success");
+					logger.info("Create order service end");
+					return result;
+				}
+				result.put("responseMessage", "Not sufficient coin");
 				return result;
 			}
 			result.put("responseMessage", "User does not exist");
 			return result;
 
 		}
-		result.put("responseMessage", "Enter  quantity more than zero");
+		result.put("responseMessage", "Enter quantity more than zero");
 		return result;
 	}
-	//Get All Buy Order
-	public List<BuyOrder> retrieveAllBuyOrder(){
+
+	// Get All Buy Order
+	public List<BuyOrder> retrieveAllBuyOrder() {
 		List<BuyOrder> result = buyOrderRepository.findAll();
 		return result;
 	}
-	//Get All Sell Order
-	
-	public List<SellOrder> retrieveAllSellOrder(){
+	// Get All Sell Order
+
+	public List<SellOrder> retrieveAllSellOrder() {
 		List<SellOrder> result = sellOrderRepository.findAll();
 		return result;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

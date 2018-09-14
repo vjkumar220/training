@@ -6,9 +6,9 @@ public class BuyOrderDto {
 	@NotNull
 	private String coinName;
 	@NotNull
-	private Long coinQuantity;
+	private Double coinQuantity;
 	@NotNull
-	private Long desiredPrice;
+	private Double desiredPrice;
 	@NotNull
 	private Long userId;
 
@@ -20,14 +20,7 @@ public class BuyOrderDto {
 		this.coinName = coinName;
 	}
 
-	public Long getCoinQuantity() {
-		return coinQuantity;
-	}
-
-	public void setCoinQuantity(Long coinQuantity) {
-		this.coinQuantity = coinQuantity;
-	}
-
+	
 	public Long getUserId() {
 		return userId;
 	}
@@ -36,12 +29,21 @@ public class BuyOrderDto {
 		this.userId = userId;
 	}
 
-	public Long getDesiredPrice() {
+	public Double getCoinQuantity() {
+		return coinQuantity;
+	}
+
+	public void setCoinQuantity(Double coinQuantity) {
+		this.coinQuantity = coinQuantity;
+	}
+
+	public Double getDesiredPrice() {
 		return desiredPrice;
 	}
 
-	public void setDesiredPrice(Long desiredPrice) {
+	public void setDesiredPrice(Double desiredPrice) {
 		this.desiredPrice = desiredPrice;
 	}
-	  
+
+	
 }
