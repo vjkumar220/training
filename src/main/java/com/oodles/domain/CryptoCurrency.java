@@ -30,59 +30,45 @@ public class CryptoCurrency {
 	@NotNull
 	private String symbol;
 	@NotNull
-	private String fees;
+	private Double fees;
 	@NotNull
-	private String initialSupply;
+	private Double initialSupply;
 	@NotNull
-	private String price;
-
-	// Setter Getter
+	private Double price;
 	public Long getCurrencyId() {
 		return currencyId;
 	}
-
 	public void setCurrencyId(Long currencyId) {
 		this.currencyId = currencyId;
 	}
-
-	public String getSymbol() {
-		return symbol;
-	}
-
-	public void setSymbol(String symbol) {
-		this.symbol = symbol;
-	}
-
-	public String getFees() {
-		return fees;
-	}
-
-	public void setFees(String fees) {
-		this.fees = fees;
-	}
-
-	public String getInitialSupply() {
-		return initialSupply;
-	}
-	
-
 	public CryptoName getCoinName() {
 		return coinName;
 	}
-
 	public void setCoinName(CryptoName coinName) {
 		this.coinName = coinName;
 	}
-
-	public void setInitialSupply(String initialSupply) {
+	public String getSymbol() {
+		return symbol;
+	}
+	public void setSymbol(String symbol) {
+		this.symbol = symbol;
+	}
+	public Double getFees() {
+		return fees;
+	}
+	public void setFees(Double fees) {
+		this.fees = fees;
+	}
+	public Double getInitialSupply() {
+		return initialSupply;
+	}
+	public void setInitialSupply(Double initialSupply) {
 		this.initialSupply = initialSupply;
 	}
-
-	public String getPrice() {
+	public Double getPrice() {
 		return price;
 	}
-
-	public void setPrice(String price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 

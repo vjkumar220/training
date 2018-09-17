@@ -21,7 +21,11 @@ public class RoleService {
 	@Autowired
 	private UserRepository userRepository;
 
-	// Creating Role
+	/**
+	 *  Creating Role
+	 * @param role
+	 * @return
+	 */
 	public Map<Object, Object> createRole(Role role) {
 		Map<Object, Object> result = new HashMap<>();
 		String roleType = role.getRoleType();
@@ -37,21 +41,23 @@ public class RoleService {
 		return result;
 	}
 
-	// Assign Role
-	public Map assignRole(UserRoleDto userRoleDto) {
+	/**
+	 *  Assign Role
+	 * @param userRoleDto
+	 * @return
+	 */
+	public Map<Object, Object> assignRole(UserRoleDto userRoleDto) {
 		Map<Object, Object> result = new HashMap<>();
 		Long userId = userRoleDto.getUserId();
 		Long roleId = userRoleDto.getRoleId();
-
 		Optional<User> userValue = userRepository.findById(userId);
 		Optional<Role> roleValue = roleRepository.findById(roleId);
-
 		if (userValue.isPresent() && roleValue.isPresent()) {
 			User foundUser = userValue.get();
 			Role foundRole = roleValue.get();
-			HashSet roleSet = new HashSet<>();
+			HashSet<Role> roleSet = new HashSet<>();
 			roleSet.add(foundRole);
-			HashSet userSet = new HashSet<>();
+			HashSet<User> userSet = new HashSet<>();
 			userSet.add(foundUser);
 			foundUser.setRoles(roleSet);
 			foundRole.setUsers(userSet);

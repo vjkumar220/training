@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.dto.BuyOrderDto;
-import com.oodles.dto.OrderDto;
 import com.oodles.dto.SellOrderDto;
 import com.oodles.exception.ResourceNotFoundException;
 import com.oodles.service.OrderService;
@@ -23,10 +22,14 @@ public class OrderController {
 	@Autowired
 	private OrderService orderService;
 	
-	//Create the buy order request
+	/**
+	 * Create the buy order request
+	 * @param buyOrderDto
+	 * @return
+	 */
 
-	@PostMapping(value = "/buyOrder")
-	public Map buyOrderGenerated(@Valid @RequestBody BuyOrderDto buyOrderDto) {
+	@PostMapping(value = "/buy/order")
+	public Map<String , Object> buyOrderGenerated(@Valid @RequestBody BuyOrderDto buyOrderDto) {
 		 String result = null;
 		try {
 			result = orderService.buyOrder(buyOrderDto);
@@ -35,9 +38,13 @@ public class OrderController {
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 		}
 	}
-		//Create the sell order request
-	@PostMapping(value = "/sellOrder")
-	public Map sellOrderGenerated(@Valid @RequestBody SellOrderDto sellOrderDto) {
+		/**
+		 * Create the sell order request
+		 * @param sellOrderDto
+		 * @return
+		 */
+	@PostMapping(value = "/sell/order")
+	public Map<String , Object> sellOrderGenerated(@Valid @RequestBody SellOrderDto sellOrderDto) {
 		 String result = null;
 		try {
 			result = orderService.sellOrder(sellOrderDto);

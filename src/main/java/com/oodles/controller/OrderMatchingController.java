@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.oodles.domain.BuyOrder;
 import com.oodles.domain.SellOrder;
 import com.oodles.service.OrderMatchingService;
 
@@ -19,9 +20,13 @@ public class OrderMatchingController {
 	
 	@GetMapping("/sell/order")
 	public List<SellOrder> sellList(){
-		List<SellOrder> sellList = orderMatchingService.sellList();
-		System.out.println(sellList);
-		return sellList;
+		return orderMatchingService.sellList();
 	}
 
+	
+	@GetMapping("/buy/order")
+	public List<BuyOrder> buyList(){
+		return orderMatchingService.buyList();
+	}
+	
 }

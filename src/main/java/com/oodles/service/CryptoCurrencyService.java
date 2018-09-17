@@ -10,14 +10,18 @@ import org.springframework.stereotype.Service;
 
 import com.oodles.domain.CryptoCurrency;
 import com.oodles.enumeration.CryptoName;
-import com.oodles.repository.CurrencyRepository;
+import com.oodles.repository.CryptoCurrencyRepository;
 
 @Service
 public class CryptoCurrencyService {
 	@Autowired
-	CurrencyRepository currencyRepository;
+	private CryptoCurrencyRepository currencyRepository;
 
-	// Creating Currency
+	/**
+	 *  Creating Currency
+	 * @param currency
+	 * @return
+	 */
 	public Map<Object, Object> createCurrency(CryptoCurrency currency) {
 		Map<Object, Object> result = new HashMap<>();
 		CryptoName cryptoName = currency.getCoinName();
@@ -37,13 +41,19 @@ public class CryptoCurrencyService {
 		return result;
 	}
 
-	// Getting all currency
+	/**
+	 *  Getting all currency
+	 * @return
+	 */
 	public List<CryptoCurrency> getAllCurrency() {
-		List<CryptoCurrency> output = currencyRepository.findAll();
-		return output;
+		return currencyRepository.findAll();
 	}
 
-	// Deleting currency
+	/**
+	 *  Deleting currency
+	 * @param id
+	 * @return
+	 */
 	public String deleteCurrency(String id) {
 		Optional<CryptoCurrency> value = currencyRepository.findById(Long.parseLong(id));
 		if (value.isPresent()) {
@@ -57,16 +67,25 @@ public class CryptoCurrencyService {
 		return "Crypto Currency not present";
 	}
 
-	// Updating currency
-	public String updateCurrency(String currencyId, CryptoName coinName, String symbol, String fees,
-			String initialSupply, String price) {
+	/**
+	 *  Updating currency
+	 * @param currencyId
+	 * @param coinName
+	 * @param symbol
+	 * @param fees
+	 * @param initialSupply
+	 * @param price
+	 * @return
+	 */
+	public String updateCurrency(String currencyId, CryptoName coinName, String symbol, Double fees,
+			Double initialSupply, Double price) {
 		Optional<CryptoCurrency> value = currencyRepository.findById(Long.parseLong(currencyId));
 		if (value.isPresent()) {
 			CryptoCurrency currency = value.get();
 			if (value.isPresent() && (!currency.getCoinName().equals(coinName))
-					&& (!currency.getSymbol().equalsIgnoreCase(symbol)) && (!currency.getFees().equalsIgnoreCase(fees))
-					&& (!currency.getInitialSupply().equalsIgnoreCase(initialSupply))
-					&& (!currency.getPrice().equalsIgnoreCase(price))) {
+					&& (!currency.getSymbol().equalsIgnoreCase(symbol)) && (!currency.getFees().equals(fees))
+					&& (!currency.getInitialSupply().equals(initialSupply))
+					&& (!currency.getPrice().equals(price))) {
 				CryptoCurrency newCurrencys = new CryptoCurrency();
 				newCurrencys.setCurrencyId(Long.parseLong(currencyId));
 				newCurrencys.setCoinName(coinName);

@@ -26,10 +26,14 @@ public class RoleController {
 	@Autowired
 	RoleService roleService;
 
-	// creating role
+	/**
+	 *  creating role
+	 * @param role
+	 * @return
+	 */
 	@PostMapping(value = "/role")
-	public Map createUser(@Valid @RequestBody Role role) {
-		Map output = null;
+	public Map<String, Object> createUser(@Valid @RequestBody Role role) {
+		Map<Object, Object> output = null;
 		logger.info("RoleController-create value start");
 		try {
 			logger.info("UserController - create value in try");
@@ -42,10 +46,14 @@ public class RoleController {
 		}
 	}
 
-	// Assign role to user
-	@PostMapping(value = "/assignrole")
-	public Map assingRoleToUser(@RequestBody UserRoleDto userRoleDto) {
-		Map output = null;
+	/**
+	 *  Assign role to user
+	 * @param userRoleDto
+	 * @return
+	 */
+	@PostMapping(value = "/assign/role")
+	public Map<String, Object> assingRoleToUser(@RequestBody UserRoleDto userRoleDto) {
+		Map<Object, Object> output = null;
 		logger.info("Role controller - assign role to user");
 		try {
 			logger.info("Role controller - assign role try to user");

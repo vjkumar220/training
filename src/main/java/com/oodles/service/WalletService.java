@@ -18,7 +18,6 @@ import com.oodles.dto.CryptoWalletDto;
 import com.oodles.dto.FiatWalletDto;
 import com.oodles.enumeration.CryptoName;
 import com.oodles.repository.CryptoWalletRepository;
-import com.oodles.repository.FiatCurrencyRepository;
 import com.oodles.repository.FiatDepositRepository;
 import com.oodles.repository.FiatWalletRepository;
 import com.oodles.repository.UserRepository;
@@ -35,8 +34,12 @@ public class WalletService {
 	@Autowired
 	private FiatDepositRepository fiatDepositRepository;
 
-	// Creating crypto Wallet
-	public Map createCryptoWallet(CryptoWalletDto cryptoWallet) {
+	/**
+	 *  Creating crypto Wallet
+	 * @param cryptoWallet
+	 * @return
+	 */
+	public Map<String, Object> createCryptoWallet(CryptoWalletDto cryptoWallet) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		logger.info("In service crypto wallet");
 		CryptoName coinName = cryptoWallet.getCoinName();
@@ -69,8 +72,12 @@ public class WalletService {
 		return result;
 	}
 
-	// Creating fiat Wallet
-	public Map createFiatWallet(FiatWalletDto fiatWallet) {
+	/**
+	 *  Creating fiat Wallet
+	 * @param fiatWallet
+	 * @return
+	 */
+	public Map<String, Object> createFiatWallet(FiatWalletDto fiatWallet) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		logger.info("In service fiat wallet");
 		Long userId = fiatWallet.getUserId();
@@ -96,11 +103,14 @@ public class WalletService {
 		return result;
 	}
 
-	// Fiat Wallet History
+	/**
+	 *  Fiat Wallet History
+	 * @param userId
+	 * @return
+	 */
 
 	public List<FiatDeposit> fiatWalletHistory(Long userId) {
-		List<FiatDeposit> depositsList = fiatDepositRepository.findAllByUserId(userId);
-		return depositsList;
+		return fiatDepositRepository.findAllByUserId(userId);
 	}
 
 }

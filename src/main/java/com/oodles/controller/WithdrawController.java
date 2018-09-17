@@ -1,5 +1,6 @@
 package com.oodles.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -24,40 +25,40 @@ public class WithdrawController {
 	@Autowired
 	private WithdrawService withdrawService;
 
-	private Map result = null;
-	
-	//Withdraw from fiat wallet
+	/**
+	 * Withdraw from fiat wallet
+	 * 
+	 * @param fiatWithrawDto
+	 * @return
+	 */
 
 	@PostMapping(value = "/withdraw-from-fiat-wallet")
-	public Map fiatWithdraw(@Valid @RequestBody FiatWithrawDto fiatWithrawDto) {
-
+	public Map<String, Object> fiatWithdraw(@Valid @RequestBody FiatWithrawDto fiatWithrawDto) {
+		Map<Object, Object> result = new HashMap<>();
 		try {
 			result = withdrawService.fiatWithdraw(fiatWithrawDto);
-			if (result.containsKey("message")) {
-				return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-			} else {
-				return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-			}
-		} catch (ResourceNotFoundException e) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		}
-	}
-	
-	//Withdraw from crypto Wallet
-	
-	@PostMapping(value = "withdraw-from-crypto-wallet")
-	public Map cryptoWithdraw(@Valid @RequestBody CryptoWithdrawDto cryptoWithdrawDto) {
-		
-		try {
-			result = withdrawService.cryptoWithdraw(cryptoWithdrawDto);
-			if (result.containsKey("message")) {
-				return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-			} else {
-				return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-			}
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 		} catch (ResourceNotFoundException e) {
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 		}
 	}
 
+	/**
+	 * Withdraw from crypto Wallet
+	 * 
+	 * @param cryptoWithdrawDto
+	 * @return
+	 */
+
+	@PostMapping(value = "withdraw-from-crypto-wallet")
+	public Map<String, Object> cryptoWithdraw(@Valid @RequestBody CryptoWithdrawDto cryptoWithdrawDto) {
+		Map<Object, Object> result = new HashMap<>();
+		try {
+			result = withdrawService.cryptoWithdraw(cryptoWithdrawDto);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+
+		} catch (ResourceNotFoundException e) {
+			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+		}
+	}
 }

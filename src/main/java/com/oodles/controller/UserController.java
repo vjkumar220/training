@@ -1,5 +1,6 @@
 package com.oodles.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -18,13 +19,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.domain.User;
 import com.oodles.dto.EmailDto;
 import com.oodles.dto.EmailVerifyDto;
-import com.oodles.dto.Otp;
+import com.oodles.dto.OtpDto;
 import com.oodles.exception.ResourceNotFoundException;
 import com.oodles.service.UserService;
 import com.oodles.util.ResponseHandler;
@@ -35,11 +35,16 @@ public class UserController {
 	Logger logger = LoggerFactory.getLogger(UserController.class);
 	@Autowired
 	UserService userService;
-	Map output = null;
 
-	// creating user
+	/**
+	 * creating user
+	 * 
+	 * @param user
+	 * @return
+	 */
 	@PostMapping(value = "/signup")
-	public Map createUser(@Valid @RequestBody User user) {
+	public Map<String, Object> createUser(@Valid @RequestBody User user) {
+		Map<Object, Object> output = new HashMap<Object, Object>();
 		try {
 			logger.info("UserController - create value in try");
 			output = userService.createUser(user);
@@ -50,16 +55,26 @@ public class UserController {
 		}
 	}
 
-	// getting all user
-	@GetMapping(value = "/get-all-users")
+	/**
+	 * getting all user
+	 * 
+	 * @return
+	 */
+	@GetMapping(value = "/all/users")
 	public List<User> viewAllUsers() {
 		List<User> result = userService.retrieveAllUser();
 		return result;
 	}
 
-	// getting all user by id
+	/**
+	 * getting all user by id
+	 * 
+	 * @param id
+	 * @return
+	 */
 	@GetMapping(value = "/users/by/id/{id}")
 	public Map<String, Object> findUserById(@PathVariable String id) {
+		Map<Object, Object> output = new HashMap<Object, Object>();
 		Optional<User> result = null;
 		try {
 			result = userService.findUserById(id);
@@ -73,13 +88,18 @@ public class UserController {
 
 	}
 
-	// deleting user by id
-	@DeleteMapping(value = "/delete-users-by-id/{id}")
-	public Map deleteUser(@PathVariable String id) {
-		User delete = null;
+	/**
+	 * deleting user by id
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@DeleteMapping(value = "/delete/users/by/userId/{id}")
+	public Map<String, Object> deleteUser(@PathVariable String id) {
+		Map<Object, Object> output = new HashMap<Object, Object>();
 		try {
-			delete = userService.deleteUser(id);
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, delete);
+			output = userService.deleteUser(id);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, output);
 
 		} catch (ResourceNotFoundException ex) {
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, output);
@@ -91,10 +111,21 @@ public class UserController {
 
 	}
 
-	// update user by id
-	@PutMapping(value = "/update-user-feild/{id}/{name}/{email}/{password}/{phoneNumber}/{country}")
-	public Map updateUser(@PathVariable String id, @PathVariable String name, @PathVariable String email,
-			@PathVariable String password, @PathVariable String phoneNumber, @PathVariable String country) {
+	/**
+	 * update user by id
+	 * 
+	 * @param id
+	 * @param name
+	 * @param email
+	 * @param password
+	 * @param phoneNumber
+	 * @param country
+	 * @return
+	 */
+	@PutMapping(value = "/update/user/feild/{id}/{name}/{email}/{password}/{phoneNumber}/{country}")
+	public Map<String, Object> updateUser(@PathVariable String id, @PathVariable String name,
+			@PathVariable String email, @PathVariable String password, @PathVariable String phoneNumber,
+			@PathVariable String country) {
 		User user = null;
 		try {
 			user = userService.updateUser(id, name, email, password, phoneNumber, country);
@@ -106,9 +137,14 @@ public class UserController {
 		}
 	}
 
-	// verify the user
-	@PostMapping(value = "/send-otp/{userId}")
-	public Map sendOtp(@PathVariable String userId) {
+	/**
+	 * verify the user
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	@PostMapping(value = "/send/otp/userId/{userId}")
+	public Map<String, Object> sendOtp(@PathVariable String userId) {
 		String result = null;
 		try {
 			result = userService.sendOTP(userId);
@@ -120,8 +156,8 @@ public class UserController {
 		}
 	}
 
-	@PutMapping(value = "/veify-users/otp/{mobileNumber}")
-	public Map verifyOtp(@PathVariable String mobileNumber, @RequestBody Otp requestOTP) {
+	@PutMapping(value = "/veify/users/otp/mobileNumber/{mobileNumber}")
+	public Map<String, Object> verifyOtp(@PathVariable String mobileNumber, @RequestBody OtpDto requestOTP) {
 		String result = null;
 		try {
 			result = userService.verifyOtp(mobileNumber, requestOTP);
@@ -133,9 +169,14 @@ public class UserController {
 		}
 	}
 
-	// Sending Mail
+	/**
+	 * Sending Mail
+	 * 
+	 * @param userId
+	 * @return
+	 */
 
-	@PostMapping(value = "/send-mail-to-user /{userId}")
+	@PostMapping(value = "/send/verification/mail/to/user/{userId}")
 	public Map<String, Object> sendMail(@PathVariable String userId) {
 		logger.info("Mail controller send mail");
 		String result = null;
@@ -149,8 +190,14 @@ public class UserController {
 		}
 	}
 
-	// Verify Email
-	@PutMapping(value = "/verify-mail/{emailAddress}/verification")
+	/**
+	 * Verify Email
+	 * 
+	 * @param emailAddress
+	 * @param verifyEmail
+	 * @return
+	 */
+	@PutMapping(value = "/verify/mail/{emailAddress}/verification")
 	public Map<String, Object> verifyMail(@PathVariable String emailAddress, @RequestBody EmailDto verifyEmail) {
 		String result = null;
 		try {
@@ -162,11 +209,11 @@ public class UserController {
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 		}
 	}
-	
-	//Sending Mail for Reset password
-	@PostMapping(value = "verification-mail-forget-password-send/{userId}")
-	public Map  forgetPasswordMail(@PathVariable String userId) {
-		
+
+	// Sending Mail for Reset password
+	@PostMapping(value = "/verification/mail/forget/password/userId/{userId}")
+	public Map<String, Object> forgetPasswordMail(@PathVariable String userId) {
+
 		String result = null;
 		try {
 			result = userService.forgetPassword(userId);
@@ -177,9 +224,16 @@ public class UserController {
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 		}
 	}
-	
-	@PutMapping(value = "/{emailAddress}/update-password")
-	public Map<String, Object> updatePassword(@PathVariable String emailAddress, @RequestBody EmailVerifyDto verifyEmail) {
+
+	/**
+	 * 
+	 * @param emailAddress
+	 * @param verifyEmail
+	 * @return
+	 */
+	@PutMapping(value = "/emailAddress/{emailAddress}/update/password")
+	public Map<String, Object> updatePassword(@PathVariable String emailAddress,
+			@RequestBody EmailVerifyDto verifyEmail) {
 		String result = null;
 		try {
 			result = userService.verifyEmailAndUpdatePass(emailAddress, verifyEmail);

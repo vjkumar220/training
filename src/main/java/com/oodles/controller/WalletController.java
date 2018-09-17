@@ -1,5 +1,6 @@
 package com.oodles.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.oodles.domain.FiatDeposit;
 import com.oodles.dto.CryptoWalletDto;
 import com.oodles.dto.FiatWalletDto;
 import com.oodles.exception.ResourceNotFoundException;
@@ -27,39 +29,59 @@ public class WalletController {
 	@Autowired
 	private WalletService walletService;
 
-	private Map result = null;
-
-	@PostMapping(value = "/create-crypto-wallet")
-	public Map createCryptoWallet(@RequestBody CryptoWalletDto  cryptoWallet) {
-		logger.info("in create waller");
+	/**
+	 * create crypto wallet
+	 * 
+	 * @param cryptoWallet
+	 * @return
+	 */
+	@PostMapping(value = "/create/crypto/wallet")
+	public Map<String, Object> createCryptoWallet(@RequestBody CryptoWalletDto cryptoWallet) {
+		Map<String, Object> result = new HashMap<>();
 		try {
 			logger.info("In create wallet try");
 			result = walletService.createCryptoWallet(cryptoWallet);
-			logger.info("Getting result",result);
+			logger.info("Getting result", result);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 		} catch (ResourceNotFoundException e) {
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 		}
 	}
-	
-	@PostMapping(value = "/create-fiat-wallet")
-	public Map createFiatWallet(@RequestBody FiatWalletDto fiatWalletDto) {
-		logger.info("in create waller");
+
+	/**
+	 * create fiat wallet
+	 * 
+	 * @param fiatWalletDto
+	 * @return
+	 */
+	@PostMapping(value = "/create/fiat/wallet")
+	public Map<String, Object> createFiatWallet(@RequestBody FiatWalletDto fiatWalletDto) {
+		Map<String, Object> result = new HashMap<>();
 		try {
 			logger.info("In create wallet try");
 			result = walletService.createFiatWallet(fiatWalletDto);
-			logger.info("Getting result",result); 
+			logger.info("Getting result", result);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 		} catch (ResourceNotFoundException e) {
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 		}
 	}
-	
-	//Fait Wallet Depost History
+
+	/**
+	 * Fait Wallet Deposit History
+	 * 
+	 * @param userId
+	 * @return
+	 */
 	@GetMapping(value = "/fiatHistory/{userId}")
-	public List fiatHistory(@PathVariable Long userId){
-		List getRecords = walletService.fiatWalletHistory(userId);
-		return getRecords;
+	public Map<String, Object> fiatHistory(@PathVariable Long userId) {
+		Map<Object, Object> result = new HashMap<>();
+		try {
+			List<FiatDeposit> getRecords = walletService.fiatWalletHistory(userId);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, getRecords);
+		} catch (ResourceNotFoundException e) {
+			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+		}
 	}
 
 }

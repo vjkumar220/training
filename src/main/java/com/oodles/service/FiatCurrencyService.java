@@ -1,5 +1,6 @@
 package com.oodles.service;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,13 @@ public class FiatCurrencyService {
 	@Autowired
 	private FiatCurrencyRepository fiatCurrencyRepository;
 
-	// Add new Fiat Currency
-	public Map<?, ?> createFiatCurrency(FiatCurrency fiatCurrency) {
-		Map result = null;
+	/**
+	 *  Add new Fiat Currency
+	 * @param fiatCurrency
+	 * @return
+	 */
+	public Map<Object, Object> createFiatCurrency(FiatCurrency fiatCurrency) {
+		Map<Object, Object> result = new HashMap<>();
 		String coinName = fiatCurrency.getCoinName();
 		String symbol = fiatCurrency.getSymbol();
 		FiatCurrency newFiatCurrecyCoinName = fiatCurrencyRepository.findByCoinName(coinName);

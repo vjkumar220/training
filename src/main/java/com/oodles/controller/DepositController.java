@@ -33,16 +33,19 @@ public class DepositController {
 	@Autowired
 	private DepositService depositService;
 
-	private Map result = new HashMap<>();
+	/**
+	 * Generating deposit request for fiat wallet
+	 * 
+	 * @param depositDto
+	 * @return
+	 */
 
-	// Generating deposit request for fiat wallet
-
-	@PostMapping(value = "/create-fiat-deposit-request")
-	public Map createFiatDeposit(@Valid @RequestBody FiatDepositDto depositDto) {
-		log.info("In deposit controller", depositDto);
+	@PostMapping(value = "/create/fiat/deposit/request")
+	public Map<String, Object> createFiatDeposit(@Valid @RequestBody FiatDepositDto depositDto) {
+		Map<Object, Object> result = new HashMap<>();
 		try {
 			result = depositService.fiatDeposit(depositDto);
-				return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 		} catch (Exception e) {
 			log.info("in catch fiat deposit");
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
@@ -50,52 +53,75 @@ public class DepositController {
 
 	}
 
-	// Getting all pending fiat deposit request
+	/**
+	 * Getting all pending fiat deposit request
+	 * 
+	 * @return
+	 */
 
-	@GetMapping(value = "/get-pending-request")
-	public List getAllPendingReq() {
-		List depositsList = depositService.getAllPendingRequest();
-		return depositsList;
+	@GetMapping(value = "/pending/request")
+	public Map<String, Object> getAllPendingReq() {
+
+		Map<Object, Object> result = new HashMap<>();
+		try {
+			List<FiatDeposit> pendingList = depositService.getAllPendingRequest();
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, pendingList);
+		} catch (Exception e) {
+			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+		}
+
 	}
 
-	// Approval of the deposit request
+	/**
+	 * Approval of the deposit request
+	 * 
+	 * @param approvalDto
+	 * @return
+	 */
 
-	@PostMapping(value = "/approve-update-fiat-deposit-request")
-	public Map approveFiatDepositRequest(@Valid @RequestBody ApprovalDto approvalDto) {
+	@PostMapping(value = "/approve/update/fiat/deposit/request")
+	public Map<String, Object> approveFiatDepositRequest(@Valid @RequestBody ApprovalDto approvalDto) {
+		Map<Object, Object> result = new HashMap<>();
 		try {
 			result = depositService.approveDeposit(approvalDto);
-			log.info("result", result);
-			if (result.containsKey("success")) {
-				return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-			} else {
-				return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-			}
+			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 		} catch (ResourceNotFoundException e) {
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 		}
 	}
 
-	// Creating the crypto deposit request
+	/**
+	 * Creating the crypto deposit request
+	 * 
+	 * @param cryptoDepositDto
+	 * @return
+	 */
 
-	@PostMapping(value = "/create-crypto-deposit-request")
-	public Map createCryptoDeposit(@Valid @RequestBody CryptoDepositDto cryptoDepositDto) {
+	@PostMapping(value = "/create/crypto/deposit/request")
+	public Map<String, Object> createCryptoDeposit(@Valid @RequestBody CryptoDepositDto cryptoDepositDto) {
+		Map<Object, Object> result = new HashMap<>();
 		try {
 			result = depositService.cryptoDeposit(cryptoDepositDto);
 			log.info("result", result);
-				return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 		} catch (ResourceNotFoundException e) {
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 		}
 	}
 
-	// Approve and update balance crypto deposit request
+	/**
+	 *  Approve and update balance crypto deposit request
+	 * @param cryptoApprovalDto
+	 * @return
+	 */
 
-	@PostMapping(value = "/approve-crypto-deposit-request")
-	public Map approveCryptoDepositRequest(@Valid @RequestBody CryptoApprovalDto cryptoApprovalDto) {
+	@PostMapping(value = "/approve/crypto/deposit/request")
+	public Map<String, Object> approveCryptoDepositRequest(@Valid @RequestBody CryptoApprovalDto cryptoApprovalDto) {
+		Map<Object, Object> result = new HashMap<>();
 		try {
 			result = depositService.approveCryptoRequest(cryptoApprovalDto);
 			log.info("result", result);
-				return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 		} catch (ResourceNotFoundException e) {
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 		}

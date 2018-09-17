@@ -30,10 +30,14 @@ public class CurrencyController {
 	@Autowired
 	CryptoCurrencyService cryptoCurrencyService;
 
-	// creating crypto currency
+	/**
+	 * creating crypto currency
+	 * @param cryptoCurrency
+	 * @return
+	 */
 	@PostMapping(value = "/create/crypto/currency")
-	public Map createCryptoCurrency(@RequestBody CryptoCurrency cryptoCurrency) {
-		 Map result = null;
+	public Map<String, Object> createCryptoCurrency(@RequestBody CryptoCurrency cryptoCurrency) {
+		Map<Object, Object> result = null;
 		try {
 
 		 result = cryptoCurrencyService.createCurrency(cryptoCurrency);
@@ -43,14 +47,13 @@ public class CurrencyController {
 		}
 	}
 
-	// creating fiat currency
 	/**
-	 * 
+	 * creating fiat currency
 	 * @param fiatCurrency
 	 * @return
 	 */
 	@PostMapping(value = "/create/fiat/currency")
-	public Map createFiatCurrency(@RequestBody FiatCurrency fiatCurrency) {
+	public Map<String, Object> createFiatCurrency(@RequestBody FiatCurrency fiatCurrency) {
 		Map result = null;
 		try {
 			 result = fiatCurrencyService.createFiatCurrency(fiatCurrency);
@@ -64,18 +67,26 @@ public class CurrencyController {
 	// Getting all existing currency
 
 	@GetMapping("/all/crypto/currnecy")
-	public List<CryptoCurrency> getAllCryptoCurrency() {
+	public Map<String, Object> getAllCryptoCurrency() {
 
-		List<CryptoCurrency> currencyList = cryptoCurrencyService.getAllCurrency();
-
-		return currencyList;
+		Map<String, Object> result = null;
+		try {
+			List<CryptoCurrency> currencyList = cryptoCurrencyService.getAllCurrency();
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, currencyList);
+		} catch (ResourceNotFoundException e) {
+			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+		}
 
 	}
 
-	// Deleting Crypto Currency
+	/**
+	 * Deleting Crypto Currency
+	 * @param currencyId
+	 * @return
+	 */
 
 	@DeleteMapping("/delete/crypto/currency/{currencdId}")
-	public Map deleteCryptoCurrency(@PathVariable String currencyId) {
+	public Map<String, Object> deleteCryptoCurrency(@PathVariable String currencyId) {
 		String result = null;
 		try {
 			 result = cryptoCurrencyService.deleteCurrency(currencyId);

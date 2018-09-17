@@ -41,7 +41,12 @@ public class DepositService {
 	@Autowired
 	private CryptoDepositRepository cryptoDepositRepository;
 
-	// Fiat deposit request generate
+	/**
+	 * Fiat deposit request generate
+	 * 
+	 * @param depositDto
+	 * @return
+	 */
 
 	public Map<Object, Object> fiatDeposit(FiatDepositDto depositDto) {
 		HashMap<Object, Object> result = new HashMap<>();
@@ -59,22 +64,30 @@ public class DepositService {
 			deposit.setDepositStatus(DepositStatus.PENDING);
 			fiatDepositRepository.save(deposit);
 			log.info("request save");
-			result.put("success", "Your request genrated");
+			result.put("responseMessage", "Your request genrated");
 			return result;
 		}
 		log.info("req not sAVED");
-		result.put("error", "No user found");
+		result.put("responseMessage", "No user found");
 		return result;
 	}
 
-	// Get all pending fiat deposit list
+	/**
+	 * Get all pending fiat deposit list
+	 * 
+	 * @return
+	 */
 
 	public List<FiatDeposit> getAllPendingRequest() {
-		List<FiatDeposit> depositsStatus = fiatDepositRepository.findAllByDepositStatus(DepositStatus.PENDING);
-		return depositsStatus;
+		return fiatDepositRepository.findAllByDepositStatus(DepositStatus.PENDING);
 	}
 
-	// Approving the Deposit Request and update the fiat balance
+	/**
+	 * Approving the Deposit Request and update the fiat balance
+	 * 
+	 * @param approvalDto
+	 * @return
+	 */
 
 	public Map<Object, Object> approveDeposit(ApprovalDto approvalDto) {
 		HashMap<Object, Object> result = new HashMap<>();
@@ -137,7 +150,12 @@ public class DepositService {
 		return result;
 	}
 
-	// Crypto deposit request Generate
+	/**
+	 * Crypto deposit request Generate
+	 * 
+	 * @param cryptoDepositDto
+	 * @return
+	 */
 
 	public Map<Object, Object> cryptoDeposit(CryptoDepositDto cryptoDepositDto) {
 		HashMap<Object, Object> result = new HashMap<>();
@@ -159,9 +177,14 @@ public class DepositService {
 		return result;
 	}
 
-	// Approved the crypto deposit request and update crypto wallet balanace
+	/**
+	 * Approved the crypto deposit request and update crypto wallet balanace
+	 * 
+	 * @param cryptoApprovalDto
+	 * @return
+	 */
 
-	public Map approveCryptoRequest(CryptoApprovalDto cryptoApprovalDto) {
+	public Map<Object, Object> approveCryptoRequest(CryptoApprovalDto cryptoApprovalDto) {
 		HashMap<Object, Object> result = new HashMap<>();
 		DepositStatus depositStatusDto = cryptoApprovalDto.getDepositStatus();
 		Long walletId = cryptoApprovalDto.getWalletId();
@@ -200,10 +223,8 @@ public class DepositService {
 				}
 			}
 			result.put("responseMessage", "User is  not found");
-
 		}
 		result.put("responseMessage", "Order is not present");
-
 		return result;
 	}
 

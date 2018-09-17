@@ -34,12 +34,15 @@ public class WithdrawService {
 	@Autowired
 	private CryptoWithdrawRepository cryptoWithdrawRepository;
 
-	private Map<Object, Object> result = new HashMap<>();
-
-	// Withdraw the amount from fiat wallet
+	/**
+	 * Withdraw the amount from fiat wallet
+	 * 
+	 * @param fiatWithdraw
+	 * @return
+	 */
 
 	public Map fiatWithdraw(FiatWithrawDto fiatWithdraw) {
-
+		Map<Object, Object> result = new HashMap<>();
 		Double amount = fiatWithdraw.getAmount();
 		Long walletId = fiatWithdraw.getWalletId();
 		Optional<FiatWallet> findWallet = fiatWalletRepository.findById(walletId);
@@ -53,19 +56,20 @@ public class WithdrawService {
 				withdraw.setFiatWallet(fiatWallet);
 				fiatWalletRepository.save(fiatWallet);
 				fiatWithdrawRepository.save(withdraw);
-				result.put("message", "Your amount withdraw is successfully done");
+				result.put("responseMessage", "Your amount withdraw is successfully done");
 				return result;
 			}
-			result.put("errorMessage", "Balance is low for withdraw");
+			result.put("responseMessage", "Balance is low for withdraw");
 			return result;
 		}
-		result.put("errorMessage", "Wallet Not Found");
+		result.put("responseMessage", "Wallet Not Found");
 		return result;
 	}
 
-	// Withdraw coin from  crypto Wallet
+	// Withdraw coin from crypto Wallet
 
-	public Map cryptoWithdraw(CryptoWithdrawDto cryptoWithdrawDto) {
+	public Map<Object, Object> cryptoWithdraw(CryptoWithdrawDto cryptoWithdrawDto) {
+		Map<Object, Object> result = new HashMap<>();
 		Double coinQuantity = cryptoWithdrawDto.getCoinQuantity();
 		Long walletId = cryptoWithdrawDto.getWalletId();
 		String coinName = cryptoWithdrawDto.getCoinName();
@@ -81,13 +85,11 @@ public class WithdrawService {
 				withdraw.setCryptoWallet(cryptoWallet);
 				cryptoWalletRepository.save(cryptoWallet);
 				cryptoWithdrawRepository.save(withdraw);
-				result.put("message", "Your amount withdraw is successfully done");
-				return result;
+				result.put("responseMessage", "Your amount withdraw is successfully done");
 			}
-			result.put("errorMessage", "Crypto Wallet is not have sufficent balance");
-			return result;
+			result.put("responseMessage", "Crypto Wallet is not have sufficent balance");
 		}
-		result.put("errorMessage", "Crypto Wallet is not found");
+		result.put("responseMessage", "Crypto Wallet is not found");
 		return result;
 	}
 

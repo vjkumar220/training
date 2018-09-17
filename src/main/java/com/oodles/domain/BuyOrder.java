@@ -1,7 +1,9 @@
 package com.oodles.domain;
 
 import java.util.Date;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,12 +14,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.oodles.enumeration.CryptoName;
 import com.oodles.enumeration.OrderStatus;
 @Entity
 public class BuyOrder {
@@ -38,6 +40,16 @@ public class BuyOrder {
 	private Double buyCoinQuantity;
 	@NotNull
 	private Double orderPrice;
+	@NotNull
+	private Double remainingBuyCoinQuantity;
+	@NotNull
+	private Double feeForBuyers;
+	
+	@OneToMany(mappedBy = "buyOrder", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<BuyTransaction> buyTransaction;
+	
+	@OneToMany(mappedBy = "sellOrder", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<SellTransaction> sellTransaction;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
@@ -96,18 +108,48 @@ public class BuyOrder {
 	public void setBuyCoinName(String buyCoinName) {
 		this.buyCoinName = buyCoinName;
 	}
+	public Double getRemainingBuyCoinQuantity() {
+		return remainingBuyCoinQuantity;
+	}
+	public void setRemainingBuyCoinQuantity(Double remainingBuyCoinQuantity) {
+		this.remainingBuyCoinQuantity = remainingBuyCoinQuantity;
+	}
+	
+	public Set<SellTransaction> getSellTransaction() {
+		return sellTransaction;
+	}
+	public void setSellTransaction(Set<SellTransaction> sellTransaction) {
+		this.sellTransaction = sellTransaction;
+	}
+	
+	
+	public Set<BuyTransaction> getBuyTransaction() {
+		return buyTransaction;
+	}
+	public void setBuyTransaction(Set<BuyTransaction> buyTransaction) {
+		this.buyTransaction = buyTransaction;
+	}
+	
+	
+	public Double getFeeForBuyers() {
+		return feeForBuyers;
+	}
+	public void setFeeForBuyers(Double feeForBuyers) {
+		this.feeForBuyers = feeForBuyers;
+	}
 	public BuyOrder(OrderStatus buyOrderStatus, @NotNull Double buyPrice, @NotNull String buyCoinName,
-			@NotNull Double buyCoinQuantity, @NotNull Double orderPrice, User user) {
+			@NotNull Double buyCoinQuantity, @NotNull Double orderPrice, @NotNull Double remainingBuyCoinQuantity,
+			@NotNull Double feeForBuyers, User user) {
 		super();
 		this.buyOrderStatus = buyOrderStatus;
 		this.buyPrice = buyPrice;
 		this.buyCoinName = buyCoinName;
 		this.buyCoinQuantity = buyCoinQuantity;
 		this.orderPrice = orderPrice;
+		this.remainingBuyCoinQuantity = remainingBuyCoinQuantity;
+		this.feeForBuyers = feeForBuyers;
 		this.user = user;
 	}
-	
-	
-	
+
 	
 }

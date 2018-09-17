@@ -7,8 +7,9 @@ import com.oodles.domain.CryptoCurrency;
 import com.oodles.enumeration.CryptoName;
 
 @Repository
-public interface CurrencyRepository extends JpaRepository<CryptoCurrency, Long> {
+public interface CryptoCurrencyRepository extends JpaRepository<CryptoCurrency, Long> {
 	
 	CryptoCurrency findByCoinName(CryptoName cryptoName);
+	CryptoCurrency findByCoinName(String coinName);
 
 }

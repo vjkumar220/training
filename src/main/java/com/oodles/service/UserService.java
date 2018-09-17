@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import com.oodles.domain.User;
 import com.oodles.dto.EmailDto;
 import com.oodles.dto.EmailVerifyDto;
-import com.oodles.dto.Otp;
+import com.oodles.dto.OtpDto;
 import com.oodles.repository.UserRepository;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
@@ -33,16 +33,20 @@ public class UserService {
 		UserService.javaMailSender = javaMailSender;
 	}
 
-	private Map<String, Otp> otp_data = new HashMap<>();
+	private Map<String, OtpDto> otp_data = new HashMap<>();
 	private Map<String, EmailDto> email_data = new HashMap<>();
-	private String id = null;
+	private String id ;
 	// get it from properties file
 	private final static String ACCOUNT_SID = "ACe2f058ec28715b76bdeaac2da52d1324";
 	private final static String AUTH_ID = "66384b401747451a0cf47404f3ae8d4c";
 	static {
 		Twilio.init(ACCOUNT_SID, AUTH_ID);
 	}
-
+	/**
+	 * Creating new User
+	 * @param user
+	 * @return
+	 */
 	public Map<Object, Object> createUser(User user) {
 		Map<Object, Object> result = new HashMap<>();
 		String name = user.getName();
@@ -52,7 +56,6 @@ public class UserService {
 		String password = user.getPassword();
 		User userEmail = userRepository.findByEmail(email);
 		User userNumber = userRepository.findByPhoneNumber(phoneNumber);
-		// checking for existing email and mobile no
 		if (userEmail == null && userNumber == null) {
 			User newUser = new User();
 			newUser.setName(name);
@@ -68,7 +71,10 @@ public class UserService {
 		return result;
 	}
 
-	// get all users
+	/**
+	 *  get all users
+	 * @return
+	 */
 	public List<User> retrieveAllUser() {
 		return userRepository.findAll();
 	}
@@ -87,18 +93,32 @@ public class UserService {
 		return value;
 	}
 
-	// delete user by id
-	public User deleteUser(String id) {
+	/** delete user by id
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public Map<Object, Object> deleteUser(String id) {
+		Map<Object, Object> result = new HashMap<>();
 		Optional<User> value = userRepository.findById(Long.parseLong(id));
-
-		User result = value.get();
-		if (value.isPresent() && (!result.getId().equals(id))) {
+		if (value.isPresent()) {
+			User user = value.get();
 			userRepository.deleteById(Long.parseLong(id));
+			result.put("responseMessaage", "User is deleted"+user);
 		}
 		return result;
 	}
 
-	// update user
+	/**
+	 *  update user
+	 * @param id
+	 * @param name
+	 * @param email
+	 * @param password
+	 * @param phoneNumber
+	 * @param country
+	 * @return
+	 */
 	public User updateUser(String id, String name, String email, String password, String phoneNumber, String country) {
 		Optional<User> value = userRepository.findById(Long.parseLong(id));
 		User user = value.get();
@@ -117,13 +137,17 @@ public class UserService {
 		return user;
 	}
 
-	// Send OTP
+	/**
+	 * Send OTP
+	 * @param userId
+	 * @return
+	 */
 	public String sendOTP(String userId) {
 		Optional<User> value = userRepository.findById(Long.parseLong(userId));
 		User user = value.get();
 		if (value.isPresent() && user.getPhoneNumber() != null) {
 			String otpCode = String.valueOf((int) (Math.random() * (10000 - 1000)) + 1000);
-			Otp otp = new Otp();
+			OtpDto otp = new OtpDto();
 			otp.setMobileNumber(user.getPhoneNumber());
 			otp.setOtp(String.valueOf(otpCode));
 			otp.setExpirytime(System.currentTimeMillis() + 500000);
@@ -138,14 +162,19 @@ public class UserService {
 		return "User not found";
 	}
 
-	// verify otp
-	public String verifyOtp(String mobilenumber, Otp requestOTP) {
+	/**
+	 *  verify otp
+	 * @param mobilenumber
+	 * @param requestOTP
+	 * @return
+	 */
+	public String verifyOtp(String mobilenumber, OtpDto requestOTP) {
 		User mobileNumber = userRepository.findByPhoneNumber(requestOTP.getMobileNumber());
 		if (requestOTP.getOtp() == null || requestOTP.getOtp().trim().length() <= 0) {
 			return "Please provide OTP";
 		}
 		if (otp_data.containsKey(mobilenumber)) {
-			Otp otp = otp_data.get(mobilenumber);
+			OtpDto otp = otp_data.get(mobilenumber);
 			if (otp != null) {
 				if (otp.getExpirytime() >= System.currentTimeMillis()) {
 					if (requestOTP.getOtp().equals(otp.getOtp())) {
@@ -161,7 +190,11 @@ public class UserService {
 		return "Mobile number is not found";
 	}
 
-	// Send mail
+	/**
+	 *  Send mail
+	 * @param userId
+	 * @return
+	 */
 	public String sendMail(String userId) {
 		Optional<User> value = userRepository.findById(Long.parseLong(userId));
 		User user = value.get();
@@ -185,7 +218,12 @@ public class UserService {
 		return "Your verification code has been send to your mail";
 	}
 
-	// Verify Email
+	/**
+	 *  Verify Email
+	 * @param email
+	 * @param verifyEmail
+	 * @return
+	 */
 	public String verifyEmail(String email, EmailDto verifyEmail) {
 		if (verifyEmail.getOtp() == null || verifyEmail.getOtp().trim().length() <= 0) {
 			return "Please provide Verification code";
@@ -217,7 +255,11 @@ public class UserService {
 		return "Email Address is not found";
 	}
 
-	// Forget Password sending verification password
+	/**
+	 *  Forget Password sending verification password
+	 * @param userId
+	 * @return
+	 */
 	public String forgetPassword(String userId) {
 		Optional<User> value = userRepository.findById(Long.parseLong(userId));
 		User user = value.get();
@@ -241,7 +283,12 @@ public class UserService {
 		return "Your verification code has been send to your mail";
 	}
 
-	// Updating Password
+	/**
+	 *  Updating Password by sending verification mail
+	 * @param email
+	 * @param verifyEmail
+	 * @return
+	 */
 	public String verifyEmailAndUpdatePass(String email, EmailVerifyDto verifyEmail) {
 		String password = verifyEmail.getPassword();
 		if (verifyEmail.getOtp() == null || verifyEmail.getOtp().trim().length() <= 0) {

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.oodles.domain.BuyOrder;
+import com.oodles.domain.CryptoCurrency;
 import com.oodles.domain.CryptoWallet;
 import com.oodles.domain.FiatWallet;
 import com.oodles.domain.SellOrder;
@@ -17,6 +18,7 @@ import com.oodles.dto.SellOrderDto;
 import com.oodles.enumeration.CryptoName;
 import com.oodles.enumeration.OrderStatus;
 import com.oodles.repository.BuyOrderRepository;
+import com.oodles.repository.CryptoCurrencyRepository;
 import com.oodles.repository.CryptoWalletRepository;
 import com.oodles.repository.FiatWalletRepository;
 import com.oodles.repository.SellOrderRepository;
@@ -41,6 +43,9 @@ public class OrderService {
 
 	@Autowired
 	private FiatWalletRepository fiatWalletRepository;
+	
+	@Autowired
+	private CryptoCurrencyRepository cryptoCurrencyRepository;
 
 	/**
 	 * This function is working for placing buy order
@@ -61,16 +66,23 @@ public class OrderService {
 				log.info("wallet found");
 				FiatWallet fiatWallet = findWallet.get();
 				Double shadowBalance = fiatWallet.getShadowBalance();
-				Double orderPrice = (buyPrice * coinQuantity);
 				CryptoWallet findUserAndCoin = cryptoWalletRepository.findByCoinNameAndUserId(coinNameDto.toString(),
 						userId);
+				CryptoCurrency cryptoCurrency = cryptoCurrencyRepository.findByCoinName(coinNameDto.toString());
+				Double currencyFee = cryptoCurrency.getFees();
+				Double orderFee = ((coinQuantity * buyPrice) * (currencyFee / 100));
+				Double orderPrice = ((buyPrice * coinQuantity) + orderFee);
 				if (findUserAndCoin != null) {
 					log.info("Coin and user find");
 					if (shadowBalance >= orderPrice) {
 						log.info(coinNameDto.toString());
 						Double updateShadowBalance = (shadowBalance - orderPrice);
-						BuyOrder buyOrder = new BuyOrder(OrderStatus.PENDING, buyPrice, coinNameDto.toString(),
-								coinQuantity, orderPrice, user);
+						
+						BuyOrder buyOrder = new BuyOrder(OrderStatus.PENDING, buyPrice, coinNameDto.toString(), coinQuantity, orderPrice, coinQuantity, orderFee, user);
+						
+						//BuyOrder buyOrder = new BuyOrder(OrderStatus.PENDING, buyPrice, coinNameDto.toString(), coinQuantity, orderPrice, coinQuantity, user);
+						/*BuyOrder buyOrder = new BuyOrder(OrderStatus.PENDING, buyPrice, coinNameDto.toString(),
+								coinQuantity, orderPrice, user);*/
 						fiatWallet.setShadowBalance(updateShadowBalance);
 						fiatWalletRepository.save(fiatWallet);
 						buyOrderRepository.save(buyOrder);
@@ -117,6 +129,7 @@ public class OrderService {
 						sellOrder.setSellCoinQuantity(coinQuantity);
 						sellOrder.setSellOrderStatus(OrderStatus.PENDING);
 						sellOrder.setSellPrice(sellPrice);
+						sellOrder.setRemainingSellCoinQuantity(coinQuantity);
 						sellOrder.setUser(user);
 						cryptoWallet.setShadowBalance(updatedShadowBalance);
 						cryptoWalletRepository.save(cryptoWallet);

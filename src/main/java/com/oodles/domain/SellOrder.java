@@ -1,7 +1,9 @@
 package com.oodles.domain;
 
 import java.util.Date;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -37,6 +40,15 @@ public class SellOrder {
 	private Double sellCoinQuantity;
 	@NotNull
 	private Double orderPrice;
+	@NotNull 
+	private Double remainingSellCoinQuantity;
+	
+	@OneToMany(mappedBy = "buyOrder", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<BuyTransaction> buyTransaction;
+	
+	@OneToMany(mappedBy = "sellOrder", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<SellTransaction> sellTransaction;
+	
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
@@ -107,21 +119,46 @@ public class SellOrder {
 		this.orderPrice = orderPrice;
 	}
 
+	public Double getRemainingSellCoinQuantity() {
+		return remainingSellCoinQuantity;
+	}
+
+	public void setRemainingSellCoinQuantity(Double remainingSellCoinQuantity) {
+		this.remainingSellCoinQuantity = remainingSellCoinQuantity;
+	}
+
+	public Set<BuyTransaction> getBuyTransaction() {
+		return buyTransaction;
+	}
+
+	public void setBuyTransaction(Set<BuyTransaction> buyTransaction) {
+		this.buyTransaction = buyTransaction;
+	}
+	
+
+	public Set<SellTransaction> getSellTransaction() {
+		return sellTransaction;
+	}
+
+	public void setSellTransaction(Set<SellTransaction> sellTransaction) {
+		this.sellTransaction = sellTransaction;
+	}
+
 	public SellOrder(OrderStatus sellOrderStatus, @NotNull Double sellPrice, @NotNull String sellCoinName,
-			@NotNull Double sellCoinQuantity, @NotNull Double orderPrice, User user) {
+			@NotNull Double sellCoinQuantity, @NotNull Double orderPrice, @NotNull Double remainingSellCoinQuantity,
+			User user) {
 		super();
 		this.sellOrderStatus = sellOrderStatus;
 		this.sellPrice = sellPrice;
 		this.sellCoinName = sellCoinName;
 		this.sellCoinQuantity = sellCoinQuantity;
 		this.orderPrice = orderPrice;
+		this.remainingSellCoinQuantity = remainingSellCoinQuantity;
 		this.user = user;
 	}
-
 	public SellOrder() {
 		super();
 		// TODO Auto-generated constructor stub
-	}
-	
+	}	
 
 }

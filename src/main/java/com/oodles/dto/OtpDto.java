@@ -1,6 +1,6 @@
 package com.oodles.dto;
 
-public class Otp {
+public class OtpDto {
 
 	private String mobileNumber;
 	private String otp;
