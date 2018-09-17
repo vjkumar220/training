@@ -29,7 +29,11 @@ public class OrderController {
 	@Autowired
 	private OrderService orderService;
 
-	// Create Limit Order
+	/**
+	 *  Create Limit Order
+	 * @param orderDTO
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/createlimitorder")
 
 	public Map createLimitOrder(@RequestBody OrderDto orderDTO) {
@@ -47,7 +51,11 @@ public class OrderController {
 		}
 	}
 
-	// Create Market Order
+	/**
+	 *  Create Market Order
+	 * @param marketOrderDTO
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/createmarketorder")
 
 	public Map createMarketOrder(@RequestBody MarketOrderDto marketOrderDTO) {
@@ -65,7 +73,11 @@ public class OrderController {
 		}
 	}
 
-	// Create Buy Order
+	/**
+	 *  Create Buy Order
+	 * @param orderDTO
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/createbuyorder")
 
 	public Map createBuyOrder(@RequestBody BuyOrderDto orderDTO) {
@@ -83,7 +95,11 @@ public class OrderController {
 		}
 	}
 
-	// Create Sell Order
+	/**
+	 *  Create Sell Order
+	 * @param orderDTO
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/createsellorder")
 
 	public Map createSellOrder(@RequestBody SellOrderDto orderDTO) {
@@ -100,7 +116,10 @@ public class OrderController {
 			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id Does not exist", null, result);
 		}
 	}
-	//Get All Sell Order
+	/**
+	 * Get All Sell Order
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/v1/allsellorder")
 		
 		public List<SellOrder> viewAllSellOrder() {
@@ -108,7 +127,10 @@ public class OrderController {
 			return result;
 		}
      
-		//Get All Buy Order
+	/**
+	 * Get All Buy Order
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/v1/allbuyorder")
 		
 		public List<BuyOrder> viewAllBuyOrder() {

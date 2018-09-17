@@ -17,6 +17,7 @@ import com.oodles.dto.SellOrderDto;
 import com.oodles.enums.OrderStatus;
 import com.oodles.enums.OrderType;
 import com.oodles.models.BuyOrder;
+import com.oodles.models.CryptoCurrency;
 import com.oodles.models.CryptoWallet;
 import com.oodles.models.FiatWallet;
 import com.oodles.models.LimitOrder;
@@ -24,6 +25,7 @@ import com.oodles.models.MarketOrder;
 import com.oodles.models.SellOrder;
 import com.oodles.models.User;
 import com.oodles.repository.BuyOrderRepository;
+import com.oodles.repository.CryptoCurrencyRepository;
 import com.oodles.repository.CryptoWalletRepository;
 import com.oodles.repository.FiatWalletRepository;
 import com.oodles.repository.LimitOrderRepository;
@@ -48,7 +50,9 @@ public class OrderService {
 	private FiatWalletRepository fiatWalletRepository;
 	@Autowired
 	private CryptoWalletRepository cryptoWalletRepository;
-
+	@Autowired
+	private CryptoCurrencyRepository cryptoCurrencyRepository;
+	
 	public Map<String, Object> createLimitOrder(OrderDto orderDTO) {
 		logger.info("createOrder service entered");
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -84,7 +88,11 @@ public class OrderService {
 		return result;
 	}
 
-	// Create Market Order
+	/**
+	 *  Create Market Order
+	 * @param marketOrderDTO
+	 * @return
+	 */
 	public Map<String, Object> createMarketOrder(MarketOrderDto marketOrderDTO) {
 		logger.info("createOrder service entered");
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -116,7 +124,11 @@ public class OrderService {
 		result.put("responseMessage", "Enter  quantity more than zero");
 		return result;
 	}
-	// Create Buy Order
+	/**
+	 *  Create Buy Order
+	 * @param buyOrderDTO
+	 * @return
+	 */
 
 	public Map<String, Object> createBuyOrder(BuyOrderDto buyOrderDTO) {
 		logger.info("createOrder service entered");
@@ -130,21 +142,27 @@ public class OrderService {
 			logger.info("Quantity" + quantity);
 			if (user.isPresent()) {
 				User foundUser = user.get();
+				CryptoCurrency cryptoCurrency = cryptoCurrencyRepository.findBycoinName(coinName);
+				Long fees = cryptoCurrency.getFees();
+				logger.info("fees "+fees);
 				FiatWallet fwType = fiatWalletRepository.findByUserId(foundUser.getId());
-
-				if (fwType.getShadowBalance() >= (quantity * amount))
+             Double amountNeedToBeDeducted=(((quantity * amount)*(fees/100))+(quantity * amount));
+             logger.info("amount "+amountNeedToBeDeducted);
+				if (fwType.getShadowBalance() >= amountNeedToBeDeducted)
 
 				{
 					logger.info("amount checking done");
                     Double currentShadowBalance=fwType.getShadowBalance();
-                    Double updatedShadowBalance=currentShadowBalance-(quantity * amount);
+                    
+                    Double updatedShadowBalance=currentShadowBalance-amountNeedToBeDeducted;
                     fwType.setShadowBalance(updatedShadowBalance);
                     fiatWalletRepository.save(fwType);
 					BuyOrder newOrder = new BuyOrder();
 
 					newOrder.setCoinName(coinName);
-					newOrder.setDesiredPrice(amount);
+					newOrder.setBuyDesiredPrice(amount);
 					newOrder.setCoinQuantity(quantity);
+					newOrder.setRemainingCoin(quantity);
 					OrderStatus status = newOrder.getStatus();
 					newOrder.setStatus(status.PENDING);
 					newOrder.setUser(foundUser);
@@ -165,7 +183,11 @@ public class OrderService {
 
 	}
 
-	// Create Sell Order
+	/**
+	 *  Create Sell Order
+	 * @param sellOrderDTO
+	 * @return
+	 */
 
 	public Map<String, Object> createSellOrder(SellOrderDto sellOrderDTO) {
 		logger.info("createOrder service entered");
@@ -189,8 +211,9 @@ public class OrderService {
 	                    cryptoWalletRepository.save(fwType);
 					SellOrder newOrder = new SellOrder();
 					newOrder.setCoinName(coinName);
-					newOrder.setDesiredPrice(amount);
+					newOrder.setSellDesiredPrice(amount);
 					newOrder.setCoinQuantity(quantity);
+					newOrder.setRemainingCoin(quantity);
 					OrderStatus status = newOrder.getStatus();
 					newOrder.setStatus(status.PENDING);
 					newOrder.setUser(foundUser);
@@ -210,12 +233,18 @@ public class OrderService {
 		return result;
 	}
 
-	// Get All Buy Order
+	/**
+	 *  Get All Buy Order
+	 * @return
+	 */
 	public List<BuyOrder> retrieveAllBuyOrder() {
 		List<BuyOrder> result = buyOrderRepository.findAll();
 		return result;
 	}
-	// Get All Sell Order
+	/**
+	 *  Get All Sell Order
+	 * @return
+	 */
 
 	public List<SellOrder> retrieveAllSellOrder() {
 		List<SellOrder> result = sellOrderRepository.findAll();

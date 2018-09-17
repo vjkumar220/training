@@ -31,7 +31,11 @@ public class ForgotPasswordService {
 
 	private Map<String, User> emailData = new HashMap<>();
 
-	// send mail
+	/**
+	 *  send mail
+	 * @param id
+	 * @return
+	 */
 	public String sendMail(String id) {
 		Optional<User> value = userRepository.findById(Long.parseLong(id));
 		User user = value.get();

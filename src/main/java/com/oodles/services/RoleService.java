@@ -19,7 +19,11 @@ public class RoleService {
 private RoleRepository roleRepository;
 @Autowired
 private UserRepository userRepository;
-	// create a new role
+/**
+ *  create a new role
+ * @param roleType
+ * @return
+ */
 	public Map<String, Object> createRole(String roleType) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		Role role = roleRepository.findByroleType(roleType);
@@ -32,7 +36,11 @@ private UserRepository userRepository;
 		}
 		return result;
 	}
-	// Assign Role
+	/**
+	 *  Assign Role
+	 * @param userRoleDto
+	 * @return
+	 */
 		public Map<String,Object> assignRole(RoleDto userRoleDto) {
 			Map<String, Object> result = new HashMap<>();
 			Long userId = userRoleDto.getUserId();

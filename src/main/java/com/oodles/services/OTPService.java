@@ -46,7 +46,12 @@ public class OTPService {
 		return "User not found";
 	}
 
-	// verify otp
+	/**
+	 *  verify otp
+	 * @param mobilenumber
+	 * @param requestOTP
+	 * @return
+	 */
 	public String verifyOtp(String mobilenumber, OtpDto requestOTP) {
 		User mobileNumber = userRepository.findByMobilenumber(requestOTP.getMobileNumber());
 		if (requestOTP.getOtp() == null || requestOTP.getOtp().trim().length() <= 0) {

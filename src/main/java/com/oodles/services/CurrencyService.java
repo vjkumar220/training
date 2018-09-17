@@ -15,7 +15,11 @@ import com.oodles.repository.CryptoCurrencyRepository;
 public class CurrencyService {
 	@Autowired
 	private CryptoCurrencyRepository cryptoCurrencyRepository;
-	//Add Currency
+	/**
+	 * Add Currency
+	 * @param cryptoCurrency
+	 * @return
+	 */
 	public Map<String, Object>  addCurrency(CryptoCurrency cryptoCurrency ) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		String coinName=cryptoCurrency.getCoinName();
@@ -37,12 +41,24 @@ public class CurrencyService {
 		}
 		return result;
 	}
-//View All Currency
+	/**
+	 * View All Currency
+	 * @return
+	 */
 	public List<CryptoCurrency> retrieveAllCurrency(){
 		List<CryptoCurrency> result = cryptoCurrencyRepository.findAll();
 		return result;
 	}
-	//Update Currency
+	/**
+	 * Update Currency
+	 * @param currencyId
+	 * @param coinName
+	 * @param fees
+	 * @param symbol
+	 * @param initialSupply
+	 * @param price
+	 * @return
+	 */
 	
 	public CryptoCurrency updateCurrency(Long currencyId,String coinName,Long fees,String symbol,Long initialSupply,Long price)
 	{
@@ -62,7 +78,11 @@ public class CurrencyService {
 		}		
 		return cryptocurrency;
 	}
-	//Delete Currency
+	/**
+	 * Delete Currency
+	 * @param currencyId
+	 * @return
+	 */
 	
 public  CryptoCurrency deleteCurrency(String currencyId) {
 		

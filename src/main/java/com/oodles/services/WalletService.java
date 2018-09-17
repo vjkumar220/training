@@ -53,7 +53,11 @@ public class WalletService {
 	@Autowired
 	private CryptoWithdrawRepository cryptoWithdrawRepository;
 
-	// create a Fiat wallet
+	/**
+	 *  create a Fiat wallet
+	 * @param userWalletDTO
+	 * @return
+	 */
 	public Map<String, Object> createFiatWallet(FiatWalletDto userWalletDTO) {
 		logger.info("createFiatwallet entered");
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -90,7 +94,11 @@ public class WalletService {
 		return result;
 	}
 
-	// Create Crypto Wallet
+	/**
+	 *  Create Crypto Wallet
+	 * @param userWalletDTO
+	 * @return
+	 */
 
 	public Map<String, Object> createCryptoWallet(UserWalletDto userWalletDTO) {
 		logger.info("create Crypto wallet entered");
@@ -130,7 +138,11 @@ public class WalletService {
 		return result;
 	}
 
-	// fiat Wallet Deposit
+	/**
+	 *  fiat Wallet Deposit
+	 * @param fiatDepositDTO
+	 * @return
+	 */
 
 	public Map<String, Object> createFiatDeposit(FiatDepositDto fiatDepositDTO) {
 		logger.info("create deposit request");
@@ -162,7 +174,11 @@ public class WalletService {
 
 	}
 
-	// Admin Approval
+	/**
+	 *  Admin Approval
+	 * @param fiatApprovalDTO
+	 * @return
+	 */
 
 	public Map<String, Object> fiatDepositApproval(FiatApprovalDto fiatApprovalDTO) {
 		logger.info(" Approve service entered");
@@ -213,7 +229,11 @@ public class WalletService {
 
 	}
 
-	// Create crypto deposit
+	/**
+	 *  Create crypto deposit
+	 * @param cryptoDepositDTO
+	 * @return
+	 */
 	public Map<String, Object> createCryptoDeposit(CryptoDepositDto cryptoDepositDTO) {
 		logger.info("create deposit request");
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -243,7 +263,11 @@ public class WalletService {
 
 	}
 
-	// Admin Approval for Crypto deposit
+	/**
+	 * Admin Approval for Crypto deposit
+	 * @param cryptoApprovalDTO
+	 * @return
+	 */
 
 	public Map<String, Object> cryptoDepositApproval(CryptoApprovalDto cryptoApprovalDTO) {
 		logger.info(" Approve service entered");
@@ -294,7 +318,11 @@ public class WalletService {
 
 	}
 
-	// Fiat Withdraw
+	/**
+	 *  Fiat Withdraw
+	 * @param fiatWithdrawDTO
+	 * @return
+	 */
 	public Map<String, Object> createFiatWithdraw(FiatWithdrawDto fiatWithdrawDTO) {
 		logger.info("create withdraw request");
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -334,7 +362,11 @@ public class WalletService {
 
 	}
 
-	// Crypto wallet Withdraw
+	/**
+	 *  Crypto wallet Withdraw
+	 * @param cryptoWithdrawDTO
+	 * @return
+	 */
 	public Map<String, Object> createCryptoWithdraw(CryptoWithdrawDto cryptoWithdrawDTO) {
 		logger.info("create withdraw request");
 		Map<String, Object> result = new HashMap<String, Object>();

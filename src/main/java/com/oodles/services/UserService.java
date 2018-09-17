@@ -19,7 +19,11 @@ public class UserService {
 	public static final Logger logger = LoggerFactory.getLogger(UserService.class);
 	@Autowired
 	private UserRepository userRepository;
-//create
+	/**
+	 * create
+	 * @param user
+	 * @return
+	 */
 	public Map<String, Object>  createUser(User user) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		String name=user.getName();
@@ -44,16 +48,23 @@ public class UserService {
 		result.put("responseMessage", "Email or mobile number exists");
 		return result;
 	}
-	//Get All detail
+	/**
+	 * Get All detail
+	 * @return
+	 */
 	public List<User> retrieveAllUser(){
-		List<User> result = userRepository.findAll();
-		return result;
+		
+		return userRepository.findAll();
 	}
 	
 
 	
 	
-//Get All Detail by id
+	/**
+	 * Get All Detail by id
+	 * @param id
+	 * @return
+	 */
 	public User retriveUser(String id)
 	{
 		Optional<User> value = userRepository.findById(Long.parseLong(id));
@@ -62,7 +73,16 @@ public class UserService {
 		
       return result;
 }
-	//Update a particular user
+	/**
+	 * Update a particular user
+	 * @param id
+	 * @param name
+	 * @param email
+	 * @param password
+	 * @param mobilenumber
+	 * @param country
+	 * @return
+	 */
 	
 	public User updateUser(String id,String name,String email,String password,String mobilenumber,String country)
 	{
@@ -83,7 +103,11 @@ public class UserService {
 		return user;
 	}
 	
-	//delete a user
+	/**
+	 * delete a user
+	 * @param id
+	 * @return
+	 */
 public  User deleteUser(String id) {
 		
 		Optional<User> user = userRepository.findById(Long.parseLong(id));

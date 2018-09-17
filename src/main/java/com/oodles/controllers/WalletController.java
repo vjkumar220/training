@@ -29,7 +29,11 @@ public class WalletController {
 	@Autowired
 	private WalletService walletService;
 
-	// Create a fiat wallet
+	/**
+	 *  Create a fiat wallet
+	 * @param userWalletDTO
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/fiatwallet")
 
 	public Map createFiatWallet(@RequestBody FiatWalletDto userWalletDTO) {
@@ -48,7 +52,11 @@ public class WalletController {
 		}
 	}
 
-	// Create a crypto wallet
+	/**
+	 *  Create a crypto wallet
+	 * @param userWalletDTO
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/cryptowallet")
 
 	public Map createCryptoWallet(@RequestBody UserWalletDto userWalletDTO) {
@@ -61,7 +69,11 @@ public class WalletController {
 		}
 	}
 
-	// Deposit in fiat wallet
+	/**
+	 *  Deposit in fiat wallet
+	 * @param fiatDepositDTO
+	 * @return
+	 */
 
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/fiatdeposit")
 
@@ -79,7 +91,11 @@ public class WalletController {
 		}
 	}
 
-	// Admin Approval for Fiat wallet
+	/**
+	 *  Admin Approval for Fiat wallet
+	 * @param fiatApprovalDTO
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/fiatdepositapproval")
 
 	public Map fiatDepositApproval(@RequestBody FiatApprovalDto fiatApprovalDTO) {
@@ -95,7 +111,11 @@ public class WalletController {
 			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
 		}
 	}
-	// Deposit in Crypto wallet
+	/**
+	 *  Deposit in Crypto wallet
+	 * @param cryptoDepositDTO
+	 * @return
+	 */
 
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/cryptodeposit")
 
@@ -111,7 +131,11 @@ public class WalletController {
 			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
 		}
 	}
-	// Admin Approval for Crypto Deposit
+	/**
+	 *  Admin Approval for Crypto Deposit
+	 * @param cryptoApprovalDTO
+	 * @return
+	 */
 
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/cryptodepositapproval")
 
@@ -128,7 +152,11 @@ public class WalletController {
 			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
 		}
 	}
-	// Fiat Wallet Withdraw
+	/**
+	 *  Fiat Wallet Withdraw
+	 * @param fiatWithdrawDTO
+	 * @return
+	 */
 
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/fiatwithdraw")
 
@@ -145,7 +173,11 @@ public class WalletController {
 			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
 		}
 	}
-	// Crypto Wallet Withdraw
+	/**
+	 *  Crypto Wallet Withdraw
+	 * @param cryptoWithdrawDTO
+	 * @return
+	 */
 
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/cryptowithdraw")
 

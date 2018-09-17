@@ -23,7 +23,11 @@ public class VerifyEmailController {
 	private static final Logger logger = LoggerFactory.getLogger (VerifyEmailController.class);
 @Autowired
 private VerifyEmailService verifyemailService;
-// Sending Mail
+/**
+ *  Sending Mail
+ * @param userId
+ * @return
+ */
 
 @PostMapping(value = "v1/verify/sendmail/{userId}")
 public Map<String, Object> sendMail(@PathVariable String userId) {
@@ -42,7 +46,12 @@ public Map<String, Object> sendMail(@PathVariable String userId) {
 	}
 }
 
-// Verify Email
+/**
+ *  Verify Email
+ * @param emailAddress
+ * @param verifyEmail
+ * @return
+ */
 @PutMapping(value = "v1/verifymail/{emailAddress}")
 public Map<String, Object> verifyMail(@PathVariable String emailAddress,@RequestBody VerifyEmailDto verifyEmail) {
 	logger.info("Mail controller verify mail start");

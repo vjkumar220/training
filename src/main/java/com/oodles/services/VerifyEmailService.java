@@ -54,7 +54,12 @@ public class VerifyEmailService {
 		return "Your verification code has been sent to your mail";
 	}
 
-	// Verify Email
+	/**
+	 *  Verify Email
+	 * @param emailAddress
+	 * @param verifyEmail
+	 * @return
+	 */
 	public String verifyEmail(String emailAddress, VerifyEmailDto verifyEmail) {
 		if (verifyEmail.getConfirmationToken()== null || verifyEmail.getConfirmationToken().trim().length() <= 0) {
 			return "Please provide Verification code";

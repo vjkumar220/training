@@ -1,7 +1,10 @@
 package com.oodles.models;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -23,14 +27,14 @@ public class BuyOrder {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     
-	private Long orderId; 
-	private Double desiredPrice;
+	private Long buyOrderId; 
+	private Double buyDesiredPrice;
 	private Double coinQuantity;
 	private String coinName;
 	  @Enumerated(EnumType.STRING)
 	    
 	    private  OrderStatus status;
-	
+	private Double remainingCoin;
 	  @Column(name="timeStamp", columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
 	   @Temporal(TemporalType.TIMESTAMP)
 	private Date orderCreatedOn;
@@ -39,24 +43,51 @@ public class BuyOrder {
 	    @JoinColumn(name = "user_id", nullable = false)
 	 @JsonBackReference(value="user-buyorder")
 	    private User user;
-
-	public Long getOrderId() {
-		return orderId;
-	}
-
-	public void setOrderId(Long orderId) {
-		this.orderId = orderId;
-	}
-
+//mapping with buy transaction
+	  @OneToMany(cascade = CascadeType.ALL,
+	           fetch = FetchType.EAGER,
+	           mappedBy = "buyOrder")
+	   private Set<BuyTransaction> buyTransaction = new HashSet<>();
+	  @OneToMany(cascade = CascadeType.ALL,
+	           fetch = FetchType.EAGER,
+	           mappedBy = "sellOrder")
+	   private Set<SellTransaction> sellTransaction = new HashSet<>();
+	
 	
 
 
-	public Double getDesiredPrice() {
-		return desiredPrice;
+	
+
+	public Set<SellTransaction> getSellTransaction() {
+		return sellTransaction;
 	}
 
-	public void setDesiredPrice(Double desiredPrice) {
-		this.desiredPrice = desiredPrice;
+	public void setSellTransaction(Set<SellTransaction> sellTransaction) {
+		this.sellTransaction = sellTransaction;
+	}
+
+	public Long getBuyOrderId() {
+		return buyOrderId;
+	}
+
+	public void setBuyOrderId(Long buyOrderId) {
+		this.buyOrderId = buyOrderId;
+	}
+
+	public Double getBuyDesiredPrice() {
+		return buyDesiredPrice;
+	}
+
+	public void setBuyDesiredPrice(Double buyDesiredPrice) {
+		this.buyDesiredPrice = buyDesiredPrice;
+	}
+
+	public Set<BuyTransaction> getBuyTransaction() {
+		return buyTransaction;
+	}
+
+	public void setBuyTransaction(Set<BuyTransaction> buyTransaction) {
+		this.buyTransaction = buyTransaction;
 	}
 
 	public Double getCoinQuantity() {
@@ -97,6 +128,14 @@ public class BuyOrder {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public Double getRemainingCoin() {
+		return remainingCoin;
+	}
+
+	public void setRemainingCoin(Double remainingCoin) {
+		this.remainingCoin = remainingCoin;
 	}
 
 

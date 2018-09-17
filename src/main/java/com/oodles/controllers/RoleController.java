@@ -21,7 +21,11 @@ public class RoleController {
 private RoleService roleService;
 
 
-//Create a new role
+/**
+ * Create a new role
+ * @param roleType
+ * @return
+ */
 @RequestMapping(method = RequestMethod.POST, value = "/rest/createrole/{roleType}")
 @ResponseBody
 public Map createUser(@PathVariable String roleType)  {
@@ -35,7 +39,11 @@ public Map createUser(@PathVariable String roleType)  {
 		return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 	}
 }
-// Create a new admin
+/**
+ *  Create a new admin
+ * @param userRoleDTO
+ * @return
+ */
 @RequestMapping(method = RequestMethod.POST, value = "/rest/assignrole/")
 @ResponseBody
 public Map assignRole(@RequestBody RoleDto userRoleDTO)  {

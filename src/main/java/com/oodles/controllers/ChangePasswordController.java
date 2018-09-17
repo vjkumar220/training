@@ -23,7 +23,11 @@ public class ChangePasswordController {
 	private static final Logger logger = LoggerFactory.getLogger (VerifyEmailController.class);
 	@Autowired
 	private ForgotPasswordService verifyemailService;
-	// Sending Mail
+	/**
+	 *  Sending Mail
+	 * @param id
+	 * @return
+	 */
 
 	@PostMapping(value = "v1/updatepassword/sendmail/{id}")
 	public Map<String, Object> sendMail(@PathVariable String id) {
@@ -42,7 +46,11 @@ public class ChangePasswordController {
 		}
 	}
 
-	// Change Password
+	/**
+	 *  Change Password
+	 * @param verifyEmail
+	 * @return
+	 */
 	@PutMapping(value = "v1/updatepassword/{newpassword}")
 	
 	public Map<String, Object> forgotPassword(@RequestBody EmailPasswordDto verifyEmail) {

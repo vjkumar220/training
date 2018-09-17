@@ -22,7 +22,11 @@ public class RegistrationController {
 	@Autowired
 	private UserService userService;
 
-	// Create
+	/**
+	 *  Create
+	 * @param user
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/signup")
 
 	public Map createUser(@Valid @RequestBody User user) {
@@ -35,14 +39,21 @@ public class RegistrationController {
 		}
 	}
 
-	// To Retrieve all detail
+	/**
+	 *  To Retrieve all detail
+	 * @return
+	 */
 	@GetMapping(value = "/users")
 	public List<User> viewAllUsers() {
-		List<User> result = userService.retrieveAllUser();
-		return result;
+		
+		return userService.retrieveAllUser();
 	}
 
-	// To retrieve user by id
+	/**
+	 *  To retrieve user by id
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/v1/users/{userid}")
 	public Map getUser(@PathVariable(value = "userid") String id) {
 		User result = null;
@@ -57,7 +68,16 @@ public class RegistrationController {
 		}
 	}
 
-	// To update the particular user
+	/**
+	 *  To update the particular user
+	 * @param id
+	 * @param name
+	 * @param email
+	 * @param password
+	 * @param mobilenumber
+	 * @param country
+	 * @return
+	 */
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/v1/users/{id}/{name}/{email}/{password}/{mobilenumber}/{country}")
 	@ResponseBody
@@ -74,7 +94,11 @@ public class RegistrationController {
 		}
 	}
 
-	// Delete a user
+	/**
+	 *  Delete a user
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping(method = RequestMethod.DELETE, value = "v1/users/{id}")
 	@ResponseBody
 	public Map deleteUser(@PathVariable String id) {

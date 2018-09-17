@@ -25,7 +25,11 @@ public class CurrencyController {
 @Autowired
 private CurrencyService  currencyService;
 
-//Add Currency
+/**
+ * Add Currency
+ * @param cryptoCurrency
+ * @return
+ */
 
 @RequestMapping(method = RequestMethod.POST, value = "/v1/currencies")
 
@@ -39,13 +43,25 @@ public Map addCurrency(@Valid @RequestBody CryptoCurrency cryptoCurrency)  {
 		return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 	}		
 }
-//View Currency
+/**
+ * View Currency
+ * @return
+ */
 @GetMapping(value = "/v1/currencies")
 public List<CryptoCurrency> viewAllCurrency() {
 	List<CryptoCurrency> result = currencyService.retrieveAllCurrency();
 	return result;
 }
-	//Update Currency
+/**
+ * Update Currency
+ * @param currencyId
+ * @param coinName
+ * @param fees
+ * @param symbol
+ * @param initialSupply
+ * @param price
+ * @return
+ */
 @RequestMapping(method = RequestMethod.PUT, value = "/v1/currencies/{currencyId}/{coinName}/{fees}/{symbol}/{initialSupply}/{price}")
 @ResponseBody
 public Map updateCurrency(@PathVariable Long currencyId,@PathVariable String coinName,@PathVariable Long fees,@PathVariable String symbol,@PathVariable Long initialSupply,@PathVariable Long price)
@@ -62,7 +78,11 @@ catch(NoSuchElementException excep){
 	return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, cryptocurrency);
 }
 }
-//Delete Currency
+/**
+ * Delete Currency
+ * @param currencyId
+ * @return
+ */
 @RequestMapping(method = RequestMethod.DELETE, value = "v1/currencies/{currencyId}")
 @ResponseBody
 public Map deleteCurrency(@PathVariable String currencyId)
