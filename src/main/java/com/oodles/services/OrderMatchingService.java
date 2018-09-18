@@ -1,6 +1,5 @@
 package com.oodles.services;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -14,9 +13,13 @@ import org.springframework.stereotype.Service;
 import com.oodles.enums.OrderStatus;
 import com.oodles.models.BuyOrder;
 import com.oodles.models.CryptoCurrency;
+import com.oodles.models.CryptoWallet;
 import com.oodles.models.SellOrder;
+import com.oodles.models.User;
 import com.oodles.repository.BuyOrderRepository;
 import com.oodles.repository.CryptoCurrencyRepository;
+import com.oodles.repository.CryptoWalletRepository;
+import com.oodles.repository.FiatWalletRepository;
 import com.oodles.repository.SellOrderRepository;
 
 @Service
@@ -28,6 +31,11 @@ public class OrderMatchingService {
 	private SellOrderRepository sellOrderRepository;
 	@Autowired
 	private CryptoCurrencyRepository cryptoCurrencyRepository;
+	@Autowired
+	private FiatWalletRepository fiatWalletRepository;
+
+	@Autowired
+	private CryptoWalletRepository cryptoWalletRepository;
 
 	public List<BuyOrder> buyList() {
 		List<BuyOrder> result = buyOrderRepository.findAllByStatus(OrderStatus.PENDING);
@@ -71,32 +79,75 @@ public class OrderMatchingService {
 			return null;
 		} else {
 			// ArrayList<Object> appproved = new ArrayList<>();
-			Iterator<BuyOrder> itrateBuyOrder = buyOrder.iterator();
-			Iterator<SellOrder> itrateSellOrder = sellOrder.iterator();
-			while (itrateBuyOrder.hasNext() && itrateSellOrder.hasNext()) {
+			Iterator<BuyOrder> iterateBuyOrder = buyOrder.iterator();
+			Iterator<SellOrder> iterateSellOrder = sellOrder.iterator();
+			while (iterateBuyOrder.hasNext() && iterateSellOrder.hasNext()) {
 
 				// Checking coin name
 
-				if (itrateBuyOrder.next().getCoinName() == itrateSellOrder.next().getCoinName()) {
-					String coinName = itrateBuyOrder.next().getCoinName();
+				if (iterateBuyOrder.next().getCoinName() == iterateSellOrder.next().getCoinName()) {
+					String coinName = iterateBuyOrder.next().getCoinName();
 					CryptoCurrency cryptoCurrency = cryptoCurrencyRepository.findBycoinName(coinName);
 					Long fees = cryptoCurrency.getFees();
 
 					// Checking Coin price
 
-					if (itrateBuyOrder.next().getBuyDesiredPrice() >= itrateSellOrder.next().getSellDesiredPrice()) {
-
-						Long sellId = itrateSellOrder.next().getSellOrderId();
-						Long buyId = itrateBuyOrder.next().getBuyOrderId();
-
+					if (iterateBuyOrder.next().getBuyDesiredPrice() >= iterateSellOrder.next().getSellDesiredPrice()) {
+                        /**
+                        * seller and order id
+                        */
+						Long sellId = iterateSellOrder.next().getSellOrderId();
+						Long buyId = iterateBuyOrder.next().getBuyOrderId();
 						/**
+						 * Buy and sell coin name
+						 */
+						String sellcoinName=iterateSellOrder.next().getCoinName();
+						String buycoinName=iterateBuyOrder.next().getCoinName();                       User buyUserId=iterateBuyOrder.next().getUser();
+                       
+						User sellUserId=iterateSellOrder.next().getUser();
+						/**
+						 * Buyer and seller id
+						 */
+                        Long buyerUserId=buyUserId.getId();
+						Long sellerUserId=sellUserId.getId();
+						/**
+						 * Buyer and seller fiat wallet id
+						 */
+						Long buyerFiatWalletid=buyUserId.getFiatwallet().getWalletId();             
+						Long sellerFiatWalletid=sellUserId.getFiatwallet().getWalletId();
+						
+                       /**
+                        * Buyer and seller crypto wallet id 
+                        */
+                        
+						CryptoWallet buycwType=cryptoWalletRepository.findByCoinNameAndUserId(buycoinName, buyerUserId);
+						
+						Long buyercryptoWalletid=buycwType.getWalletId();
+						
+						CryptoWallet sellcwType=cryptoWalletRepository.findByCoinNameAndUserId(sellcoinName, sellerUserId);
+						
+						Long sellercryptoWalletid=sellcwType.getWalletId();
+						/**
+						 * Buy order values
+						 */
+						Double noOfCointobesell= iterateSellOrder.next().getRemainingCoin();
+						Double desiredpriceforsell=iterateSellOrder.next().getSellDesiredPrice();
+                        Double noOfCointobebuy=iterateBuyOrder.next().getRemainingCoin();
+                        Double desiredpriceforbuy=iterateBuyOrder.next().getBuyDesiredPrice();
+						Double amountforsell=(noOfCointobesell*desiredpriceforsell);
+                        Double amountforbuy=(noOfCointobebuy*desiredpriceforbuy);
+                        
+                        Double grossamountbuy=(amountforbuy)*fees/100;
+                        
+                        
+                        /**
 						 * Checking coin Quantity if the coin is greater for buy then add coin in buyer
 						 * wallet and deduct from seller account which is available and add that much
 						 * money in seller fiat wallet from buyer fiat wallet and transaction is
 						 * complete for seller and transaction is still pending for buyer
 						 */
 
-						if (itrateBuyOrder.next().getCoinQuantity() > itrateSellOrder.next().getCoinQuantity()) {
+						if (iterateBuyOrder.next().getRemainingCoin() > iterateSellOrder.next().getRemainingCoin()) {
 
 						}
 						/**
@@ -106,7 +157,7 @@ public class OrderMatchingService {
 						 * transaction is still pending for seller
 						 */
 
-						else if (itrateBuyOrder.next().getCoinQuantity() < itrateSellOrder.next().getCoinQuantity()) {
+						else if (iterateBuyOrder.next().getRemainingCoin() < iterateSellOrder.next().getRemainingCoin()) {
                          
 						}
 						/**
@@ -114,9 +165,9 @@ public class OrderMatchingService {
 						 * account and opposite in fiat wallet
 						 */
 
-						else if (itrateBuyOrder.next().getCoinQuantity() == itrateSellOrder.next().getCoinQuantity()) {
-							// Transaction transaction = new
-
+						else if (iterateBuyOrder.next().getRemainingCoin() == iterateSellOrder.next().getRemainingCoin()) {
+							
+                            
 						}
 
 					}

@@ -146,7 +146,7 @@ public class OrderService {
 				Long fees = cryptoCurrency.getFees();
 				logger.info("fees "+fees);
 				FiatWallet fwType = fiatWalletRepository.findByUserId(foundUser.getId());
-             Double amountNeedToBeDeducted=(((quantity * amount)*(fees/100))+(quantity * amount));
+             Double amountNeedToBeDeducted=(((quantity * amount)*fees/100)+(quantity * amount));
              logger.info("amount "+amountNeedToBeDeducted);
 				if (fwType.getShadowBalance() >= amountNeedToBeDeducted)
 

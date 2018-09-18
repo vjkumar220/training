@@ -43,7 +43,11 @@ public class BuyOrder {
 	    @JoinColumn(name = "user_id", nullable = false)
 	 @JsonBackReference(value="user-buyorder")
 	    private User user;
-//mapping with buy transaction
+//mapping with  transaction
+	  @OneToMany(cascade = CascadeType.ALL,
+	           fetch = FetchType.EAGER,
+	           mappedBy = "buyOrder")
+	   private Set<Transaction> transaction = new HashSet<>();
 	  @OneToMany(cascade = CascadeType.ALL,
 	           fetch = FetchType.EAGER,
 	           mappedBy = "buyOrder")
@@ -52,20 +56,6 @@ public class BuyOrder {
 	           fetch = FetchType.EAGER,
 	           mappedBy = "sellOrder")
 	   private Set<SellTransaction> sellTransaction = new HashSet<>();
-	
-	
-
-
-	
-
-	public Set<SellTransaction> getSellTransaction() {
-		return sellTransaction;
-	}
-
-	public void setSellTransaction(Set<SellTransaction> sellTransaction) {
-		this.sellTransaction = sellTransaction;
-	}
-
 	public Long getBuyOrderId() {
 		return buyOrderId;
 	}
@@ -82,13 +72,7 @@ public class BuyOrder {
 		this.buyDesiredPrice = buyDesiredPrice;
 	}
 
-	public Set<BuyTransaction> getBuyTransaction() {
-		return buyTransaction;
-	}
-
-	public void setBuyTransaction(Set<BuyTransaction> buyTransaction) {
-		this.buyTransaction = buyTransaction;
-	}
+	
 
 	public Double getCoinQuantity() {
 		return coinQuantity;
@@ -136,6 +120,30 @@ public class BuyOrder {
 
 	public void setRemainingCoin(Double remainingCoin) {
 		this.remainingCoin = remainingCoin;
+	}
+
+	public Set<Transaction> getTransaction() {
+		return transaction;
+	}
+
+	public void setTransaction(Set<Transaction> transaction) {
+		this.transaction = transaction;
+	}
+
+	public Set<BuyTransaction> getBuyTransaction() {
+		return buyTransaction;
+	}
+
+	public void setBuyTransaction(Set<BuyTransaction> buyTransaction) {
+		this.buyTransaction = buyTransaction;
+	}
+
+	public Set<SellTransaction> getSellTransaction() {
+		return sellTransaction;
+	}
+
+	public void setSellTransaction(Set<SellTransaction> sellTransaction) {
+		this.sellTransaction = sellTransaction;
 	}
 
 

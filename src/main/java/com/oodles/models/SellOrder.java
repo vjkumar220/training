@@ -44,7 +44,11 @@ public class SellOrder {
 	    @JoinColumn(name = "user_id", nullable = false)
 	 @JsonBackReference(value="user-buyorder")
 	    private User user;
-//mapping with sell transaction
+//mapping with transaction
+	  @OneToMany(cascade = CascadeType.ALL,
+	           fetch = FetchType.EAGER,
+	           mappedBy = "sellOrder")
+	   private Set<Transaction> transaction = new HashSet<>();
 	  @OneToMany(cascade = CascadeType.ALL,
 	           fetch = FetchType.EAGER,
 	           mappedBy = "sellOrder")
@@ -53,7 +57,6 @@ public class SellOrder {
 	           fetch = FetchType.EAGER,
 	           mappedBy = "buyOrder")
 	   private Set<BuyTransaction> buyTransaction = new HashSet<>();
-	
 	public String getCoinName() {
 		return coinName;
 	}
@@ -120,6 +123,14 @@ public class SellOrder {
 		this.remainingCoin = remainingCoin;
 	}
 
+	public Set<Transaction> getTransaction() {
+		return transaction;
+	}
+
+	public void setTransaction(Set<Transaction> transaction) {
+		this.transaction = transaction;
+	}
+
 	public Set<SellTransaction> getSellTransaction() {
 		return sellTransaction;
 	}
@@ -135,5 +146,7 @@ public class SellOrder {
 	public void setBuyTransaction(Set<BuyTransaction> buyTransaction) {
 		this.buyTransaction = buyTransaction;
 	}
+
+	
 	  
 }

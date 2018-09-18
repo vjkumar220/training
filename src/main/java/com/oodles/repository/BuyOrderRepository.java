@@ -10,4 +10,6 @@ import com.oodles.models.BuyOrder;
 @Repository
 public interface BuyOrderRepository extends JpaRepository<BuyOrder,Long>{
 	List<BuyOrder> findAllByStatus(OrderStatus status);
+	BuyOrder findByUserId(Long userid);
+	BuyOrder findByBuyOrderId(Long buyOrderId);
 }
