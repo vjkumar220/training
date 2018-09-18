@@ -21,16 +21,17 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.oodles.enumeration.OrderStatus;
+
 @Entity
 public class SellOrder {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long sellOrderId;
 	@Enumerated(EnumType.STRING)
 	private OrderStatus sellOrderStatus;
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+	@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
 	private Date sellOrderCreatedOn;
 	@NotNull
 	private Double sellPrice;
@@ -40,16 +41,18 @@ public class SellOrder {
 	private Double sellCoinQuantity;
 	@NotNull
 	private Double orderPrice;
-	@NotNull 
+	@NotNull
 	private Double remainingSellCoinQuantity;
-	
+
 	@OneToMany(mappedBy = "buyOrder", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<BuyTransaction> buyTransaction;
-	
+
 	@OneToMany(mappedBy = "sellOrder", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<SellTransaction> sellTransaction;
-	
-	
+
+	@OneToMany(mappedBy = "sellOrder", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<Transaction> Transaction;
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	@JsonBackReference(value = "for sell helllo Orders")
@@ -134,7 +137,6 @@ public class SellOrder {
 	public void setBuyTransaction(Set<BuyTransaction> buyTransaction) {
 		this.buyTransaction = buyTransaction;
 	}
-	
 
 	public Set<SellTransaction> getSellTransaction() {
 		return sellTransaction;
@@ -142,6 +144,14 @@ public class SellOrder {
 
 	public void setSellTransaction(Set<SellTransaction> sellTransaction) {
 		this.sellTransaction = sellTransaction;
+	}
+
+	public Set<Transaction> getTransaction() {
+		return Transaction;
+	}
+
+	public void setTransaction(Set<Transaction> transaction) {
+		Transaction = transaction;
 	}
 
 	public SellOrder(OrderStatus sellOrderStatus, @NotNull Double sellPrice, @NotNull String sellCoinName,
@@ -156,9 +166,10 @@ public class SellOrder {
 		this.remainingSellCoinQuantity = remainingSellCoinQuantity;
 		this.user = user;
 	}
+
 	public SellOrder() {
 		super();
 		// TODO Auto-generated constructor stub
-	}	
+	}
 
 }

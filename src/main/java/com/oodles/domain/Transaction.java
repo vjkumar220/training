@@ -4,11 +4,16 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Transaction {
@@ -30,6 +35,16 @@ public class Transaction {
 	private Long buyerId;
 	private Long sellerId;
 	private String description;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "buyOrder_id")
+	@JsonBackReference(value = "for Orders")
+	private BuyOrder buyOrder;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "sellOrder_id")
+	@JsonBackReference(value = "for Orders ")
+	private SellOrder sellOrder;
 	
 	public Long getTransactionId() {
 		return transactionId;

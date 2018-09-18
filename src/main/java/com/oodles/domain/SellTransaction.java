@@ -31,6 +31,8 @@ public class SellTransaction {
 	private Double transationFee;
 	private Double exchangeRateSellDesiredPrice;
 	private Double grossAmount;
+	private Long sellerId;
+	private Long buyerId;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "buyOrder_id")
@@ -41,6 +43,13 @@ public class SellTransaction {
 	@JoinColumn(name = "sellOrder_id")
 	@JsonBackReference(value = "for Orders")
 	private SellOrder sellOrder;
+	
+	
+
+	public SellTransaction() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	public Long getSellTransactionId() {
 		return sellTransactionId;
@@ -129,5 +138,40 @@ public class SellTransaction {
 	public void setSellOrder(SellOrder sellOrder) {
 		this.sellOrder = sellOrder;
 	}
+
+	public Long getSellerId() {
+		return sellerId;
+	}
+
+	public void setSellerId(Long sellerId) {
+		this.sellerId = sellerId;
+	}
+
+	public Long getBuyerId() {
+		return buyerId;
+	}
+
+	public void setBuyerId(Long buyerId) {
+		this.buyerId = buyerId;
+	}
+
+	public SellTransaction(Double coinQuantity, String coinName, String transactionStatus, Double netAmount,
+			Double transationFee, Double exchangeRateSellDesiredPrice, Double grossAmount, Long sellerId, Long buyerId,
+			BuyOrder buyOrder, SellOrder sellOrder) {
+		super();
+		this.coinQuantity = coinQuantity;
+		this.coinName = coinName;
+		this.transactionStatus = transactionStatus;
+		this.netAmount = netAmount;
+		this.transationFee = transationFee;
+		this.exchangeRateSellDesiredPrice = exchangeRateSellDesiredPrice;
+		this.grossAmount = grossAmount;
+		this.sellerId = sellerId;
+		this.buyerId = buyerId;
+		this.buyOrder = buyOrder;
+		this.sellOrder = sellOrder;
+	}
+	
+	
 	
 }

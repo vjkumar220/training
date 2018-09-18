@@ -25,11 +25,13 @@ public class BuyTransaction {
 	private String status;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
-	private Date transactionCreatedOn;
+	private Date 	transactionCreatedOn;
 	private Double netAmount;
 	private Double transationFee;
 	private Double exchangeRate;
 	private Double grossAmount;
+	private Long sellerId;
+	private Long buyerId;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "sellOrder_id")
@@ -41,6 +43,13 @@ public class BuyTransaction {
 	@JoinColumn(name = "buyOrder_id")
 	@JsonBackReference(value = "for Orders")
 	private BuyOrder buyOrder;
+
+	
+
+	public BuyTransaction() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 
 	public Long getBuyTransactionId() {
@@ -151,7 +160,44 @@ public class BuyTransaction {
 	public void setBuyOrder(BuyOrder buyOrder) {
 		this.buyOrder = buyOrder;
 	}
-	
+
+
+	public Long getSellerId() {
+		return sellerId;
+	}
+
+
+	public void setSellerId(Long sellerId) {
+		this.sellerId = sellerId;
+	}
+
+
+	public Long getBuyerId() {
+		return buyerId;
+	}
+
+
+	public void setBuyerId(Long buyerId) {
+		this.buyerId = buyerId;
+	}
+
+
+	public BuyTransaction(Double coinQuantity, String cointype, String status, Double netAmount, Double transationFee,
+			Double exchangeRate, Double grossAmount, Long sellerId, Long buyerId, SellOrder sellOrder,
+			BuyOrder buyOrder) {
+		super();
+		this.coinQuantity = coinQuantity;
+		this.cointype = cointype;
+		this.status = status;
+		this.netAmount = netAmount;
+		this.transationFee = transationFee;
+		this.exchangeRate = exchangeRate;
+		this.grossAmount = grossAmount;
+		this.sellerId = sellerId;
+		this.buyerId = buyerId;
+		this.sellOrder = sellOrder;
+		this.buyOrder = buyOrder;
+	}
 	
 	
 }
