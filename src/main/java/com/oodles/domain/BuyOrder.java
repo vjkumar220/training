@@ -26,7 +26,7 @@ import com.oodles.enumeration.OrderStatus;
 public class BuyOrder {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long buyOrderId;
 	@Enumerated(EnumType.STRING)
 	private OrderStatus buyOrderStatus;
@@ -57,7 +57,7 @@ public class BuyOrder {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
-	@JsonBackReference(value = "for Orders")
+	@JsonBackReference(value = "for buy Orders ef")
 	private User user;
 
 	public BuyOrder() {

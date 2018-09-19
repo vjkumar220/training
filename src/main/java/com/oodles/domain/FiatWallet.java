@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class FiatWallet implements Serializable{
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long fiatWalletId;
 	private Double shadowBalance;
 	@NotNull

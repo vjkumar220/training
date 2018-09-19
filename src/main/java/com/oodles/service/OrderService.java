@@ -68,7 +68,7 @@ public class OrderService {
 				Double shadowBalance = fiatWallet.getShadowBalance();
 				CryptoWallet findUserAndCoin = cryptoWalletRepository.findByCoinNameAndUserId(coinNameDto.toString(),
 						userId);
-				CryptoCurrency cryptoCurrency = cryptoCurrencyRepository.findByCoinName(coinNameDto.toString());
+				CryptoCurrency cryptoCurrency = cryptoCurrencyRepository.findByCoinName(coinNameDto);
 				Double currencyFee = cryptoCurrency.getFees();
 				Double orderFee = ((coinQuantity * buyPrice) * (currencyFee / 100));
 				Double orderPrice = ((buyPrice * coinQuantity) + orderFee);

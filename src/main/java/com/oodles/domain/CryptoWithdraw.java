@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class CryptoWithdraw {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long withdrawId;
 
 	@NotNull

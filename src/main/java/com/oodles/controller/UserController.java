@@ -28,6 +28,9 @@ import com.oodles.dto.OtpDto;
 import com.oodles.exception.ResourceNotFoundException;
 import com.oodles.service.UserService;
 import com.oodles.util.ResponseHandler;
+import static com.oodles.util.Constants.SUCCESS;
+import static com.oodles.util.Constants.ERROR;;
+
 
 @RestController
 @RequestMapping("/user")
@@ -46,12 +49,11 @@ public class UserController {
 	public Map<String, Object> createUser(@Valid @RequestBody User user) {
 		Map<Object, Object> output = new HashMap<Object, Object>();
 		try {
-			logger.info("UserController - create value in try");
 			output = userService.createUser(user);
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, output);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, output);
 		} catch (ResourceNotFoundException e) {
 			logger.info("UserController - create value in catch'");
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, output);
+			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, ERROR, null, output);
 		}
 	}
 
@@ -62,8 +64,7 @@ public class UserController {
 	 */
 	@GetMapping(value = "/all/users")
 	public List<User> viewAllUsers() {
-		List<User> result = userService.retrieveAllUser();
-		return result;
+		return userService.retrieveAllUser();
 	}
 
 	/**
@@ -94,7 +95,7 @@ public class UserController {
 	 * @param id
 	 * @return
 	 */
-	@DeleteMapping(value = "/delete/users/by/userId/{id}")
+	@DeleteMapping(value = "/delete/user/by/userId/{id}")
 	public Map<String, Object> deleteUser(@PathVariable String id) {
 		Map<Object, Object> output = new HashMap<Object, Object>();
 		try {

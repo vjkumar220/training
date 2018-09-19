@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class FiatWithdraw {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long withdrawId;
 
 	@NotNull

@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class SellTransaction {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long sellTransactionId;
 
 	private Double coinQuantity;
@@ -36,12 +36,12 @@ public class SellTransaction {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "buyOrder_id")
-	@JsonBackReference(value = "for Orders")
+	@JsonBackReference(value = "for Orders hdfsd")
 	private BuyOrder buyOrder;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "sellOrder_id")
-	@JsonBackReference(value = "for Orders")
+	@JsonBackReference(value = "for Orders dfwef")
 	private SellOrder sellOrder;
 	
 	

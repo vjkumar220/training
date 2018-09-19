@@ -9,7 +9,8 @@ import com.oodles.enumeration.CryptoName;
 @Repository
 public interface CryptoCurrencyRepository extends JpaRepository<CryptoCurrency, Long> {
 	
-	CryptoCurrency findByCoinName(CryptoName cryptoName);
+	//CryptoCurrency findByCoinName(CryptoName cryptoName);
+	CryptoCurrency findByCoinName(CryptoName coinName);
 	CryptoCurrency findByCoinName(String coinName);
 
 }
