@@ -31,19 +31,17 @@ public class RegistrationController {
 
 	public Map createUser(@Valid @RequestBody User user) {
 		Map result = null;
-		try {
+		
 			result = userService.createUser(user);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-		} catch (com.oodles.exceptions.ResourceNotFoundException exception) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		}
 	}
 
 	/**
 	 *  To Retrieve all detail
 	 * @return
 	 */
-	@GetMapping(value = "/users")
+	@RequestMapping(method = RequestMethod.GET, value = "/users")
+	
 	public List<User> viewAllUsers() {
 		
 		return userService.retrieveAllUser();
@@ -58,14 +56,10 @@ public class RegistrationController {
 	public Map getUser(@PathVariable(value = "userid") String id) {
 		User result = null;
 
-		try {
+		
 			result = userService.retriveUser(id);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-		} catch (ResourceNotFoundException exception) {
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, result);
-		} catch (NoSuchElementException excep) {
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, result);
-		}
+		
 	}
 
 	/**
@@ -84,14 +78,10 @@ public class RegistrationController {
 	public Map updateUser(@PathVariable String id, @PathVariable String name, @PathVariable String email,
 			@PathVariable String password, @PathVariable String mobilenumber, @PathVariable String country) {
 		User user = null;
-		try {
+		
 			user = userService.updateUser(id, name, email, password, mobilenumber, country);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, user);
-		} catch (ResourceNotFoundException exception) {
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, user);
-		} catch (NoSuchElementException excep) {
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, user);
-		}
+		
 	}
 
 	/**
@@ -104,13 +94,9 @@ public class RegistrationController {
 	public Map deleteUser(@PathVariable String id) {
 		User result = null;
 
-		try {
+		
 			result = userService.deleteUser(id);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-		} catch (ResourceNotFoundException exception) {
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, result);
-		} catch (NoSuchElementException excep) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "Id does not exist", null, result);
-		}
+		
 	}
 }

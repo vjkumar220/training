@@ -25,7 +25,7 @@ import com.oodles.enums.OrderStatus;
 @Entity
 public class BuyOrder {
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     
 	private Long buyOrderId; 
 	private Double buyDesiredPrice;

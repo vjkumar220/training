@@ -23,7 +23,7 @@ import com.oodles.enums.DepositStatus;
 @Entity
 public class FiatDeposit {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long transactionId;
 	@NotNull
 	private String walletType;

@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 @Entity
 public class CryptoWalletHistory {
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
 private Long walletHistoryId;
 	private Date withdrawTime;
 	private Date depositTime;

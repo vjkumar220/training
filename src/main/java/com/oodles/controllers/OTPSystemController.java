@@ -23,25 +23,17 @@ public class OTPSystemController {
 	@RequestMapping(value="/v1/verifyUser/{userId}",method=RequestMethod.POST)
 	public Map sendOtp(@PathVariable String userId) {
 		String result = null;
-		try {
+		
 			result = otpService.sendOTP(userId);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-		} catch (ResourceNotFoundException exception) {
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
-		} catch (NoSuchElementException excep) {
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
-		}
+		
 	}
 	@RequestMapping(value="/v1/verifyUser/{mobileNumber}",method=RequestMethod.PUT)
 	public Map verifyOtp(@PathVariable String mobileNumber, @RequestBody OtpDto requestOTP) {
 		String result = null;
-		try {
+		
 			result = otpService.verifyOtp(mobileNumber, requestOTP);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-		} catch (ResourceNotFoundException exception) {
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
-		} catch (NoSuchElementException excep) {
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
-		}
+		
 	}
 	}

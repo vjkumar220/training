@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 @Entity
 public class FiatWalletHistory {
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
 private Long walletHistoryId;
 	private Date withdrawTime;
 	private Date depositTime;

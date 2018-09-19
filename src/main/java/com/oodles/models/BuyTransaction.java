@@ -16,17 +16,17 @@ import com.oodles.enums.TransactionStatus;
 @Entity
 public class BuyTransaction {
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long buytransactionID;
-	private Long coinQuantity;
+	private Double coinQuantity;
 	 private String coinType;
 	  @Enumerated
 	    @Column
 	  private TransactionStatus status;
-	 private Long exchangeRateAsDesiredPrice;
-	 private Long netAmount;
-	private double fees;
-	 private Long grossAmount;
+	 private Double exchangeRateAsDesiredPrice;
+	 private Double netAmount;
+	private Long fees;
+	 private Double grossAmount;
 	 @ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "buyerorderid", nullable = false)
 	 @JsonBackReference(value="buytransaction-buyorder")
@@ -36,69 +36,87 @@ public class BuyTransaction {
 	    @JoinColumn(name = "sellerorderid", nullable = false)
 	 @JsonBackReference(value="buytransaction-sellorder")
 	    private SellOrder sellOrder;
-	 
-	public Long getCoinQuantity() {
-		return coinQuantity;
-	}
-	public void setCoinQuantity(Long coinQuantity) {
-		this.coinQuantity = coinQuantity;
-	}
-	public String getCoinType() {
-		return coinType;
-	}
-	public void setCoinType(String coinType) {
-		this.coinType = coinType;
-	}
-	public TransactionStatus getStatus() {
-		return status;
-	}
-	public void setStatus(TransactionStatus status) {
-		this.status = status;
-	}
-	
+
 	public Long getBuytransactionID() {
 		return buytransactionID;
 	}
+
 	public void setBuytransactionID(Long buytransactionID) {
 		this.buytransactionID = buytransactionID;
 	}
-	public Long getExchangeRateAsDesiredPrice() {
+
+	public Double getCoinQuantity() {
+		return coinQuantity;
+	}
+
+	public void setCoinQuantity(Double coinQuantity) {
+		this.coinQuantity = coinQuantity;
+	}
+
+	public String getCoinType() {
+		return coinType;
+	}
+
+	public void setCoinType(String coinType) {
+		this.coinType = coinType;
+	}
+
+	public TransactionStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(TransactionStatus status) {
+		this.status = status;
+	}
+
+	public Double getExchangeRateAsDesiredPrice() {
 		return exchangeRateAsDesiredPrice;
 	}
-	public void setExchangeRateAsDesiredPrice(Long exchangeRateAsDesiredPrice) {
+
+	public void setExchangeRateAsDesiredPrice(Double exchangeRateAsDesiredPrice) {
 		this.exchangeRateAsDesiredPrice = exchangeRateAsDesiredPrice;
 	}
+
+	public Double getNetAmount() {
+		return netAmount;
+	}
+
+	public void setNetAmount(Double netAmount) {
+		this.netAmount = netAmount;
+	}
+
+	
+	public Long getFees() {
+		return fees;
+	}
+
+	public void setFees(Long fees) {
+		this.fees = fees;
+	}
+
+	public Double getGrossAmount() {
+		return grossAmount;
+	}
+
+	public void setGrossAmount(Double grossAmount) {
+		this.grossAmount = grossAmount;
+	}
+
 	public BuyOrder getBuyOrder() {
 		return buyOrder;
 	}
+
 	public void setBuyOrder(BuyOrder buyOrder) {
 		this.buyOrder = buyOrder;
 	}
-	public Long getNetAmount() {
-		return netAmount;
-	}
-	public void setNetAmount(Long netAmount) {
-		this.netAmount = netAmount;
-	}
-	
-	public double getFees() {
-		return fees;
-	}
-	public void setFees(double fees) {
-		this.fees = fees;
-	}
-	public Long getGrossAmount() {
-		return grossAmount;
-	}
-	public void setGrossAmount(Long grossAmount) {
-		this.grossAmount = grossAmount;
-	}
+
 	public SellOrder getSellOrder() {
 		return sellOrder;
 	}
+
 	public void setSellOrder(SellOrder sellOrder) {
 		this.sellOrder = sellOrder;
 	}
-
+	
 
 }

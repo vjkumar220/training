@@ -38,18 +38,13 @@ public class WalletController {
 
 	public Map createFiatWallet(@RequestBody FiatWalletDto userWalletDTO) {
 		Map result = null;
-		try {
+		
 			logger.info("Entered in create fiatwallet");
 			logger.info("userWalletDTO =" + userWalletDTO);
 			result = walletService.createFiatWallet(userWalletDTO);
 			logger.info("created fiatwallet");
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 
-		} catch (ResourceNotFoundException exception) {
-			// logger.info("Enter in creat
-
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
-		}
 	}
 
 	/**
@@ -61,12 +56,10 @@ public class WalletController {
 
 	public Map createCryptoWallet(@RequestBody UserWalletDto userWalletDTO) {
 		Map result = null;
-		try {
+		
 			result = walletService.createCryptoWallet(userWalletDTO);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-		} catch (ResourceNotFoundException exception) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		}
+		
 	}
 
 	/**
@@ -79,16 +72,13 @@ public class WalletController {
 
 	public Map createFiatDeposit(@RequestBody FiatDepositDto fiatDepositDTO) {
 		Map result = null;
-		try {
+		
 			logger.info("Entered in create fiatwallet");
 			logger.info("userWalletDTO =" + fiatDepositDTO);
 			result = walletService.createFiatDeposit(fiatDepositDTO);
 			logger.info("created fiatwallet");
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 
-		} catch (ResourceNotFoundException exception) {
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
-		}
 	}
 
 	/**
@@ -101,15 +91,12 @@ public class WalletController {
 	public Map fiatDepositApproval(@RequestBody FiatApprovalDto fiatApprovalDTO) {
 		logger.info("Approval controller entered");
 		Map result = null;
-		try {
-
+		
 			result = walletService.fiatDepositApproval(fiatApprovalDTO);
 			logger.info("Approval controller end");
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 
-		} catch (ResourceNotFoundException exception) {
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
-		}
+		
 	}
 	/**
 	 *  Deposit in Crypto wallet
@@ -121,15 +108,12 @@ public class WalletController {
 
 	public Map createCryptoDeposit(@RequestBody CryptoDepositDto cryptoDepositDTO) {
 		Map result = null;
-		try {
+		
 
 			result = walletService.createCryptoDeposit(cryptoDepositDTO);
 
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 
-		} catch (ResourceNotFoundException exception) {
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
-		}
 	}
 	/**
 	 *  Admin Approval for Crypto Deposit
@@ -142,15 +126,12 @@ public class WalletController {
 	public Map cryptoDepositApproval(@RequestBody CryptoApprovalDto cryptoApprovalDTO) {
 		logger.info("Approval controller entered");
 		Map result = null;
-		try {
+		
 
 			result = walletService.cryptoDepositApproval(cryptoApprovalDTO);
 			logger.info("Approval controller end");
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 
-		} catch (ResourceNotFoundException exception) {
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
-		}
 	}
 	/**
 	 *  Fiat Wallet Withdraw
@@ -163,15 +144,12 @@ public class WalletController {
 	public Map createFiatWithdraw(@RequestBody FiatWithdrawDto fiatWithdrawDTO) {
 		logger.info("Approval controller entered");
 		Map result = null;
-		try {
+		
 
 			result = walletService.createFiatWithdraw(fiatWithdrawDTO);
 			logger.info("Approval controller end");
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 
-		} catch (ResourceNotFoundException exception) {
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
-		}
 	}
 	/**
 	 *  Crypto Wallet Withdraw
@@ -184,15 +162,12 @@ public class WalletController {
 	public Map createCryptoWithdraw(@RequestBody CryptoWithdrawDto cryptoWithdrawDTO) {
 		logger.info("Approval controller entered");
 		Map result = null;
-		try {
+		
 
 			result = walletService.createCryptoWithdraw(cryptoWithdrawDTO);
 			logger.info("Approval controller end");
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 
-		} catch (ResourceNotFoundException exception) {
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
-		}
 	}
 
 }

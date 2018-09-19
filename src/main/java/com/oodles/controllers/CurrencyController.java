@@ -35,13 +35,10 @@ private CurrencyService  currencyService;
 
 public Map addCurrency(@Valid @RequestBody CryptoCurrency cryptoCurrency)  {
 	Map result=null;
-	try{
+	
 		 result=currencyService.addCurrency(cryptoCurrency);
 		 return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-	}
-	catch(ResourceNotFoundException exception){
-		return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-	}		
+		
 }
 /**
  * View Currency
@@ -67,16 +64,10 @@ public List<CryptoCurrency> viewAllCurrency() {
 public Map updateCurrency(@PathVariable Long currencyId,@PathVariable String coinName,@PathVariable Long fees,@PathVariable String symbol,@PathVariable Long initialSupply,@PathVariable Long price)
 {
 	CryptoCurrency cryptocurrency=null;
-try {
+
 	cryptocurrency =currencyService.updateCurrency(currencyId,coinName,fees,symbol,initialSupply,price);
 	return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, cryptocurrency);
-}
-catch(ResourceNotFoundException exception){
-	return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, cryptocurrency);
-}
-catch(NoSuchElementException excep){
-	return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, cryptocurrency);
-}
+
 }
 /**
  * Delete Currency
@@ -89,15 +80,9 @@ public Map deleteCurrency(@PathVariable String currencyId)
 {
 	CryptoCurrency result=null;
 		
-		try{
+		
 		 result=currencyService.deleteCurrency(currencyId);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-		}
-		catch(ResourceNotFoundException exception){
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, result);
-		}
-		catch(NoSuchElementException excep){
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, result);
-		}
+		
 }
 }

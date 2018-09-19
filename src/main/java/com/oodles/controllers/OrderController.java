@@ -38,17 +38,14 @@ public class OrderController {
 
 	public Map createLimitOrder(@RequestBody OrderDto orderDTO) {
 		Map result = null;
-		try {
+		
 			logger.info("Entered in create order");
 			logger.info("userWalletDTO =" + orderDTO);
 			result = orderService.createLimitOrder(orderDTO);
 			logger.info("created fiatwallet");
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 
-		} catch (ResourceNotFoundException exception) {
-
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id Does not exist", null, result);
-		}
+		
 	}
 
 	/**
@@ -60,17 +57,14 @@ public class OrderController {
 
 	public Map createMarketOrder(@RequestBody MarketOrderDto marketOrderDTO) {
 		Map result = null;
-		try {
+		
 			logger.info("Entered in create order");
 			logger.info("userWalletDTO =" + marketOrderDTO);
 			result = orderService.createMarketOrder(marketOrderDTO);
 			logger.info("created fiatwallet");
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 
-		} catch (ResourceNotFoundException exception) {
-
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id Does not exist", null, result);
-		}
+		
 	}
 
 	/**
@@ -82,17 +76,14 @@ public class OrderController {
 
 	public Map createBuyOrder(@RequestBody BuyOrderDto orderDTO) {
 		Map result = null;
-		try {
+		
 			logger.info("Entered in create order");
 			logger.info("userWalletDTO =" + orderDTO);
 			result = orderService.createBuyOrder(orderDTO);
 			logger.info("created fiatwallet");
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 
-		} catch (ResourceNotFoundException exception) {
-
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id Does not exist", null, result);
-		}
+		
 	}
 
 	/**
@@ -104,17 +95,13 @@ public class OrderController {
 
 	public Map createSellOrder(@RequestBody SellOrderDto orderDTO) {
 		Map result = null;
-		try {
+		
 			logger.info("Entered in create order");
 			logger.info("userWalletDTO =" + orderDTO);
 			result = orderService.createSellOrder(orderDTO);
 			logger.info("created fiatwallet");
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 
-		} catch (ResourceNotFoundException exception) {
-
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id Does not exist", null, result);
-		}
 	}
 	/**
 	 * Get All Sell Order

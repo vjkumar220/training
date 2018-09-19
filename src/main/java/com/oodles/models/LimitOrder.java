@@ -23,7 +23,7 @@ import com.oodles.enums.OrderType;
 @Table(name = "LimitOrders")
 public class LimitOrder {
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     
 	private Long orderId;
 	@Enumerated(EnumType.STRING)

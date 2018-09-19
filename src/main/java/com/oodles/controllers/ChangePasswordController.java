@@ -33,17 +33,11 @@ public class ChangePasswordController {
 	public Map<String, Object> sendMail(@PathVariable String id) {
 		logger.info("Mail controller send mail");
 		String result = null;
-		try {
+		
 			result = verifyemailService.sendMail(id);
 			logger.info("send controller try block");
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-		} catch (ResourceNotFoundException exception) {
-			logger.info("send controller catch block RNS");
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Email id does not exist", null, result);
-		} catch (NoSuchElementException excep) {
-			logger.info("send controller catch block NSE");
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null, result);
-		}
+		
 	}
 
 	/**
@@ -56,14 +50,10 @@ public class ChangePasswordController {
 	public Map<String, Object> forgotPassword(@RequestBody EmailPasswordDto verifyEmail) {
 		logger.info("Mail controller verify mail start");
 		String result = null;
-		try {
+		
 			result = verifyemailService.forgotPassword(verifyEmail);
 			logger.info("Mail verify controller end");
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-		} catch (ResourceNotFoundException exception) {
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Mail id does not exist", null, result);
-		} catch (NoSuchElementException excep) {
-			return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Wrong mail id", null, result);
-		}
+		
 	}
 }

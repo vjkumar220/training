@@ -31,13 +31,10 @@ private RoleService roleService;
 public Map createUser(@PathVariable String roleType)  {
 	 Map result=null;
 	
-	try{
+	
 	 result=roleService.createRole(roleType);
 		return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-	}
-	catch(ResourceNotFoundException exception){
-		return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-	}
+	
 }
 /**
  *  Create a new admin
@@ -49,12 +46,9 @@ public Map createUser(@PathVariable String roleType)  {
 public Map assignRole(@RequestBody RoleDto userRoleDTO)  {
 	 Map result=null;
 	
-	try{
+	
 	 result=roleService.assignRole(userRoleDTO);
 		return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-	}
-	catch(ResourceNotFoundException exception){
-		return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-	}
+	
 }
 }

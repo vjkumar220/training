@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.oodles.controllers.OrderController;
 import com.oodles.controllers.RegistrationController;
 
 @RunWith(SpringRunner.class)
@@ -15,10 +16,18 @@ import com.oodles.controllers.RegistrationController;
 public class SmokeTest {
     
     @Autowired
-    private RegistrationController controller;
+    private RegistrationController userController;
+    @Autowired
+    private OrderController orderController;
 
     @Test
-    public void contexLoads() throws Exception {
-        assertThat(controller).isNotNull();
+    public void userController() throws Exception {
+        assertThat(userController).isNotNull();
+    }
+    
+    @Test
+    public void orderController() throws Exception {
+        assertThat(orderController).isNotNull();
     }
 }
+

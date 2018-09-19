@@ -118,7 +118,7 @@ public class WalletService {
 			logger.info("user found");
 			CryptoWallet fwType = cryptoWalletRepository.findByWalletTypeAndUser(walletType, foundUser);
 
-			if (!(fwType == null))
+			if ((fwType == null))
 			// if(fwType.equals(walletType))
 			{
 				logger.info("WalletType search done");

@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class CryptoCurrency {
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long currencyId;
     
     @NotNull
