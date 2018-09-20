@@ -28,7 +28,7 @@ import com.oodles.service.FiatCurrencyService;
 import com.oodles.util.ResponseHandler;
 
 @RestController
-@RequestMapping("/currency")
+@RequestMapping(value = "/v1")
 public class CurrencyController {
 
 	@Autowired
@@ -39,81 +39,56 @@ public class CurrencyController {
 
 	/**
 	 * creating crypto currency
+	 * 
 	 * @param cryptoCurrency
 	 * @return
 	 */
-	@PostMapping(value = "/create/crypto/currency")
+	@PostMapping(value = "admin/currency/crypto")
 	public Map<String, Object> createCryptoCurrency(@Valid @RequestBody CryptoCurrencyDto cryptoCurrency) {
-		Map<Object, Object> result = new HashMap<>();
-		try {
-
-		 result = cryptoCurrencyService.createCurrency(cryptoCurrency);
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-		} catch (ResourceNotFoundException e) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		}
+		Map<Object, Object> result = cryptoCurrencyService.createCurrency(cryptoCurrency);
+		return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
 	}
 
 	/**
 	 * creating fiat currency
+	 * 
 	 * @param fiatCurrency
 	 * @return
 	 */
-	@PostMapping(value = "/create/fiat/currency")
+	@PostMapping(value = "admin/currency/fiat/currency")
 	public Map<String, Object> createFiatCurrency(@Valid @RequestBody FiatCurrencyDto fiatCurrency) {
-		Map<Object ,Object>result = new HashMap<>();
-		try {
-			 result = fiatCurrencyService.createFiatCurrency(fiatCurrency);
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-		} catch (ResourceNotFoundException e) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		}
-
+		Map<Object, Object> result = fiatCurrencyService.createFiatCurrency(fiatCurrency);
+		return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
 	}
 
 	// Getting all existing currency
 
-	@GetMapping("/crypto/currencies")
+	@GetMapping("admin/crypto/currencies")
 	public Map<String, Object> getAllCryptoCurrency() {
-
-		Map<String, Object> result = new HashMap<>();
-		try {
-			List<CryptoCurrency> currencyList = cryptoCurrencyService.getAllCurrency();
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, currencyList);
-		} catch (ResourceNotFoundException e) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		}
+		List<CryptoCurrency> currencyList = cryptoCurrencyService.getAllCurrency();
+		return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, currencyList);
 
 	}
 
 	/**
 	 * Deleting Crypto Currency
+	 * 
 	 * @param currencyId
 	 * @return
 	 */
 
-	@DeleteMapping("/delete/crypto/currency/{currencdId}")
+	@DeleteMapping("admin/crypto/currency/{currencyId}")
 	public Map<String, Object> deleteCryptoCurrency(@PathVariable String currencyId) {
-		String result = null;
-		try {
-			 result = cryptoCurrencyService.deleteCurrency(currencyId);
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-		} catch (ResourceNotFoundException e) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		}
+		String result = cryptoCurrencyService.deleteCurrency(currencyId);
+		return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 
 	}
-	
-	@PutMapping(value = "/update/crypto/currency/currencyID/{currencyID}/fees/{fees}/initialSupply/{initialSupply}/price/{price}")
-	public Map<String, Object> updateCryptoCurrency(@RequestParam Long currencyId , @RequestParam Double fees, @RequestParam Double initialSupply, @RequestParam Double price ) {
-		String result = null;
-		try {
 
-		 result = cryptoCurrencyService.updateCryptoCurrency(currencyId, fees, initialSupply, price);
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-		} catch (ResourceNotFoundException e) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		}
+	@PutMapping(value = "admin/currency/crypto/{currencyID}/fees/{fees}/initialSupply/{initialSupply}/price/{price}")
+	public Map<String, Object> updateCryptoCurrency(@RequestParam Long currencyId, @RequestParam Double fees,
+			@RequestParam Double initialSupply, @RequestParam Double price) {
+		 String result = cryptoCurrencyService.updateCryptoCurrency(currencyId, fees, initialSupply, price);
+		return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 	}
 
 }

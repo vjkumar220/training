@@ -18,7 +18,7 @@ public class CryptoDeposit {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long cryptoDepositId;
-
+	
 	private String coinType;
 
 	private Double numberOfCoin;

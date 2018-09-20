@@ -1,5 +1,6 @@
 package com.oodles.dto;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import com.oodles.enumeration.CryptoName;
@@ -8,6 +9,7 @@ public class CryptoDepositDto {
 	@NotNull
 	private CryptoName coinName;
 	@NotNull
+	@Min(value = 1 , message = "Enter value greater than 0")
 	private Double coinQuantity;
 	@NotNull
 	private Long cryptoWalletId;

@@ -36,7 +36,7 @@ import static com.oodles.util.Constants.SUCCESS;
 import static com.oodles.util.Constants.ERROR;;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("v1/user")
 public class UserController {
 	Logger logger = LoggerFactory.getLogger(UserController.class);
 	@Autowired
@@ -50,14 +50,8 @@ public class UserController {
 	 */
 	@PostMapping(value = "/signup")
 	public Map<String, Object> createUser(@Valid @RequestBody UserDto user) {
-		Map<Object, Object> output = new HashMap<Object, Object>();
-		try {
-			output = userService.createUser(user);
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, output);
-		} catch (ResourceNotFoundException e) {
-			logger.info("UserController - create value in catch'");
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, ERROR, null, output);
-		}
+		Map<Object, Object> output = userService.createUser(user);
+		return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, output);
 	}
 
 	/**
@@ -65,16 +59,10 @@ public class UserController {
 	 * 
 	 * @return
 	 */
-	@GetMapping(value = "/all/users")
+	@GetMapping(value = "/users")
 	public Map<String, Object> viewAllUsers() {
-		List<User> output = new ArrayList<>();
-		try {
-			output = userService.retrieveAllUser();
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, output);
-		} catch (ResourceNotFoundException e) {
-			logger.info("UserController - create value in catch'");
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, ERROR, null, output);
-		}
+		List<User> output = userService.retrieveAllUser();
+		return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, output);
 	}
 
 	/**
@@ -83,19 +71,10 @@ public class UserController {
 	 * @param id
 	 * @return
 	 */
-	@GetMapping(value = "/user/{id}")
-	public Map<String, Object> findUserById(@RequestParam String id) {
-		Map result = new HashMap<>();
-		try {
-			result = userService.findUserById(id);
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-		} catch (ResourceNotFoundException ex) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		} catch (NoSuchElementException ex) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-
-		}
-
+	@GetMapping(value = "/user/{userId}")
+	public Map<String, Object> findUserById(@RequestParam String userId) {
+		Map result = userService.findUserById(userId);
+		return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 	}
 
 	/**
@@ -104,20 +83,10 @@ public class UserController {
 	 * @param id
 	 * @return
 	 */
-	@DeleteMapping(value = "/delete/user/{id}")
-	public Map<String, Object> deleteUser(@PathVariable String id) {
-		Map<Object, Object> output = new HashMap<Object, Object>();
-		try {
-			output = userService.deleteUser(id);
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, output);
-
-		} catch (ResourceNotFoundException ex) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, output);
-
-		} catch (NoSuchElementException ex) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, output);
-
-		}
+	@DeleteMapping(value = "/user/{userId}")
+	public Map<String, Object> deleteUser(@PathVariable String userId) {
+		Map<Object, Object> output = userService.deleteUser(userId);
+		return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, output);
 
 	}
 
@@ -132,19 +101,19 @@ public class UserController {
 	 * @param country
 	 * @return
 	 */
-	@PutMapping(value = "/update/user/feild/{id}/{name}/{email}/{password}/{phoneNumber}/{country}")
+/*	@PutMapping(value = "/update/user/feild/{id}/{name}/{email}/{password}/{phoneNumber}/{country}")
 	public Map<String, Object> updateUser(@RequestParam String id, @RequestParam(required = false) String name,
-			@RequestParam(required = false) @Email String email, @RequestParam(required = false) String password, @RequestParam(required = false) String phoneNumber,
-			@RequestParam(required = false) String country) {
-		User user = null;
-		try {
-			user = userService.updateUser(id, name, email, password, phoneNumber, country);
+			@RequestParam(required = false) @Email String email, @RequestParam(required = false) String password,
+			@RequestParam(required = false) String phoneNumber, @RequestParam(required = false) String country) {
+		User user = userService.updateUser(id, name, email, password, phoneNumber, country);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, user);
-		} catch (ResourceNotFoundException exception) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, user);
-		} catch (NoSuchElementException excep) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, user);
-		}
+	}*/
+	@PutMapping(value = "/user/feild/{userId}/{name}/{email}/{password}/{phoneNumber}/{country}")
+	public Map<String, Object> updateUser(@RequestParam String userId, @RequestParam String name,
+			@RequestParam @Email String email, @RequestParam String password,
+			@RequestParam String phoneNumber, @RequestParam String country) {
+		User user = userService.updateUser(userId, name, email, password, phoneNumber, country);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, user);
 	}
 
 	/**
@@ -155,28 +124,14 @@ public class UserController {
 	 */
 	@PostMapping(value = "/send/otp/{userId}")
 	public Map<String, Object> sendOtp(@PathVariable String userId) {
-		String result = null;
-		try {
-			result = userService.sendOTP(userId);
+		String result = userService.sendOTP(userId);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-		} catch (ResourceNotFoundException exception) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		} catch (NoSuchElementException excep) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		}
 	}
 
-	@PutMapping(value = "/veify/users/otp/mobileNumber/{mobileNumber}")
+	@PutMapping(value = "/veify/otp/mobileNumber/{mobileNumber}")
 	public Map<String, Object> verifyOtp(@PathVariable String mobileNumber, @RequestBody OtpDto requestOTP) {
-		String result = null;
-		try {
-			result = userService.verifyOtp(mobileNumber, requestOTP);
+		String result = userService.verifyOtp(mobileNumber, requestOTP);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-		} catch (ResourceNotFoundException exception) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		} catch (NoSuchElementException excep) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		}
 	}
 
 	/**
@@ -186,18 +141,11 @@ public class UserController {
 	 * @return
 	 */
 
-	@PostMapping(value = "/send/verification/mail/user/{userId}")
+	@PostMapping(value = "/send/verification/mail/{userId}")
 	public Map<String, Object> sendMail(@PathVariable String userId) {
 		logger.info("Mail controller send mail");
-		String result = null;
-		try {
-			result = userService.sendMail(userId);
+		String result = userService.sendMail(userId);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-		} catch (ResourceNotFoundException exception) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		} catch (NoSuchElementException excep) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		}
 	}
 
 	/**
@@ -209,30 +157,16 @@ public class UserController {
 	 */
 	@PutMapping(value = "/verify/mail/{emailAddress}/verification")
 	public Map<String, Object> verifyMail(@PathVariable String emailAddress, @RequestBody EmailDto verifyEmail) {
-		String result = null;
-		try {
-			result = userService.verifyEmail(emailAddress, verifyEmail);
+		String result = userService.verifyEmail(emailAddress, verifyEmail);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-		} catch (ResourceNotFoundException exception) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		} catch (NoSuchElementException excep) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		}
 	}
 
 	// Sending Mail for Reset password
 	@PostMapping(value = "/verification/mail/forget/password/userId/{userId}")
 	public Map<String, Object> forgetPasswordMail(@PathVariable String userId) {
 
-		String result = null;
-		try {
-			result = userService.forgetPassword(userId);
+		String result = userService.forgetPassword(userId);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-		} catch (ResourceNotFoundException exception) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		} catch (NoSuchElementException excep) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		}
 	}
 
 	/**
@@ -241,7 +175,7 @@ public class UserController {
 	 * @param verifyEmail
 	 * @return
 	 */
-	@PutMapping(value = "/emailAddress/{emailAddress}/update/password")
+	@PutMapping(value = "/emailAddress/{emailAddress}/password")
 	public Map<String, Object> updatePassword(@PathVariable String emailAddress,
 			@RequestBody EmailVerifyDto verifyEmail) {
 		String result = null;

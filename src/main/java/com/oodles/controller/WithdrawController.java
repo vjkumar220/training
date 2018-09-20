@@ -34,13 +34,8 @@ public class WithdrawController {
 
 	@PostMapping(value = "/fiat/wallet")
 	public Map<String, Object> fiatWithdraw(@Valid @RequestBody FiatWithrawDto fiatWithrawDto) {
-		Map<Object, Object> result = new HashMap<>();
-		try {
-			result = withdrawService.fiatWithdraw(fiatWithrawDto);
+		Map<Object, Object> result = withdrawService.fiatWithdraw(fiatWithrawDto);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-		} catch (ResourceNotFoundException e) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		}
 	}
 
 	/**
@@ -52,13 +47,8 @@ public class WithdrawController {
 
 	@PostMapping(value = "/crypto/wallet")
 	public Map<String, Object> cryptoWithdraw(@Valid @RequestBody CryptoWithdrawDto cryptoWithdrawDto) {
-		Map<Object, Object> result = new HashMap<>();
-		try {
-			result = withdrawService.cryptoWithdraw(cryptoWithdrawDto);
+		Map<Object, Object> result = withdrawService.cryptoWithdraw(cryptoWithdrawDto);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 
-		} catch (ResourceNotFoundException e) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		}
 	}
 }

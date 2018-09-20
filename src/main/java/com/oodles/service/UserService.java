@@ -133,14 +133,12 @@ public class UserService {
 		if (value.isPresent() && (!user.getName().equalsIgnoreCase(name)) && (!user.getEmail().equalsIgnoreCase(email))
 				&& (!user.getPassword().equalsIgnoreCase(password))
 				&& (!user.getPhoneNumber().equalsIgnoreCase(phoneNumber))) {
-			User newUsers = new User();
-			newUsers.setId(Long.parseLong(id));
-			newUsers.setName(name);
-			newUsers.setCountry(country);
-			newUsers.setEmail(email);
-			newUsers.setPhoneNumber(phoneNumber);
-			newUsers.setPassword(password);
-			userRepository.save(newUsers);
+			user.setName(name);
+			user.setCountry(country);
+			user.setEmail(email);
+			user.setPhoneNumber(phoneNumber);
+			user.setPassword(password);
+			userRepository.save(user);
 		}
 		return user;
 	}

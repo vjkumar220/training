@@ -31,6 +31,7 @@ public class User implements Serializable {
 	private Long id;
 	@NotNull(message = "Enter the name")
 	@Size(min = 2, message = "Name should have atleast 2 characters")
+	@Pattern(regexp = "{A-Za-z}*")
 	private String name;
 	@NotNull(message = "Enter the email")
 	@Email(message = "Enter Valid Email Id")

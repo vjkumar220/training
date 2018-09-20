@@ -23,7 +23,6 @@ import com.oodles.service.WalletService;
 import com.oodles.util.ResponseHandler;
 
 @RestController
-@RequestMapping("/wallet")
 public class WalletController {
 	Logger logger = LoggerFactory.getLogger(WalletController.class);
 	@Autowired
@@ -37,15 +36,8 @@ public class WalletController {
 	 */
 	@PostMapping(value = "/create/crypto/wallet")
 	public Map<String, Object> createCryptoWallet(@RequestBody CryptoWalletDto cryptoWallet) {
-		Map<String, Object> result = new HashMap<>();
-		try {
-			logger.info("In create wallet try");
-			result = walletService.createCryptoWallet(cryptoWallet);
-			logger.info("Getting result", result);
+		Map<String, Object> result = walletService.createCryptoWallet(cryptoWallet);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-		} catch (ResourceNotFoundException e) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		}
 	}
 
 	/**
@@ -56,15 +48,8 @@ public class WalletController {
 	 */
 	@PostMapping(value = "/create/fiat/wallet")
 	public Map<String, Object> createFiatWallet(@RequestBody FiatWalletDto fiatWalletDto) {
-		Map<String, Object> result = new HashMap<>();
-		try {
-			logger.info("In create wallet try");
-			result = walletService.createFiatWallet(fiatWalletDto);
-			logger.info("Getting result", result);
+		Map<String, Object> result = walletService.createFiatWallet(fiatWalletDto);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
-		} catch (ResourceNotFoundException e) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
-		}
 	}
 
 	/**

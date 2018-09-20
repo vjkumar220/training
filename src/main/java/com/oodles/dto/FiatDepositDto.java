@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 
 public class FiatDepositDto {
 	@NotNull
-	@Min(value=0  ,message = " Enter amount is greater than zero")
+	@Min(value=1  ,message = " Enter amount is greater than zero")
 	private Double amount;
 	@NotNull
 	private Long userId;

@@ -1,9 +1,7 @@
 package com.oodles.controller;
 
-import static com.oodles.util.Constants.ERROR;
 import static com.oodles.util.Constants.SUCCESS;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.oodles.domain.BuyOrder;
-import com.oodles.domain.SellOrder;
-import com.oodles.exception.ResourceNotFoundException;
 import com.oodles.service.OrderMatchingService;
 import com.oodles.util.ResponseHandler;
 
 @RestController
-@RequestMapping("/order")
+@RequestMapping(value = "/v1")
 public class OrderMatchingController {
 
 	@Autowired
@@ -35,15 +30,10 @@ public class OrderMatchingController {
 		return orderMatchingService.buyList();
 	}*/
 
-	@GetMapping("/orderMatching")
+	@GetMapping("admin/orderMatching")
 	public Map<String, Object> orderMatching() {
-		String output = null;
-		try {
-			output = orderMatchingService.orderMatch();
+		String output = orderMatchingService.orderMatch();
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, output);
-		} catch (ResourceNotFoundException e) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, ERROR, null, output);
-		}
 	}
 
 }

@@ -1,9 +1,7 @@
 package com.oodles.controller;
 
-import static com.oodles.util.Constants.ERROR;
 import static com.oodles.util.Constants.SUCCESS;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,37 +14,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.domain.BuyTransaction;
 import com.oodles.domain.SellTransaction;
-import com.oodles.exception.ResourceNotFoundException;
 import com.oodles.service.TransactionHistoryService;
 import com.oodles.util.ResponseHandler;
 
 @RestController
-@RequestMapping(value = "/transaction")
+@RequestMapping(value = "/v1")
 public class TransactionHistoryController {
 	
 	@Autowired
 	private TransactionHistoryService transactionHistoryService;
 	
-	@GetMapping(value = "/history/buyer/{buyerId}")
+	@GetMapping(value = "user/transaction/history/buyer/{buyerId}")
 	public Map<String, Object> buyerHistory(@PathVariable Long buyerId) {
-		List<BuyTransaction> output = new ArrayList<>();
-		try {
-			output = transactionHistoryService.buyTransactionHistory(buyerId);
+		List<BuyTransaction> output = transactionHistoryService.buyTransactionHistory(buyerId);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, output);
-		} catch (ResourceNotFoundException e) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, ERROR, null, output);
-		}
 	}
 	
-	@GetMapping(value = "/history/seller/{sellerId}")
+	@GetMapping(value = "user/transaction/history/seller/{sellerId}")
 	public Map<String, Object> sellerHistory(@PathVariable Long sellerId) {
-		List<SellTransaction> output = new ArrayList<>();
-		try {
-			output = transactionHistoryService.sellTransactionHistory(sellerId);
+		List<SellTransaction> output = transactionHistoryService.sellTransactionHistory(sellerId);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, output);
-		} catch (ResourceNotFoundException e) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, ERROR, null, output);
-		}
 	}
 
 }
