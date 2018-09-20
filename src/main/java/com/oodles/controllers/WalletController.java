@@ -33,7 +33,7 @@ public class WalletController {
 	 * @param userWalletDTO
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.POST, value = "/v1/fiatwallet/{userId}")
+	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/wallets/fiat/{userId}")
 
 	public Map createFiatWallet(@PathVariable Long userId) {
 		Map result = null;
@@ -41,7 +41,7 @@ public class WalletController {
 			
 			result = walletService.createFiatWallet(userId);
 			logger.info("created fiatwallet");
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
 
 	}
 
@@ -50,13 +50,13 @@ public class WalletController {
 	 * @param userWalletDTO
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.POST, value = "/v1/cryptowallet")
+	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/wallets/crypto")
 
 	public Map createCryptoWallet(@RequestBody CryptoWalletDto cryptoWalletDTO) {
 		Map result = null;
 		
 			result = walletService.createCryptoWallet(cryptoWalletDTO);
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
 		
 	}
 
@@ -66,7 +66,7 @@ public class WalletController {
 	 * @return
 	 */
 
-	@RequestMapping(method = RequestMethod.POST, value = "/v1/fiatdeposit")
+	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/wallets/fiat/deposit")
 
 	public Map createFiatDeposit(@RequestBody FiatDepositDto fiatDepositDTO) {
 		Map result = null;
@@ -75,7 +75,7 @@ public class WalletController {
 			logger.info("userWalletDTO =" + fiatDepositDTO);
 			result = walletService.createFiatDeposit(fiatDepositDTO);
 			logger.info("created fiatwallet");
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
 
 	}
 
@@ -84,7 +84,7 @@ public class WalletController {
 	 * @param fiatApprovalDTO
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.POST, value = "/v1/fiatdepositapproval")
+	@RequestMapping(method = RequestMethod.POST, value = "/v1/admin/wallets/fiat/deposit/approval")
 
 	public Map fiatDepositApproval(@RequestBody FiatApprovalDto fiatApprovalDTO) {
 		logger.info("Approval controller entered");
@@ -92,7 +92,7 @@ public class WalletController {
 		
 			result = walletService.fiatDepositApproval(fiatApprovalDTO);
 			logger.info("Approval controller end");
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
 
 		
 	}
@@ -102,7 +102,7 @@ public class WalletController {
 	 * @return
 	 */
 
-	@RequestMapping(method = RequestMethod.POST, value = "/v1/cryptodeposit")
+	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/wallets/crypto/deposit")
 
 	public Map createCryptoDeposit(@RequestBody CryptoDepositDto cryptoDepositDTO) {
 		Map result = null;
@@ -110,7 +110,7 @@ public class WalletController {
 
 			result = walletService.createCryptoDeposit(cryptoDepositDTO);
 
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
 
 	}
 	/**
@@ -119,7 +119,7 @@ public class WalletController {
 	 * @return
 	 */
 
-	@RequestMapping(method = RequestMethod.POST, value = "/v1/cryptodepositapproval")
+	@RequestMapping(method = RequestMethod.POST, value = "/v1/admin/wallets/crypto/deposit/approval")
 
 	public Map cryptoDepositApproval(@RequestBody CryptoApprovalDto cryptoApprovalDTO) {
 		logger.info("Approval controller entered");
@@ -128,7 +128,7 @@ public class WalletController {
 
 			result = walletService.cryptoDepositApproval(cryptoApprovalDTO);
 			logger.info("Approval controller end");
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
 
 	}
 	/**
@@ -137,7 +137,7 @@ public class WalletController {
 	 * @return
 	 */
 
-	@RequestMapping(method = RequestMethod.POST, value = "/v1/fiatwithdraw")
+	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/wallets/fiat/withdraw")
 
 	public Map createFiatWithdraw(@RequestBody FiatWithdrawDto fiatWithdrawDTO) {
 		logger.info("Approval controller entered");
@@ -146,7 +146,7 @@ public class WalletController {
 
 			result = walletService.createFiatWithdraw(fiatWithdrawDTO);
 			logger.info("Approval controller end");
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
 
 	}
 	/**
@@ -155,7 +155,7 @@ public class WalletController {
 	 * @return
 	 */
 
-	@RequestMapping(method = RequestMethod.POST, value = "/v1/cryptowithdraw")
+	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/wallets/crypto/withdraw")
 
 	public Map createCryptoWithdraw(@RequestBody CryptoWithdrawDto cryptoWithdrawDTO) {
 		logger.info("Approval controller entered");
@@ -164,7 +164,7 @@ public class WalletController {
 
 			result = walletService.createCryptoWithdraw(cryptoWithdrawDTO);
 			logger.info("Approval controller end");
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
 
 	}
 

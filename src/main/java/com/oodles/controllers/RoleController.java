@@ -26,14 +26,14 @@ private RoleService roleService;
  * @param roleType
  * @return
  */
-@RequestMapping(method = RequestMethod.POST, value = "/rest/createrole/{roleType}")
+@RequestMapping(method = RequestMethod.POST, value = "/v1/admin/role/{roleType}")
 @ResponseBody
 public Map createUser(@PathVariable String roleType)  {
 	 Map result=null;
 	
 	
 	 result=roleService.createRole(roleType);
-		return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+		return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
 	
 }
 /**
@@ -41,14 +41,14 @@ public Map createUser(@PathVariable String roleType)  {
  * @param userRoleDTO
  * @return
  */
-@RequestMapping(method = RequestMethod.POST, value = "/rest/assignrole/")
+@RequestMapping(method = RequestMethod.POST, value = "/v1/admin/role/assign")
 @ResponseBody
 public Map assignRole(@RequestBody RoleDto userRoleDTO)  {
 	 Map result=null;
 	
 	
 	 result=roleService.assignRole(userRoleDTO);
-		return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+		return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
 	
 }
 }

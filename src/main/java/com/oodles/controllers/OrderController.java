@@ -34,7 +34,7 @@ public class OrderController {
 	 * @param orderDTO
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.POST, value = "/v1/createlimitorder")
+	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/order/limit")
 
 	public Map createLimitOrder(@RequestBody OrderDto orderDTO) {
 		Map result = null;
@@ -43,7 +43,7 @@ public class OrderController {
 			logger.info("userWalletDTO =" + orderDTO);
 			result = orderService.createLimitOrder(orderDTO);
 			logger.info("created fiatwallet");
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
 
 		
 	}
@@ -53,7 +53,7 @@ public class OrderController {
 	 * @param marketOrderDTO
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.POST, value = "/v1/createmarketorder")
+	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/order/market")
 
 	public Map createMarketOrder(@RequestBody MarketOrderDto marketOrderDTO) {
 		Map result = null;
@@ -62,7 +62,7 @@ public class OrderController {
 			logger.info("userWalletDTO =" + marketOrderDTO);
 			result = orderService.createMarketOrder(marketOrderDTO);
 			logger.info("created fiatwallet");
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
 
 		
 	}
@@ -72,7 +72,7 @@ public class OrderController {
 	 * @param orderDTO
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.POST, value = "/v1/createbuyorder")
+	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/order/buy")
 
 	public Map createBuyOrder(@RequestBody BuyOrderDto orderDTO) {
 		Map result = null;
@@ -81,7 +81,7 @@ public class OrderController {
 			logger.info("userWalletDTO =" + orderDTO);
 			result = orderService.createBuyOrder(orderDTO);
 			logger.info("created fiatwallet");
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
 
 		
 	}
@@ -91,7 +91,7 @@ public class OrderController {
 	 * @param orderDTO
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.POST, value = "/v1/createsellorder")
+	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/order/sell")
 
 	public Map createSellOrder(@RequestBody SellOrderDto orderDTO) {
 		Map result = null;
@@ -100,14 +100,14 @@ public class OrderController {
 			logger.info("userWalletDTO =" + orderDTO);
 			result = orderService.createSellOrder(orderDTO);
 			logger.info("created fiatwallet");
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
 
 	}
 	/**
 	 * Get All Sell Order
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "/v1/allsellorder")
+	@RequestMapping(method = RequestMethod.GET, value = "/v1/admin/order/sell")
 		
 		public List<SellOrder> viewAllSellOrder() {
 			List<SellOrder> result = orderService.retrieveAllSellOrder();
@@ -118,7 +118,7 @@ public class OrderController {
 	 * Get All Buy Order
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "/v1/allbuyorder")
+	@RequestMapping(method = RequestMethod.GET, value = "/v1/admin/order/buy")
 		
 		public List<BuyOrder> viewAllBuyOrder() {
 			List<BuyOrder> result = orderService.retrieveAllBuyOrder();

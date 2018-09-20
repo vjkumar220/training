@@ -28,20 +28,20 @@ public class RegistrationController {
 	 * @param user
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.POST, value = "/v1/signup")
+	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/signup")
 
 	public Map createUser(@Valid @RequestBody UserDto user) {
 		Map result = null;
 		
 			result = userService.createUser(user);
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
 	}
 
 	/**
 	 *  To Retrieve all detail
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "/users")
+	@RequestMapping(method = RequestMethod.GET, value = "/v1/admin/users")
 	
 	public List<User> viewAllUsers() {
 		
@@ -53,7 +53,7 @@ public class RegistrationController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "/v1/users/{userid}")
+	@RequestMapping(method = RequestMethod.GET, value = "/v1/admin/users/{userid}")
 	public Map getUser(@PathVariable(value = "userid") String id) {
 		Map result = null;
 
@@ -74,7 +74,7 @@ public class RegistrationController {
 	 * @return
 	 */
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/v1/users/{id}/{name}/{email}/{password}/{mobilenumber}/{country}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/v1/user/users/{id}/{name}/{email}/{password}/{mobilenumber}/{country}")
 	@ResponseBody
 	public Map updateUser(@PathVariable String id, @PathVariable String name, @PathVariable String email,
 			@PathVariable String password, @PathVariable String mobilenumber, @PathVariable String country) {
@@ -90,7 +90,7 @@ public class RegistrationController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.DELETE, value = "v1/users/{id}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/v1/admin/users/{id}")
 	@ResponseBody
 	public Map deleteUser(@PathVariable String id) {
 		Map result = null;

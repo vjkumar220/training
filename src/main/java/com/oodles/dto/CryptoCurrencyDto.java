@@ -2,6 +2,8 @@ package com.oodles.dto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 public class CryptoCurrencyDto {
 	 
@@ -12,12 +14,15 @@ public class CryptoCurrencyDto {
 	private String symbol;
     
 	@NotNull
+	@Positive
 	private Long fees;
     
 	@NotNull
+	@PositiveOrZero
 private Long initialSupply;
     
 	@NotNull
+	@PositiveOrZero
 	private Long price;
 
 	public String getCoinName() {

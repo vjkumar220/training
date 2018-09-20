@@ -6,6 +6,8 @@ import javax.validation.constraints.Size;
 
 public class UserDto {
 	@Size(min=2, message="Name should have atleast 2 characters")
+	  @Pattern(regexp="[a-z][A-Z]+", message="Enter Alphabet only")
+
     private String name;
 	 @NotBlank
 	  @Pattern(regexp=".+@.+\\.[a-z]+", message="Invalid Mail")

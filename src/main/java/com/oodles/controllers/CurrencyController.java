@@ -31,20 +31,20 @@ private CurrencyService  currencyService;
  * @return
  */
 
-@RequestMapping(method = RequestMethod.POST, value = "/v1/currencies")
+@RequestMapping(method = RequestMethod.POST, value = "/v1/admin/currencies/crypto")
 
 public Map addCurrency(@Valid @RequestBody CryptoCurrencyDto cryptoCurrency)  {
 	Map result=null;
 	
 		 result=currencyService.addCurrency(cryptoCurrency);
-		 return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+		 return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
 		
 }
 /**
  * View Currency
  * @return
  */
-@GetMapping(value = "/v1/currencies")
+@GetMapping(value = "/v1/admin/currencies")
 public List<CryptoCurrency> viewAllCurrency() {
 	List<CryptoCurrency> result = currencyService.retrieveAllCurrency();
 	return result;
@@ -59,7 +59,7 @@ public List<CryptoCurrency> viewAllCurrency() {
  * @param price
  * @return
  */
-@RequestMapping(method = RequestMethod.PUT, value = "/v1/currencies/{currencyId}/{coinName}/{fees}/{symbol}/{initialSupply}/{price}")
+@RequestMapping(method = RequestMethod.PUT, value = "/v1/admin/currencies/{currencyId}/{coinName}/{fees}/{symbol}/{initialSupply}/{price}")
 @ResponseBody
 public Map updateCurrency(@PathVariable Long currencyId,@PathVariable String coinName,@PathVariable Long fees,@PathVariable String symbol,@PathVariable Long initialSupply,@PathVariable Long price)
 {
@@ -74,7 +74,7 @@ public Map updateCurrency(@PathVariable Long currencyId,@PathVariable String coi
  * @param currencyId
  * @return
  */
-@RequestMapping(method = RequestMethod.DELETE, value = "v1/currencies/{currencyId}")
+@RequestMapping(method = RequestMethod.DELETE, value = "v1/admin/currencies/{currencyId}")
 @ResponseBody
 public Map deleteCurrency(@PathVariable String currencyId)
 {

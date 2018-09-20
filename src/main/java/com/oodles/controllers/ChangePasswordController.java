@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.dto.EmailPasswordDto;
@@ -29,14 +31,15 @@ public class ChangePasswordController {
 	 * @return
 	 */
 
-	@PostMapping(value = "v1/updatepassword/sendmail/{id}")
+@RequestMapping(method = RequestMethod.POST,value = "v1/user/password/update/{id}")
+	
 	public Map<String, Object> sendMail(@PathVariable String id) {
 		logger.info("Mail controller send mail");
 		String result = null;
 		
 			result = verifyemailService.sendMail(id);
 			logger.info("send controller try block");
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
 		
 	}
 
@@ -45,7 +48,8 @@ public class ChangePasswordController {
 	 * @param verifyEmail
 	 * @return
 	 */
-	@PutMapping(value = "v1/updatepassword/{newpassword}")
+
+@RequestMapping(method = RequestMethod.PUT,value = "v1/user/password/update/{newpassword}")
 	
 	public Map<String, Object> forgotPassword(@RequestBody EmailPasswordDto verifyEmail) {
 		logger.info("Mail controller verify mail start");

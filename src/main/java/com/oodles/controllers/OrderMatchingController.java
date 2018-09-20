@@ -20,18 +20,18 @@ public class OrderMatchingController {
 
 	@Autowired
 	private OrderMatchingService orderMatchingService;
-	@RequestMapping(method = RequestMethod.GET, value = "/sell/order")
+	@RequestMapping(method = RequestMethod.GET, value = "v1/admin/orders/sell")
 	public List<SellOrder> sellList(){
 		return orderMatchingService.sellList();
 	}
 
 
-	@RequestMapping(method = RequestMethod.GET, value = "/buy/order")
+	@RequestMapping(method = RequestMethod.GET, value = "v1/admin/orders/buy")
 	public List<BuyOrder> buyList(){
 		return orderMatchingService.buyList();
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/v1/DoTransaction")
+	@RequestMapping(method = RequestMethod.GET, value = "/v1/admin/executeTransaction")
 
 	public Map orderMatch() {
 		Map result = null;

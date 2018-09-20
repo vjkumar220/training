@@ -21,39 +21,39 @@ public class GlobalControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String,Object> constraintViolationException(ConstraintViolationException ex) {
         LOG.error(ex.getCause().toString());
-        return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "error", null,ex);
+        return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Enter valid detail", null,null);
     }
 
     @ExceptionHandler(value = { NoHandlerFoundException.class })
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String,Object>  noHandlerFoundException(Exception ex) {
         LOG.error(ex.getCause().toString());
-        return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, ex);
+        return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, null);
     }
 
     @ExceptionHandler(value = { Exception.class })
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String,Object>  unknownException(Exception ex) {
         LOG.error(ex.getCause().toString());
-        return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, ex);
+        return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, null);
     }
     @ExceptionHandler(value = { NoSuchElementException.class })
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String,Object>  noSuchElementException(Exception ex) {
         LOG.error(ex.getCause().toString());
-        return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, ex);
+        return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, null);
     }
     @ExceptionHandler(value = { NullPointerException.class })
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String,Object>  nullPointerException(Exception ex) {
         LOG.error(ex.getCause().toString());
-        return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, ex);
+        return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, null);
     }
     @ExceptionHandler(value = { ResourceNotFoundException.class })
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String,Object>  noresourceFoundException(Exception ex) {
         LOG.error(ex.getCause().toString());
-        return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, ex);
+        return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, null);
     }
 
     

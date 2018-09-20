@@ -2,13 +2,16 @@ package com.oodles.dto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 public class BuyOrderDto {
 	@NotBlank
 	private String coinName;
 	@NotNull
+	@Positive
 	private Double coinQuantity;
 	@NotNull
+	@Positive
 	private Double desiredPrice;
 	@NotNull
 	private Long userId;
