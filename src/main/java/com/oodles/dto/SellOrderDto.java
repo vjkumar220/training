@@ -22,6 +22,7 @@ public class SellOrderDto {
 	private Long userId;
 	@NotNull
 	private Long cryptoWalletId;
+	
 	public CryptoName getCoinName() {
 		return coinName;
 	}

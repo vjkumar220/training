@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.oodles.domain.CryptoCurrency;
 import com.oodles.domain.CryptoWallet;
 import com.oodles.domain.FiatDeposit;
 import com.oodles.domain.FiatWallet;
@@ -17,7 +18,9 @@ import com.oodles.domain.User;
 import com.oodles.dto.CryptoWalletDto;
 import com.oodles.dto.FiatWalletDto;
 import com.oodles.enumeration.CryptoName;
+import com.oodles.repository.CryptoCurrencyRepository;
 import com.oodles.repository.CryptoWalletRepository;
+import com.oodles.repository.FiatCurrencyRepository;
 import com.oodles.repository.FiatDepositRepository;
 import com.oodles.repository.FiatWalletRepository;
 import com.oodles.repository.UserRepository;
@@ -33,6 +36,10 @@ public class WalletService {
 	private UserRepository userRepository;
 	@Autowired
 	private FiatDepositRepository fiatDepositRepository;
+	@Autowired
+	private CryptoCurrencyRepository cryptoCurrencyRepository;
+	@Autowired
+	private FiatCurrencyRepository fiatCurrencyRepository;
 
 	/**
 	 *  Creating crypto Wallet
@@ -50,8 +57,9 @@ public class WalletService {
 		if (user.isPresent()) {
 			logger.info("in user if");
 			User foundUser = user.get();
+			CryptoCurrency cryptoCurrency = cryptoCurrencyRepository.findByCoinName(coinName);
+			if(cryptoCurrency != null) {
 			CryptoWallet newWalletType = cryptoWalletRepository.findByCoinNameAndUser(coinName.toString(), foundUser);
-			System.out.println(newWalletType);
 			if (newWalletType == null) {
 				logger.info("logger in newWalletType");
 				CryptoWallet wallet = new CryptoWallet();
@@ -66,6 +74,9 @@ public class WalletService {
 				return result;
 			}
 			result.put("responseMessage", " crypto wallet alredy present");
+			return result;
+		}
+			result.put("responseMessage","Crypto currency is not present");
 			return result;
 		}
 		result.put("responseMessage", "User Not Found");

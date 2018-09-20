@@ -19,7 +19,7 @@ import com.oodles.service.WithdrawService;
 import com.oodles.util.ResponseHandler;
 
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("/withdraw")
 public class WithdrawController {
 
 	@Autowired
@@ -32,7 +32,7 @@ public class WithdrawController {
 	 * @return
 	 */
 
-	@PostMapping(value = "/withdraw-from-fiat-wallet")
+	@PostMapping(value = "/fiat/wallet")
 	public Map<String, Object> fiatWithdraw(@Valid @RequestBody FiatWithrawDto fiatWithrawDto) {
 		Map<Object, Object> result = new HashMap<>();
 		try {
@@ -50,7 +50,7 @@ public class WithdrawController {
 	 * @return
 	 */
 
-	@PostMapping(value = "withdraw-from-crypto-wallet")
+	@PostMapping(value = "/crypto/wallet")
 	public Map<String, Object> cryptoWithdraw(@Valid @RequestBody CryptoWithdrawDto cryptoWithdrawDto) {
 		Map<Object, Object> result = new HashMap<>();
 		try {

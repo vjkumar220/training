@@ -1,7 +1,10 @@
 package com.oodles.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,12 +12,16 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.domain.CryptoCurrency;
-import com.oodles.domain.FiatCurrency;
+import com.oodles.dto.CryptoCurrencyDto;
+import com.oodles.dto.FiatCurrencyDto;
+import com.oodles.enumeration.CryptoName;
 import com.oodles.exception.ResourceNotFoundException;
 import com.oodles.service.CryptoCurrencyService;
 import com.oodles.service.FiatCurrencyService;
@@ -36,8 +43,8 @@ public class CurrencyController {
 	 * @return
 	 */
 	@PostMapping(value = "/create/crypto/currency")
-	public Map<String, Object> createCryptoCurrency(@RequestBody CryptoCurrency cryptoCurrency) {
-		Map<Object, Object> result = null;
+	public Map<String, Object> createCryptoCurrency(@Valid @RequestBody CryptoCurrencyDto cryptoCurrency) {
+		Map<Object, Object> result = new HashMap<>();
 		try {
 
 		 result = cryptoCurrencyService.createCurrency(cryptoCurrency);
@@ -53,8 +60,8 @@ public class CurrencyController {
 	 * @return
 	 */
 	@PostMapping(value = "/create/fiat/currency")
-	public Map<String, Object> createFiatCurrency(@RequestBody FiatCurrency fiatCurrency) {
-		Map result = null;
+	public Map<String, Object> createFiatCurrency(@Valid @RequestBody FiatCurrencyDto fiatCurrency) {
+		Map<Object ,Object>result = new HashMap<>();
 		try {
 			 result = fiatCurrencyService.createFiatCurrency(fiatCurrency);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
@@ -66,10 +73,10 @@ public class CurrencyController {
 
 	// Getting all existing currency
 
-	@GetMapping("/all/crypto/currnecy")
+	@GetMapping("/crypto/currencies")
 	public Map<String, Object> getAllCryptoCurrency() {
 
-		Map<String, Object> result = null;
+		Map<String, Object> result = new HashMap<>();
 		try {
 			List<CryptoCurrency> currencyList = cryptoCurrencyService.getAllCurrency();
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, currencyList);
@@ -95,6 +102,18 @@ public class CurrencyController {
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 		}
 
+	}
+	
+	@PutMapping(value = "/update/crypto/currency/currencyID/{currencyID}/fees/{fees}/initialSupply/{initialSupply}/price/{price}")
+	public Map<String, Object> updateCryptoCurrency(@RequestParam Long currencyId , @RequestParam Double fees, @RequestParam Double initialSupply, @RequestParam Double price ) {
+		String result = null;
+		try {
+
+		 result = cryptoCurrencyService.updateCryptoCurrency(currencyId, fees, initialSupply, price);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+		} catch (ResourceNotFoundException e) {
+			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
+		}
 	}
 
 }

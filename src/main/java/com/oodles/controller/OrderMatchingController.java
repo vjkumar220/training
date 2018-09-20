@@ -1,43 +1,49 @@
 package com.oodles.controller;
 
+import static com.oodles.util.Constants.ERROR;
+import static com.oodles.util.Constants.SUCCESS;
+
 import java.util.List;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.domain.BuyOrder;
 import com.oodles.domain.SellOrder;
+import com.oodles.exception.ResourceNotFoundException;
 import com.oodles.service.OrderMatchingService;
+import com.oodles.util.ResponseHandler;
 
 @RestController
 @RequestMapping("/order")
 public class OrderMatchingController {
-	
+
 	@Autowired
 	private OrderMatchingService orderMatchingService;
-	
-	@GetMapping("/sell")
-	public List<SellOrder> sellList(){
+
+/*	@GetMapping("/sell")
+	public List<SellOrder> sellList() {
 		return orderMatchingService.sellList();
 	}
 
-	
 	@GetMapping("/buy")
-	public List<BuyOrder> buyList(){
+	public List<BuyOrder> buyList() {
 		return orderMatchingService.buyList();
-	}
-	
-	@GetMapping("/orderMatching")
-	public String orderMatching() {
-		return orderMatchingService.orderMatch();
-	}
-	
-/*	@GetMapping("/hello")
-	public String hello() {
-		return orderMatchingService.test();
 	}*/
+
+	@GetMapping("/orderMatching")
+	public Map<String, Object> orderMatching() {
+		String output = null;
+		try {
+			output = orderMatchingService.orderMatch();
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, output);
+		} catch (ResourceNotFoundException e) {
+			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, ERROR, null, output);
+		}
+	}
+
 }

@@ -22,6 +22,7 @@ public class BuyOrderDto {
 	private Long userId;
 	@NotNull
 	private Long fiatWalletId;
+	
 	public CryptoName getCoinName() {
 		return coinName;
 	}

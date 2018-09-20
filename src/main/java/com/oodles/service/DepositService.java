@@ -212,17 +212,20 @@ public class DepositService {
 							cryptoDeposit.setDepositStatus(DepositStatus.APPROVED);
 							cryptoDepositRepository.save(cryptoDeposit);
 							cryptoWalletRepository.save(cryptoWallet);
-							result.put("success", "Your request is approved and balance is updated");
+							result.put("responseMessage", "Your request is approved and balance is updated");
+							return result;
 						} else if (depositStatusDto.equals(DepositStatus.REJECTED)) {
 							cryptoDeposit.setDepositStatus(DepositStatus.REJECTED);
 							cryptoDepositRepository.save(cryptoDeposit);
 							result.put("responseMessage", "Your request is rejected");
+							return result;
 						}
 
 					}
 				}
 			}
 			result.put("responseMessage", "User is  not found");
+			return result;
 		}
 		result.put("responseMessage", "Order is not present");
 		return result;

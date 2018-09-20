@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.oodles.domain.FiatCurrency;
+import com.oodles.dto.FiatCurrencyDto;
 import com.oodles.repository.FiatCurrencyRepository;
 
 @Service
@@ -20,7 +21,7 @@ public class FiatCurrencyService {
 	 * @param fiatCurrency
 	 * @return
 	 */
-	public Map<Object, Object> createFiatCurrency(FiatCurrency fiatCurrency) {
+	public Map<Object, Object> createFiatCurrency(FiatCurrencyDto fiatCurrency) {
 		Map<Object, Object> result = new HashMap<>();
 		String coinName = fiatCurrency.getCoinName();
 		String symbol = fiatCurrency.getSymbol();
@@ -30,7 +31,8 @@ public class FiatCurrencyService {
 			FiatCurrency fiatCurrency2 = new FiatCurrency();
 			fiatCurrency2.setCoinName(coinName);
 			fiatCurrency2.setSymbol(symbol);
-			result.put("responseMessage", "success");
+			fiatCurrencyRepository.save(fiatCurrency2);
+			result.put("responseMessage", "Fiat Currency is generated");
 			return result;
 		}
 		result.put("responseMessage", "error");

@@ -86,8 +86,12 @@ public class WithdrawService {
 				cryptoWalletRepository.save(cryptoWallet);
 				cryptoWithdrawRepository.save(withdraw);
 				result.put("responseMessage", "Your amount withdraw is successfully done");
+				return result;
+
 			}
 			result.put("responseMessage", "Crypto Wallet is not have sufficent balance");
+			return result;
+
 		}
 		result.put("responseMessage", "Crypto Wallet is not found");
 		return result;

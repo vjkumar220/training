@@ -73,7 +73,7 @@ public class WalletController {
 	 * @param userId
 	 * @return
 	 */
-	@GetMapping(value = "/fiatHistory/{userId}")
+/*	@GetMapping(value = "/fiatHistory/{userId}")
 	public Map<String, Object> fiatHistory(@PathVariable Long userId) {
 		Map<Object, Object> result = new HashMap<>();
 		try {
@@ -82,6 +82,6 @@ public class WalletController {
 		} catch (ResourceNotFoundException e) {
 			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 		}
-	}
+	}*/
 
 }

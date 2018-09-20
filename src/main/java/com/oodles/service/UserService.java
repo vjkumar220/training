@@ -14,6 +14,7 @@ import com.oodles.domain.User;
 import com.oodles.dto.EmailDto;
 import com.oodles.dto.EmailVerifyDto;
 import com.oodles.dto.OtpDto;
+import com.oodles.dto.UserDto;
 import com.oodles.repository.UserRepository;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
@@ -47,7 +48,7 @@ public class UserService {
 	 * @param user
 	 * @return
 	 */
-	public Map<Object, Object> createUser(User user) {
+	public Map<Object, Object> createUser(UserDto user) {
 		Map<Object, Object> result = new HashMap<>();
 		String name = user.getName();
 		String email = user.getEmail();
@@ -64,10 +65,10 @@ public class UserService {
 			newUser.setPassword(password);
 			newUser.setCountry(country);
 			userRepository.save(newUser);
-			result.put("responseMessage", "success");
+			result.put("responseMessage", "Welcome to our Trade Exchnage");
 			return result;
 		}
-		result.put("responseMessage", "error");
+		result.put("responseMessage", "Mail or phone number is present");
 		return result;
 	}
 
@@ -84,14 +85,21 @@ public class UserService {
 	 * @param id
 	 * @return
 	 */
-	public Optional<User> findUserById(String id) {
+/*	public Optional<User> 
+	}*/
+	
+	public Map findUserById(String id) {
+		Map<Object, Optional<User>> result = new HashMap<>();
+		Map<Object, String> output = new HashMap<>();
 		Optional<User> value = userRepository.findById(Long.parseLong(id));
-		User result = value.get();
-		if (value.isPresent() && (!result.getId().equals(id))) {
-			return value;
+		if (value.isPresent()) {
+			result.put("responseMessage", value);
+			return result;
 		}
-		return value;
+		output.put("responseMessage", "User Not found");
+		return output;
 	}
+		
 
 	/** delete user by id
 	 * 
@@ -104,7 +112,7 @@ public class UserService {
 		if (value.isPresent()) {
 			User user = value.get();
 			userRepository.deleteById(Long.parseLong(id));
-			result.put("responseMessaage", "User is deleted"+user);
+			result.put("responseMessaage", "User is deleted");
 		}
 		return result;
 	}
@@ -137,6 +145,30 @@ public class UserService {
 		return user;
 	}
 
+	public Map updateUserRow(String id, String name, String email, String password, String phoneNumber, String country) {
+		Map<Object, Object> result = new HashMap<>();
+		Optional<User> value = userRepository.findById(Long.parseLong(id));
+		if(value.isPresent()) {
+			User user = value.get();
+			if(name!=null) {
+				user.setName(name);
+				userRepository.save(user);
+				result.put("responseMessageForName", "User name is update");
+				return result;
+			}
+			else if(email != null) {
+				
+				user.setEmail(email);
+				userRepository.save(user);
+				result.put("responseMessageForEmail", "Name of the is update");
+				return result;
+			}
+			
+			
+		}
+		result.put("responseMessage", "User Is Not found");
+		return result;
+	}
 	/**
 	 * Send OTP
 	 * @param userId

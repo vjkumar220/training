@@ -1,9 +1,7 @@
 package com.oodles.service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,27 +29,20 @@ import com.oodles.repository.SellTransactionRepository;
 
 @Service
 public class OrderMatchingService {
-
 	Logger log = LoggerFactory.getLogger(OrderMatchingService.class);
 
 	@Autowired
 	private BuyOrderRepository buyOrderRepository;
-
 	@Autowired
 	private SellOrderRepository sellOrderRepository;
-
 	@Autowired
 	private CryptoCurrencyRepository cryptoCurrencyRepository;
-
 	@Autowired
 	private CryptoWalletRepository cryptoWalletRepository;
-
 	@Autowired
 	private SellTransactionRepository sellTransactionRepository;
-
 	@Autowired
 	private BuyTransactionRepository buyTransactionRepository;
-
 	@Autowired
 	private FiatWalletRepository fiatWalletRepository;
 
@@ -137,11 +128,10 @@ public class OrderMatchingService {
 							Double desiredSellerPrice = sellOrder.getSellPrice();
 							Double sellerCoinQuantity = sellOrder.getSellCoinQuantity();
 							Double sellerGrossAmount = sellOrder.getOrderPrice();
-							Double sellerNetAmount = (desiredSellerPrice * sellerCoinQuantity);
+							
 							log.info("desired seller price" + desiredSellerPrice);
 							log.info("seller coin quantiy" + sellerCoinQuantity);
 							log.info("seller Gross Amount" + sellerGrossAmount);
-							log.info("seller net Amount" + sellerNetAmount);
 							// Seller and buyer Id
 							Long sellerId = sellOrder.getUser().getId();
 							Long buyerId = buyOrder.getUser().getId();
@@ -185,6 +175,7 @@ public class OrderMatchingService {
 							
 							if (buyOrder.getRemainingBuyCoinQuantity()
 									.equals(sellOrder.getRemainingSellCoinQuantity())) {
+								Double sellerNetAmount = (desiredSellerPrice * sellerCoinQuantity);
 								// buyer fiat and crypto updted balance
 								Double buyerUpdatedFiatBalance = (buyerFiatBalance - buyerGrossAmount);
 								Double buyerUpdatedCryptoWalletBalance = (buyerCryptoWalletBalance
@@ -245,7 +236,18 @@ public class OrderMatchingService {
 								return "Your exact order is matched";
 							} 
 
-							if (buyOrder.getRemainingBuyCoinQuantity() > sellOrder.getRemainingSellCoinQuantity()) {
+							else if (buyOrder.getRemainingBuyCoinQuantity() > sellOrder.getRemainingSellCoinQuantity()) {
+								//buyer pending 
+								
+								//Buyer Fiat Balance
+								
+								
+								SellTransaction sellTransaction = new SellTransaction();
+								
+							}
+							
+							else if(buyOrder.getRemainingBuyCoinQuantity() < sellOrder.getRemainingSellCoinQuantity()) {
+								
 								
 								
 								

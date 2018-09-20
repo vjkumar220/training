@@ -1,8 +1,11 @@
 package com.oodles.dto;
 
-public class UserRoleDto {
+import javax.validation.constraints.NotNull;
 
+public class UserRoleDto {
+	@NotNull
 	private Long userId;
+	@NotNull
 	private Long roleId;
 	public Long getUserId() {
 		return userId;

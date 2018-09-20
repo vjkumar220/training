@@ -1,15 +1,17 @@
 package com.oodles.dto;
 
+import javax.validation.constraints.NotNull;
+
 import com.oodles.enumeration.CryptoName;
 
 public class CryptoDepositDto {
-	
+	@NotNull
 	private CryptoName coinName;
-	
+	@NotNull
 	private Double coinQuantity;
-	
+	@NotNull
 	private Long cryptoWalletId;
-
+	@NotNull
 	public Double getCoinQuantity() {
 		return coinQuantity;
 	}
@@ -33,5 +35,5 @@ public class CryptoDepositDto {
 	public void setCoinName(CryptoName coinName) {
 		this.coinName = coinName;
 	}
-										
+
 }

@@ -1,5 +1,6 @@
 package com.oodles.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,18 +21,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.domain.User;
 import com.oodles.dto.EmailDto;
 import com.oodles.dto.EmailVerifyDto;
 import com.oodles.dto.OtpDto;
+import com.oodles.dto.UserDto;
 import com.oodles.exception.ResourceNotFoundException;
 import com.oodles.service.UserService;
 import com.oodles.util.ResponseHandler;
 import static com.oodles.util.Constants.SUCCESS;
 import static com.oodles.util.Constants.ERROR;;
-
 
 @RestController
 @RequestMapping("/user")
@@ -46,7 +49,7 @@ public class UserController {
 	 * @return
 	 */
 	@PostMapping(value = "/signup")
-	public Map<String, Object> createUser(@Valid @RequestBody User user) {
+	public Map<String, Object> createUser(@Valid @RequestBody UserDto user) {
 		Map<Object, Object> output = new HashMap<Object, Object>();
 		try {
 			output = userService.createUser(user);
@@ -63,8 +66,15 @@ public class UserController {
 	 * @return
 	 */
 	@GetMapping(value = "/all/users")
-	public List<User> viewAllUsers() {
-		return userService.retrieveAllUser();
+	public Map<String, Object> viewAllUsers() {
+		List<User> output = new ArrayList<>();
+		try {
+			output = userService.retrieveAllUser();
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, output);
+		} catch (ResourceNotFoundException e) {
+			logger.info("UserController - create value in catch'");
+			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, ERROR, null, output);
+		}
 	}
 
 	/**
@@ -73,17 +83,16 @@ public class UserController {
 	 * @param id
 	 * @return
 	 */
-	@GetMapping(value = "/users/by/id/{id}")
-	public Map<String, Object> findUserById(@PathVariable String id) {
-		Map<Object, Object> output = new HashMap<Object, Object>();
-		Optional<User> result = null;
+	@GetMapping(value = "/user/{id}")
+	public Map<String, Object> findUserById(@RequestParam String id) {
+		Map result = new HashMap<>();
 		try {
 			result = userService.findUserById(id);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 		} catch (ResourceNotFoundException ex) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, output);
+			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 		} catch (NoSuchElementException ex) {
-			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, output);
+			return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, result);
 
 		}
 
@@ -95,7 +104,7 @@ public class UserController {
 	 * @param id
 	 * @return
 	 */
-	@DeleteMapping(value = "/delete/user/by/userId/{id}")
+	@DeleteMapping(value = "/delete/user/{id}")
 	public Map<String, Object> deleteUser(@PathVariable String id) {
 		Map<Object, Object> output = new HashMap<Object, Object>();
 		try {
@@ -124,9 +133,9 @@ public class UserController {
 	 * @return
 	 */
 	@PutMapping(value = "/update/user/feild/{id}/{name}/{email}/{password}/{phoneNumber}/{country}")
-	public Map<String, Object> updateUser(@PathVariable String id, @PathVariable String name,
-			@PathVariable String email, @PathVariable String password, @PathVariable String phoneNumber,
-			@PathVariable String country) {
+	public Map<String, Object> updateUser(@RequestParam String id, @RequestParam(required = false) String name,
+			@RequestParam(required = false) @Email String email, @RequestParam(required = false) String password, @RequestParam(required = false) String phoneNumber,
+			@RequestParam(required = false) String country) {
 		User user = null;
 		try {
 			user = userService.updateUser(id, name, email, password, phoneNumber, country);
@@ -144,7 +153,7 @@ public class UserController {
 	 * @param userId
 	 * @return
 	 */
-	@PostMapping(value = "/send/otp/userId/{userId}")
+	@PostMapping(value = "/send/otp/{userId}")
 	public Map<String, Object> sendOtp(@PathVariable String userId) {
 		String result = null;
 		try {
@@ -177,7 +186,7 @@ public class UserController {
 	 * @return
 	 */
 
-	@PostMapping(value = "/send/verification/mail/to/user/{userId}")
+	@PostMapping(value = "/send/verification/mail/user/{userId}")
 	public Map<String, Object> sendMail(@PathVariable String userId) {
 		logger.info("Mail controller send mail");
 		String result = null;

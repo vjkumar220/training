@@ -31,7 +31,7 @@ public class RoleController {
 	 * @param role
 	 * @return
 	 */
-	@PostMapping(value = "/role")
+	@PostMapping(value = "/create/role")
 	public Map<String, Object> createUser(@Valid @RequestBody Role role) {
 		Map<Object, Object> output = null;
 		logger.info("RoleController-create value start");
