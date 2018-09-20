@@ -16,7 +16,7 @@ import com.oodles.enums.TransactionStatus;
 @Entity
 public class BuyTransaction {
 	@Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long buytransactionID;
 	private Double coinQuantity;
 	 private String coinType;

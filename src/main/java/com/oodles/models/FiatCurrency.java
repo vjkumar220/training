@@ -7,7 +7,7 @@ import javax.persistence.Id;
 @Entity
 public class FiatCurrency {
 	@Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long currencyId;
 	private String 	coinName;
 	private String symbol;

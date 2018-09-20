@@ -1,6 +1,11 @@
 package com.oodles.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 public class VerifyEmailDto {
+	@NotNull
+	  @Pattern(regexp=".+@.+\\.[a-z]+", message="Invalid Mail")
 	private String email;
 	private Long expirytime;
 	private String confirmationToken;

@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,13 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.dto.CryptoApprovalDto;
 import com.oodles.dto.CryptoDepositDto;
+import com.oodles.dto.CryptoWalletDto;
 import com.oodles.dto.CryptoWithdrawDto;
 import com.oodles.dto.FiatApprovalDto;
 import com.oodles.dto.FiatDepositDto;
-import com.oodles.dto.FiatWalletDto;
 import com.oodles.dto.FiatWithdrawDto;
-import com.oodles.dto.UserWalletDto;
-import com.oodles.exceptions.ResourceNotFoundException;
 import com.oodles.exceptions.ResponseHandler;
 import com.oodles.services.WalletService;
 
@@ -34,14 +33,13 @@ public class WalletController {
 	 * @param userWalletDTO
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.POST, value = "/v1/fiatwallet")
+	@RequestMapping(method = RequestMethod.POST, value = "/v1/fiatwallet/{userId}")
 
-	public Map createFiatWallet(@RequestBody FiatWalletDto userWalletDTO) {
+	public Map createFiatWallet(@PathVariable Long userId) {
 		Map result = null;
 		
-			logger.info("Entered in create fiatwallet");
-			logger.info("userWalletDTO =" + userWalletDTO);
-			result = walletService.createFiatWallet(userWalletDTO);
+			
+			result = walletService.createFiatWallet(userId);
 			logger.info("created fiatwallet");
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 
@@ -54,10 +52,10 @@ public class WalletController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/cryptowallet")
 
-	public Map createCryptoWallet(@RequestBody UserWalletDto userWalletDTO) {
+	public Map createCryptoWallet(@RequestBody CryptoWalletDto cryptoWalletDTO) {
 		Map result = null;
 		
-			result = walletService.createCryptoWallet(userWalletDTO);
+			result = walletService.createCryptoWallet(cryptoWalletDTO);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 		
 	}

@@ -27,14 +27,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 public class FiatWallet {
 	@Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long walletId;
 	private Double balance;
 	private Double shadowBalance;
-	 
+	private String walletType;
 	    
 	private String coinName;
-	private String walletType;
+	
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
 	//@JsonBackReference
@@ -75,12 +75,7 @@ public class FiatWallet {
 	public void setCoinName(String coinName) {
 		this.coinName = coinName;
 	}
-	public String getWalletType() {
-		return walletType;
-	}
-	public void setWalletType(String walletType) {
-		this.walletType = walletType;
-	}
+	
 	public User getUser() {
 		return user;
 	}
@@ -92,6 +87,12 @@ public class FiatWallet {
 	}
 	public void setFiatwithdraw(Set<FiatWithdraw> fiatwithdraw) {
 		this.fiatwithdraw = fiatwithdraw;
+	}
+	public String getWalletType() {
+		return walletType;
+	}
+	public void setWalletType(String walletType) {
+		this.walletType = walletType;
 	}
 	
 

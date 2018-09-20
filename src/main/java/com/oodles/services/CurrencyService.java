@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.oodles.dto.CryptoCurrencyDto;
 import com.oodles.models.CryptoCurrency;
 import com.oodles.repository.CryptoCurrencyRepository;
 
@@ -20,7 +21,7 @@ public class CurrencyService {
 	 * @param cryptoCurrency
 	 * @return
 	 */
-	public Map<String, Object>  addCurrency(CryptoCurrency cryptoCurrency ) {
+	public Map<String, Object>  addCurrency(CryptoCurrencyDto cryptoCurrency ) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		String coinName=cryptoCurrency.getCoinName();
 		String symbol=cryptoCurrency.getSymbol();

@@ -64,7 +64,7 @@ public class OTPService {
 					if (requestOTP.getOtp().equals(otp.getOtp())) {
 						Optional<User> foundUser = userRepository.findById(Long.parseLong(id));
 						User user = foundUser.get();
-						user.setEnabled(true);
+						user.setEnabled("Active");
 						userRepository.save(user);
 						return "OTP is verified successfully";
 					}

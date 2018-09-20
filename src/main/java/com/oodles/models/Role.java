@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 public class Role {
 	@Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long roleId;
     private String roleType;
     @ManyToMany(mappedBy="role")

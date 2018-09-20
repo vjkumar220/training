@@ -196,12 +196,22 @@ public class OrderMatchingService {
 								Double currentcryptobalanceofbuyer = buycwType.getBalance();
 								Double updatedbuyerCryptoBalance = currentcryptobalanceofbuyer + noOfCointobesell;
 								buycwType.setBalance(updatedbuyerCryptoBalance);
+								Double currentcryptoShadowbalanceofbuyer = buycwType.getShadowBalance();
+								Double updatedbuyerCryptoShadowBalance = currentcryptoShadowbalanceofbuyer + noOfCointobesell;
+								buycwType.setShadowBalance(updatedbuyerCryptoShadowBalance);
+								
+								
 								cryptoWalletRepository.save(buycwType);
 								// seller fiat balance
 								Double currentfiatbalanceofseller = sellUserId.getFiatwallet().getBalance();
 								Double sellamount = (desiredpriceforsell * noOfCointobesell);
 								Double updatedsellerFiatBalance = currentfiatbalanceofseller + sellamount;
 								sellfwType.setBalance(updatedsellerFiatBalance);
+								
+								Double currentfiatShadowbalanceofseller = sellUserId.getFiatwallet().getShadowBalance();
+								Double updatedsellerFiatShadowBalance = currentfiatShadowbalanceofseller + sellamount;
+								sellfwType.setShadowBalance(updatedsellerFiatShadowBalance);
+								
 								fiatWalletRepository.save(sellfwType);
 								// seller crypto balance
 								Double currentcryptobalanceofseller = sellcwType.getBalance();
@@ -257,13 +267,19 @@ public class OrderMatchingService {
 								// buyer cryptowallet balance
 								Double currentcryptobalanceofbuyer = buycwType.getBalance();
 								Double updatedbuyerCryptoBalance = currentcryptobalanceofbuyer + noOfCointobebuy;
+								Double currentcryptoShadowbalanceofbuyer = buycwType.getShadowBalance();
+								Double updatedbuyerCryptoShadowBalance = currentcryptoShadowbalanceofbuyer + noOfCointobebuy;
 								buycwType.setBalance(updatedbuyerCryptoBalance);
+								buycwType.setShadowBalance(updatedbuyerCryptoShadowBalance);
 								cryptoWalletRepository.save(buycwType);
 								// seller fiat balance
 								Double currentfiatbalanceofseller = sellUserId.getFiatwallet().getBalance();
 								Double sellamount = (desiredpriceforsell * noOfCointobebuy);
 								Double updatedsellerFiatBalance = currentfiatbalanceofseller + sellamount;
 								sellfwType.setBalance(updatedsellerFiatBalance);
+								Double currentfiatShadowbalanceofseller = sellUserId.getFiatwallet().getShadowBalance();
+								Double updatedsellerFiatShadowBalance = currentfiatShadowbalanceofseller + sellamount;
+								sellfwType.setShadowBalance(updatedsellerFiatShadowBalance);
 								fiatWalletRepository.save(sellfwType);
 								// seller crypto balance
 								Double currentcryptobalanceofseller = sellcwType.getBalance();
@@ -318,11 +334,19 @@ public class OrderMatchingService {
 								// buyer cryptowallet balance
 								Double currentcryptobalanceofbuyer = buycwType.getBalance();
 								Double updatedbuyerCryptoBalance = currentcryptobalanceofbuyer + noOfCointobesell;
+								//buyer shadow balance
+								Double currentcryptoshadowbalanceofbuyer=buycwType.getShadowBalance();
+								Double updatedbuyerCryptoshadowbalanceofbuyer=currentcryptoshadowbalanceofbuyer+noOfCointobesell;
+								buycwType.setShadowBalance(updatedbuyerCryptoshadowbalanceofbuyer);
 								buycwType.setBalance(updatedbuyerCryptoBalance);
 								cryptoWalletRepository.save(buycwType);
 								// seller fiat balance
 								Double currentfiatbalanceofseller = sellUserId.getFiatwallet().getBalance();
 								Double updatedsellerFiatBalance = currentfiatbalanceofseller + amountforsell;
+								//seller fiat shadow balance
+								Double currentfiatShadowbalanceofseller = sellUserId.getFiatwallet().getShadowBalance();
+								Double updatedsellerFiatShadowBalance = currentfiatShadowbalanceofseller + amountforsell;
+								sellfwType.setShadowBalance(updatedsellerFiatShadowBalance);;
 								sellfwType.setBalance(updatedsellerFiatBalance);
 								fiatWalletRepository.save(sellfwType);
 								// seller crypto balance

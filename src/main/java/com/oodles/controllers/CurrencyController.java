@@ -2,7 +2,6 @@ package com.oodles.controllers;
 
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import javax.validation.Valid;
 
@@ -15,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.oodles.dto.CryptoCurrencyDto;
 import com.oodles.exceptions.ResponseHandler;
-import com.oodles.exceptions.ResourceNotFoundException;
 import com.oodles.models.CryptoCurrency;
 import com.oodles.services.CurrencyService;
 
@@ -33,7 +33,7 @@ private CurrencyService  currencyService;
 
 @RequestMapping(method = RequestMethod.POST, value = "/v1/currencies")
 
-public Map addCurrency(@Valid @RequestBody CryptoCurrency cryptoCurrency)  {
+public Map addCurrency(@Valid @RequestBody CryptoCurrencyDto cryptoCurrency)  {
 	Map result=null;
 	
 		 result=currencyService.addCurrency(cryptoCurrency);

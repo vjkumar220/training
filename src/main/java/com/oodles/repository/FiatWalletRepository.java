@@ -11,5 +11,5 @@ public interface FiatWalletRepository extends JpaRepository<FiatWallet,Long> {
 	FiatWallet findByWalletTypeAndUser(String walletType,User userid);
 	FiatWallet findByUserId(Long userid);
 	FiatWallet findByWalletId(Long walletID);
-	//FiatWallet findByUserId(Long id);
+	FiatWallet findByUser(User userid);
 }

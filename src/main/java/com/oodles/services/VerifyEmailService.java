@@ -71,7 +71,7 @@ public class VerifyEmailService {
 					if (verifyEmail.getConfirmationToken().equals(emailDto.getConfirmationToken())) {
 						Optional<User> foundUser = userRepository.findById(Long.parseLong(id));
 						User user = foundUser.get();
-						user.setEnabled(true);
+						user.setEnabled("Active");
 						userRepository.save(user);
 						emailData.remove(emailAddress);
 						return "Verificarion code is verified successfully";

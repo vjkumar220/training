@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.oodles.controllers.RegistrationController;
-import com.oodles.models.User;
+import com.oodles.dto.UserDto;
 import com.oodles.services.UserService;
 
 @RunWith(SpringRunner.class)
@@ -28,7 +28,8 @@ public class CreateUserControllerMockTest {
     @MockBean
     private UserService userService;
     @MockBean
-    private User user;
+    private UserDto user;
+   
     @Test
 	public void getUserById() throws Exception {
 		when(userService.createUser(user)).thenReturn(null);

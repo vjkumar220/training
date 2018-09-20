@@ -24,7 +24,7 @@ import com.oodles.enums.OrderType;
 @Table(name="MarketOrders")
 public class MarketOrder {
 	@Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     
 	private Long orderId;
 	@Enumerated(EnumType.STRING)

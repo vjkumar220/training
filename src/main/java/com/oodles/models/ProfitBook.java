@@ -8,7 +8,7 @@ import javax.persistence.Id;
 @Entity
 public class ProfitBook {
 	@Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long bookID;
 	private Double EarnedAmount;
 	public Long getBookID() {

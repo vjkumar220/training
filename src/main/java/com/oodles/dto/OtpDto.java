@@ -1,7 +1,11 @@
 package com.oodles.dto;
 
-public class OtpDto {
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
+public class OtpDto {
+	 @NotNull
+	 @Pattern(regexp="^[6-9]\\d{9}$",message="Invalid Mobile Number")
 	private String mobileNumber;
 	private String otp;
 	private Long expirytime;

@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 public class User  {
 	@Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
  	@Size(min=2, message="Name should have atleast 2 characters")
     private String name;
@@ -41,7 +41,7 @@ public class User  {
     private String password;
    @NotNull
     private String country;	
-   private boolean enabled;
+   private String enabled;
    private String otp;
    private String confirmationToken;
    private Long expirytime;
@@ -96,7 +96,7 @@ public class User  {
    public User() {
        super();
        
-       this.enabled = false;
+       
    }
 
 public Long getId() {
@@ -147,11 +147,12 @@ public void setCountry(String country) {
 	this.country = country;
 }
 
-public boolean isEnabled() {
+
+public String getEnabled() {
 	return enabled;
 }
 
-public void setEnabled(boolean enabled) {
+public void setEnabled(String enabled) {
 	this.enabled = enabled;
 }
 

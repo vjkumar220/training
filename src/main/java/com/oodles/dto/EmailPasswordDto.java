@@ -1,12 +1,11 @@
 package com.oodles.dto;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 public class EmailPasswordDto {
 	@NotNull
-		@Email(message = "Enter Valid Email Id")
+	  @Pattern(regexp=".+@.+\\.[a-z]+", message="Invalid Mail")
 		private String email;
 	@NotNull
 		private String passToken;

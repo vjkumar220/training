@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.oodles.dto.UserDto;
 import com.oodles.models.User;
 import com.oodles.repository.UserRepository;
 
@@ -24,7 +25,7 @@ public class UserService {
 	 * @param user
 	 * @return
 	 */
-	public Map<String, Object>  createUser(User user) {
+	public Map<String, Object>  createUser(UserDto user) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		String name=user.getName();
 		String password=user.getPassword();
@@ -40,7 +41,7 @@ public class UserService {
 			newUser.setMobilenumber(mobilenumber);
 			newUser.setPassword(password);
 			newUser.setCountry(country);
-			newUser.setEnabled(false);
+			newUser.setEnabled("Inactive");
 			userRepository.save(newUser);
 			result.put("responseMessage", "success");
 			return result;

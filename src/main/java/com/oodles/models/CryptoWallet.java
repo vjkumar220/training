@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 public class CryptoWallet {
 	@Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long walletId;
 	private Double balance;
 	private Double shadowBalance;

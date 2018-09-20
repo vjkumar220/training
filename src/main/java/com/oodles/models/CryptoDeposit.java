@@ -21,7 +21,7 @@ import com.oodles.enums.DepositStatus;
 @Entity
 public class CryptoDeposit {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long transactionId;
 
 	  @Column(name="timeStamp", columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
