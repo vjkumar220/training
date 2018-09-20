@@ -2,6 +2,7 @@ package com.oodles.dto;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.oodles.enums.CryptoCoin;
@@ -9,7 +10,7 @@ import com.oodles.enums.CryptoCoin;
 public class CryptoWalletDto {
 	@NotNull
 	private Long userId;
-	@NotNull
+	@NotBlank
 	@Enumerated(EnumType.STRING)
 	private CryptoCoin coinName;
 	public Long getUserId() {

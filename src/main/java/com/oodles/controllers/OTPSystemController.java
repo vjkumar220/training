@@ -28,11 +28,11 @@ public class OTPSystemController {
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 		
 	}
-	@RequestMapping(value="/v1/verifyUser/{mobileNumber}",method=RequestMethod.PUT)
-	public Map verifyOtp(@PathVariable String mobileNumber, @RequestBody OtpDto requestOTP) {
+	@RequestMapping(value="/v1/verifyUser",method=RequestMethod.PUT)
+	public Map verifyOtp(@RequestBody OtpDto requestOTP) {
 		String result = null;
 		
-			result = otpService.verifyOtp(mobileNumber, requestOTP);
+			result = otpService.verifyOtp(requestOTP);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 		
 	}

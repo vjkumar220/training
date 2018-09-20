@@ -2,12 +2,13 @@ package com.oodles.dto;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.oodles.enums.WalletType;
 
 public class FiatDepositDto {
-	@NotNull
+	@NotBlank
 	@Enumerated(EnumType.STRING)
 private WalletType walletType;
 	@NotNull

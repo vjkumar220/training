@@ -35,7 +35,8 @@ public class OTPService {
 			OtpDto otp = new OtpDto();
 			otp.setMobileNumber(user.getMobilenumber());
 			otp.setOtp(String.valueOf(otpCode));
-			otp.setExpirytime(System.currentTimeMillis() + 500000);
+			//otp.setExpirytime(System.currentTimeMillis() + 500000);
+			user.setExpirytime(System.currentTimeMillis() + 500000);
 			user.setOtp(otpCode);
 			userRepository.save(user);
 			otp_data.put(user.getMobilenumber(),otp);
@@ -52,7 +53,8 @@ public class OTPService {
 	 * @param requestOTP
 	 * @return
 	 */
-	public String verifyOtp(String mobilenumber, OtpDto requestOTP) {
+	public String verifyOtp( OtpDto requestOTP) {
+		String mobilenumber=requestOTP.getMobileNumber();
 		User mobileNumber = userRepository.findByMobilenumber(requestOTP.getMobileNumber());
 		if (requestOTP.getOtp() == null || requestOTP.getOtp().trim().length() <= 0) {
 			return "Please provide OTP";
@@ -60,7 +62,7 @@ public class OTPService {
 		if (otp_data.containsKey(mobilenumber)) {
 			OtpDto otp = otp_data.get(mobilenumber);
 			if (otp != null) {
-				if (otp.getExpirytime() >= System.currentTimeMillis()) {
+				if (mobileNumber.getExpirytime() >= System.currentTimeMillis()) {
 					if (requestOTP.getOtp().equals(otp.getOtp())) {
 						Optional<User> foundUser = userRepository.findById(Long.parseLong(id));
 						User user = foundUser.get();

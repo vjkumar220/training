@@ -1,5 +1,6 @@
 package com.oodles.dto;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.oodles.enums.DepositStatus;
@@ -7,7 +8,7 @@ import com.oodles.enums.DepositStatus;
 public class FiatApprovalDto {
 	@NotNull
 		private Long userId;
-	@NotNull
+	@NotBlank
 	private DepositStatus status;
 	@NotNull
 	private Long transactionID;

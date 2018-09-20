@@ -1,22 +1,23 @@
 package com.oodles.dto;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class CryptoCurrencyDto {
 	 
-    @NotNull
+	@NotBlank
 	private String 	coinName;
     
-    @NotNull
+	@NotBlank
 	private String symbol;
     
-    @NotNull
+	@NotNull
 	private Long fees;
     
-    @NotNull
+	@NotNull
 private Long initialSupply;
     
-    @NotNull
+	@NotNull
 	private Long price;
 
 	public String getCoinName() {

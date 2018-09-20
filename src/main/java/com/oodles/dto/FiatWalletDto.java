@@ -2,6 +2,7 @@ package com.oodles.dto;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.oodles.enums.CoinName;
@@ -10,7 +11,7 @@ import com.oodles.enums.WalletType;
 public class FiatWalletDto {
 	@NotNull
 	private Double balance;
-	@NotNull
+	@NotBlank
 	 @Enumerated(EnumType.STRING)
 	
 	private CoinName coinName;
@@ -18,7 +19,7 @@ public class FiatWalletDto {
  private Double shadowBalance;
 	@NotNull
 private Long user_id;
-	@NotNull
+	@NotBlank
 	@Enumerated(EnumType.STRING)
 private WalletType walletType;
 public Double getBalance() {

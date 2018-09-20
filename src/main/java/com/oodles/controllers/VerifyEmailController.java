@@ -46,12 +46,12 @@ public Map<String, Object> sendMail(@PathVariable String userId) {
  * @param verifyEmail
  * @return
  */
-@PutMapping(value = "v1/verifymail/{emailAddress}")
-public Map<String, Object> verifyMail(@PathVariable String emailAddress,@RequestBody VerifyEmailDto verifyEmail) {
+@PutMapping(value = "v1/verifymail")
+public Map<String, Object> verifyMail(@RequestBody VerifyEmailDto verifyEmail) {
 	logger.info("Mail controller verify mail start");
 	String result = null;
 	
-		result = verifyemailService.verifyEmail(emailAddress,verifyEmail);
+		result = verifyemailService.verifyEmail(verifyEmail);
 		logger.info("Mail verify controller end");
 		return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
 	

@@ -38,7 +38,7 @@ public class VerifyEmailService {
 		String body = "Your Verification OTP-" + otpCode;
 		VerifyEmailDto verifyEmail = new VerifyEmailDto();
 		verifyEmail.setEmail(emailTo);
-		verifyEmail.setExpirytime(System.currentTimeMillis() + 200000);
+		//verifyEmail.setExpirytime(System.currentTimeMillis() + 200000);
 		verifyEmail.setConfirmationToken(otpCode);
 		emailData.put(emailTo, verifyEmail);
 		SimpleMailMessage mail = new SimpleMailMessage();
@@ -47,6 +47,7 @@ public class VerifyEmailService {
 		mail.setSubject("Please verify your OTP");
 		mail.setText(body);
 		user.setConfirmationToken(otpCode);
+		user.setExpirytime(System.currentTimeMillis() + 200000);
 		userRepository.save(user);
 		id = userId;
 		javaMailSender.send(mail)
@@ -60,17 +61,19 @@ public class VerifyEmailService {
 	 * @param verifyEmail
 	 * @return
 	 */
-	public String verifyEmail(String emailAddress, VerifyEmailDto verifyEmail) {
+	public String verifyEmail(VerifyEmailDto verifyEmail) {
 		if (verifyEmail.getConfirmationToken()== null || verifyEmail.getConfirmationToken().trim().length() <= 0) {
 			return "Please provide Verification code";
 		}
+		String emailAddress=verifyEmail.getEmail();
 		if (emailData.containsKey(emailAddress)) {
 			VerifyEmailDto emailDto = emailData.get(emailAddress);
+			Optional<User> foundUser = userRepository.findById(Long.parseLong(id));
+			User user = foundUser.get();
 			if (emailDto != null) {
-				if (emailDto.getExpirytime() >= System.currentTimeMillis()) {
+				if (user.getExpirytime() >= System.currentTimeMillis()) {
 					if (verifyEmail.getConfirmationToken().equals(emailDto.getConfirmationToken())) {
-						Optional<User> foundUser = userRepository.findById(Long.parseLong(id));
-						User user = foundUser.get();
+						
 						user.setEnabled("Active");
 						userRepository.save(user);
 						emailData.remove(emailAddress);

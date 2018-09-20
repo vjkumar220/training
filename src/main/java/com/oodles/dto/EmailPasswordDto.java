@@ -1,17 +1,16 @@
 package com.oodles.dto;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 public class EmailPasswordDto {
-	@NotNull
+	@NotBlank
 	  @Pattern(regexp=".+@.+\\.[a-z]+", message="Invalid Mail")
 		private String email;
-	@NotNull
+	@NotBlank
 		private String passToken;
-	@NotNull
-		private Long expirytime;
-		@NotNull(message = "Enter the password")
+	
+	@NotBlank(message = "Enter the password")
 		@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&].{8,}$", message = "The password should have contain minimum 1 lowercase, maximum 1 uppercase, 1 digit and 1 special character(Minimum Length=8) ")
 		private String password;
 		public String getEmail() {
@@ -26,12 +25,7 @@ public class EmailPasswordDto {
 		public void setPassToken(String passToken) {
 			this.passToken = passToken;
 		}
-		public Long getExpirytime() {
-			return expirytime;
-		}
-		public void setExpirytime(Long expirytime) {
-			this.expirytime = expirytime;
-		}
+		
 		public String getPassword() {
 			return password;
 		}

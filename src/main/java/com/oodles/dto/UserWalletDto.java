@@ -2,6 +2,7 @@ package com.oodles.dto;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.oodles.enums.CryptoCoin;
@@ -10,14 +11,14 @@ import com.oodles.enums.CyptoWalletType;
 public class UserWalletDto {
 	@NotNull
 	private Double balance;
-	@NotNull
+	@NotBlank
 	 @Enumerated(EnumType.STRING)
     private CryptoCoin coinName;
 	@NotNull
  private Double shadowBalance;
 	@NotNull
 private Long user_id;
-	@NotNull
+	@NotBlank
 	@Enumerated(EnumType.STRING)
 private CyptoWalletType walletType;
 public Double getBalance() {

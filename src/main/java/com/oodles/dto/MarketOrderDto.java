@@ -1,13 +1,14 @@
 package com.oodles.dto;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.oodles.enums.OrderType;
 
 public class MarketOrderDto {
-	@NotNull
+	@NotBlank
 	private OrderType orderType; 
-	@NotNull
+	@NotBlank
 	private String coinName;
 	@NotNull
 	private Long coinQuantity;

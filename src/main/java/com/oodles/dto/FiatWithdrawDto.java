@@ -1,9 +1,10 @@
 package com.oodles.dto;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class FiatWithdrawDto {
-	@NotNull
+	@NotBlank
 	private Double amount;
 	@NotNull
 	private Long walletId;
