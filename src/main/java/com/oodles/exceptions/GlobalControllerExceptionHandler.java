@@ -1,6 +1,7 @@
 package com.oodles.exceptions;
 
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import javax.validation.ConstraintViolationException;
 
@@ -36,4 +37,26 @@ public class GlobalControllerExceptionHandler {
         LOG.error(ex.getCause().toString());
         return ResponseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, true, "error", null, ex);
     }
+    @ExceptionHandler(value = { NoSuchElementException.class })
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String,Object>  noSuchElementException(Exception ex) {
+        LOG.error(ex.getCause().toString());
+        return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, ex);
+    }
+    @ExceptionHandler(value = { NullPointerException.class })
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String,Object>  nullPointerException(Exception ex) {
+        LOG.error(ex.getCause().toString());
+        return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, ex);
+    }
+    @ExceptionHandler(value = { ResourceNotFoundException.class })
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String,Object>  noresourceFoundException(Exception ex) {
+        LOG.error(ex.getCause().toString());
+        return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, ex);
+    }
+
+    
+    
+    
 }

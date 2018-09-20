@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.oodles.dto.UserDto;
+import com.oodles.exceptions.ResourceNotFoundException;
 import com.oodles.models.User;
 import com.oodles.repository.UserRepository;
 
@@ -66,14 +67,22 @@ public class UserService {
 	 * @param id
 	 * @return
 	 */
-	public User retriveUser(String id)
+	public Map retriveUser(String id)
 	{
+		Map<Object, Optional<User>> result = new HashMap<>();
+		Map<Object, String> output = new HashMap<>();
 		Optional<User> value = userRepository.findById(Long.parseLong(id));
-		
-		User result = value.get();
-		
-      return result;
+		if (value.isPresent()) {
+			result.put("responseMessage", value);
+			return result;
+		}
+		output.put("responseMessage", "Id does not exist");
+		return output;
 }
+	
+	
+	
+	
 	/**
 	 * Update a particular user
 	 * @param id
@@ -100,7 +109,8 @@ public class UserService {
 			newUsers.setMobilenumber(mobilenumber);
 			newUsers.setPassword(password);
 			userRepository.save(newUsers);
-		}		
+		}	
+		 
 		return user;
 	}
 	
@@ -109,20 +119,24 @@ public class UserService {
 	 * @param id
 	 * @return
 	 */
-public  User deleteUser(String id) {
-		
+public  Map deleteUser(String id) {
+	Map<Object, Optional<User>> result = new HashMap<>();
+	Map<Object, String> output = new HashMap<>();
 		Optional<User> user = userRepository.findById(Long.parseLong(id));
-		 User result = user.get();
-		if(user.isPresent()&& (!result.getId().equals(id)))
+		 User results = user.get();
+		if(user.isPresent()&& (!results.getId().equals(id)))
 		{
 			User newUser=new User();
 			
 				
 			userRepository.deleteById(Long.parseLong(id));
-			
+			result.put("responseMessage", user);
+			return result;
 			
 		}
-		return result;
+		output.put("responseMessage", "Id does not exist");
+		return output;
+		
 }
 	
 }

@@ -55,7 +55,7 @@ public class RegistrationController {
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/v1/users/{userid}")
 	public Map getUser(@PathVariable(value = "userid") String id) {
-		User result = null;
+		Map result = null;
 
 		
 			result = userService.retriveUser(id);
@@ -93,7 +93,7 @@ public class RegistrationController {
 	@RequestMapping(method = RequestMethod.DELETE, value = "v1/users/{id}")
 	@ResponseBody
 	public Map deleteUser(@PathVariable String id) {
-		User result = null;
+		Map result = null;
 
 		
 			result = userService.deleteUser(id);

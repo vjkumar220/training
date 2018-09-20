@@ -206,11 +206,12 @@ public class WalletService {
 					fiatDepositRepository.save(deposituser);
 					result.put("responseMessage", "success");
 					return result;
-				}
+				}result.put("responseMessage", "There is no request for Deposit");
+				return result;
 			}
 			result.put("responseMessage", "There is no request for Deposit");
 			return result;
-		}
+		}result.put("responseMessage", "There is no user");
 		return result;
 
 	}
@@ -295,11 +296,13 @@ public class WalletService {
 					cryptoDepositRepository.save(deposituser);
 					result.put("responseMessage", "success");
 					return result;
-				}
+				}result.put("responseMessage", "There is no request for Deposit");
+				return result;
 			}
 			result.put("responseMessage", "There is no request for Deposit");
 			return result;
 		}
+		result.put("responseMessage", "There is no Wallet");
 		return result;
 
 	}
