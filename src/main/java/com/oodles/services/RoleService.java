@@ -28,7 +28,8 @@ private UserRepository userRepository;
 		Map<String, Object> result = new HashMap<String, Object>();
 		Role role = roleRepository.findByroleType(roleType);
 		if(role == null){
-			Role newRole=new Role();
+			
+			Role newRole=new Role("ADMIN");
 			newRole.setRoleType(roleType);	
 			roleRepository.save(newRole);
 			

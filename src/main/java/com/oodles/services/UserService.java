@@ -1,6 +1,7 @@
 package com.oodles.services;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -8,10 +9,11 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.oodles.dto.UserDto;
+import com.oodles.models.Role;
 import com.oodles.models.User;
 import com.oodles.repository.UserRepository;
 
@@ -21,6 +23,8 @@ public class UserService {
 	public static final Logger logger = LoggerFactory.getLogger(UserService.class);
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	/**
 	 * create
 	 * @param user
@@ -40,9 +44,16 @@ public class UserService {
 			newUser.setName(name);
 			newUser.setEmail(email);
 			newUser.setMobilenumber(mobilenumber);
-			newUser.setPassword(password);
+			newUser.setPassword(bCryptPasswordEncoder.encode(password));
 			newUser.setCountry(country);
 			newUser.setEnabled("Inactive");
+			
+			HashSet<Role> roleSet=new HashSet();
+			Role userRole=new Role("USER");
+			
+			roleSet.add(userRole);
+			newUser.setRole(roleSet);
+			
 			userRepository.save(newUser);
 			result.put("responseMessage", "success");
 			return result;

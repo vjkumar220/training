@@ -3,6 +3,7 @@ package com.oodles.models;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,10 +20,16 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long roleId;
     private String roleType;
-    @ManyToMany(mappedBy="role")
+    @ManyToMany(mappedBy="role", fetch = FetchType.EAGER)
     //@JsonBackReference
     @JsonBackReference(value="user-role")
     private Set<User> user;
+    
+    
+	public Role(String roleType) {
+		super();
+		this.roleType = roleType;
+	}
 	public Long getRoleId() {
 		return roleId;
 	}
