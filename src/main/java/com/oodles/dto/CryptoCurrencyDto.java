@@ -2,12 +2,14 @@ package com.oodles.dto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
 public class CryptoCurrencyDto {
 	 
 	@NotBlank
+	
 	private String 	coinName;
     
 	@NotBlank
@@ -19,11 +21,11 @@ public class CryptoCurrencyDto {
     
 	@NotNull
 	@PositiveOrZero
-private Long initialSupply;
+private Double initialSupply;
     
 	@NotNull
 	@PositiveOrZero
-	private Long price;
+	private Double price;
 
 	public String getCoinName() {
 		return coinName;
@@ -49,22 +51,24 @@ private Long initialSupply;
 		this.fees = fees;
 	}
 
-	public Long getInitialSupply() {
+	
+
+	public Double getInitialSupply() {
 		return initialSupply;
 	}
 
-	public void setInitialSupply(Long initialSupply) {
+	public void setInitialSupply(Double initialSupply) {
 		this.initialSupply = initialSupply;
 	}
 
-	public Long getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(Long price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
-    
-    
+
+	
     
 }

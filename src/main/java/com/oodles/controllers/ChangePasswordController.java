@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.dto.EmailPasswordDto;
+import com.oodles.dto.StringConstant;
 import com.oodles.exceptions.ResourceNotFoundException;
 import com.oodles.exceptions.ResponseHandler;
 import com.oodles.services.ForgotPasswordService;
@@ -39,7 +40,7 @@ public class ChangePasswordController {
 		
 			result = verifyemailService.sendMail(id);
 			logger.info("send controller try block");
-			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, StringConstant.Success, null, result);
 		
 	}
 
@@ -57,7 +58,7 @@ public class ChangePasswordController {
 		
 			result = verifyemailService.forgotPassword(verifyEmail);
 			logger.info("Mail verify controller end");
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, StringConstant.Success, null, result);
 		
 	}
 }

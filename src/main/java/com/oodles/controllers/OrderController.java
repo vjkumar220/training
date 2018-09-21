@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,7 +16,7 @@ import com.oodles.dto.BuyOrderDto;
 import com.oodles.dto.MarketOrderDto;
 import com.oodles.dto.OrderDto;
 import com.oodles.dto.SellOrderDto;
-import com.oodles.exceptions.ResourceNotFoundException;
+import com.oodles.dto.StringConstant;
 import com.oodles.exceptions.ResponseHandler;
 import com.oodles.models.BuyOrder;
 import com.oodles.models.SellOrder;
@@ -43,7 +42,7 @@ public class OrderController {
 			logger.info("userWalletDTO =" + orderDTO);
 			result = orderService.createLimitOrder(orderDTO);
 			logger.info("created fiatwallet");
-			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, StringConstant.Success, null, result);
 
 		
 	}
@@ -62,7 +61,7 @@ public class OrderController {
 			logger.info("userWalletDTO =" + marketOrderDTO);
 			result = orderService.createMarketOrder(marketOrderDTO);
 			logger.info("created fiatwallet");
-			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, StringConstant.Success, null, result);
 
 		
 	}
@@ -81,7 +80,7 @@ public class OrderController {
 			logger.info("userWalletDTO =" + orderDTO);
 			result = orderService.createBuyOrder(orderDTO);
 			logger.info("created fiatwallet");
-			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, StringConstant.Success, null, result);
 
 		
 	}
@@ -100,7 +99,7 @@ public class OrderController {
 			logger.info("userWalletDTO =" + orderDTO);
 			result = orderService.createSellOrder(orderDTO);
 			logger.info("created fiatwallet");
-			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, StringConstant.Success, null, result);
 
 	}
 	/**
@@ -110,8 +109,8 @@ public class OrderController {
 	@RequestMapping(method = RequestMethod.GET, value = "/v1/admin/order/sell")
 		
 		public List<SellOrder> viewAllSellOrder() {
-			List<SellOrder> result = orderService.retrieveAllSellOrder();
-			return result;
+			
+			return orderService.retrieveAllSellOrder();
 		}
      
 	/**
@@ -121,7 +120,7 @@ public class OrderController {
 	@RequestMapping(method = RequestMethod.GET, value = "/v1/admin/order/buy")
 		
 		public List<BuyOrder> viewAllBuyOrder() {
-			List<BuyOrder> result = orderService.retrieveAllBuyOrder();
-			return result;
+			
+			return orderService.retrieveAllBuyOrder();
 		}	
 }

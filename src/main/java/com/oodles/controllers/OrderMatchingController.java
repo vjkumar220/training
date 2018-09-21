@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.oodles.dto.StringConstant;
 import com.oodles.exceptions.ResourceNotFoundException;
 import com.oodles.exceptions.ResponseHandler;
 import com.oodles.models.BuyOrder;
@@ -37,7 +38,7 @@ public class OrderMatchingController {
 		Map result = null;
 		
 			result = orderMatchingService.orderMatch();
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, StringConstant.Success, null, result);
 		
 	}}
 	

@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -23,10 +22,10 @@ public class CryptoCurrency {
 	private Long fees;
     
     @NotNull
-private Long initialSupply;
+private Double initialSupply;
     
     @NotNull
-	private Long price;
+	private Double price;
 	public Long getCurrencyId() {
 		return currencyId;
 	}
@@ -51,17 +50,18 @@ private Long initialSupply;
 	public void setFees(Long fees) {
 		this.fees = fees;
 	}
-	public Long getInitialSupply() {
-		return initialSupply;
-	}
-	public void setInitialSupply(Long initialSupply) {
-		this.initialSupply = initialSupply;
-	}
-	public Long getPrice() {
+	
+	public Double getPrice() {
 		return price;
 	}
-	public void setPrice(Long price) {
+	public void setPrice(Double price) {
 		this.price = price;
+	}
+	public Double getInitialSupply() {
+		return initialSupply;
+	}
+	public void setInitialSupply(Double initialSupply) {
+		this.initialSupply = initialSupply;
 	}
 	
 }

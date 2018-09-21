@@ -238,8 +238,8 @@ public class OrderService {
 	 * @return
 	 */
 	public List<BuyOrder> retrieveAllBuyOrder() {
-		List<BuyOrder> result = buyOrderRepository.findAll();
-		return result;
+		
+		return buyOrderRepository.findAll();
 	}
 	/**
 	 *  Get All Sell Order
@@ -247,8 +247,8 @@ public class OrderService {
 	 */
 
 	public List<SellOrder> retrieveAllSellOrder() {
-		List<SellOrder> result = sellOrderRepository.findAll();
-		return result;
+		
+		return sellOrderRepository.findAll();
 	}
 
 }

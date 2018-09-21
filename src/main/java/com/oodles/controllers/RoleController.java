@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oodles.dto.RoleDto;
+import com.oodles.dto.StringConstant;
 import com.oodles.exceptions.ResourceNotFoundException;
 import com.oodles.exceptions.ResponseHandler;
 import com.oodles.services.RoleService;
@@ -33,7 +34,7 @@ public Map createUser(@PathVariable String roleType)  {
 	
 	
 	 result=roleService.createRole(roleType);
-		return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
+		return ResponseHandler.generateResponse(HttpStatus.CREATED, false, StringConstant.Success, null, result);
 	
 }
 /**
@@ -48,7 +49,7 @@ public Map assignRole(@RequestBody RoleDto userRoleDTO)  {
 	
 	
 	 result=roleService.assignRole(userRoleDTO);
-		return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
+		return ResponseHandler.generateResponse(HttpStatus.CREATED, false, StringConstant.Success, null, result);
 	
 }
 }

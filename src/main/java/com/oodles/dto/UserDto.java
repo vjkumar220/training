@@ -20,6 +20,7 @@ public class UserDto {
     
     private String password;
 	 @NotBlank
+	 @Pattern(regexp="[a-z][A-Z]+", message="Enter Alphabet only")
     private String country;
 public String getName() {
 	return name;

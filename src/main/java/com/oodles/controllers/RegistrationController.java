@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.oodles.dto.StringConstant;
 import com.oodles.dto.UserDto;
 import com.oodles.exceptions.ResponseHandler;
 import com.oodles.models.User;
@@ -34,7 +35,7 @@ public class RegistrationController {
 		Map result = null;
 		
 			result = userService.createUser(user);
-			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, StringConstant.Success, null, result);
 	}
 
 	/**
@@ -59,7 +60,7 @@ public class RegistrationController {
 
 		
 			result = userService.retriveUser(id);
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, StringConstant.Success, null, result);
 		
 	}
 
@@ -81,7 +82,7 @@ public class RegistrationController {
 		User user = null;
 		
 			user = userService.updateUser(id, name, email, password, mobilenumber, country);
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, user);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false,StringConstant.Success, null, user);
 		
 	}
 
@@ -97,7 +98,7 @@ public class RegistrationController {
 
 		
 			result = userService.deleteUser(id);
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, StringConstant.Success, null, result);
 		
 	}
 }

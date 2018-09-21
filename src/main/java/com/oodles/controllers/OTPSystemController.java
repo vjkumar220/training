@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.dto.OtpDto;
+import com.oodles.dto.StringConstant;
 import com.oodles.exceptions.ResourceNotFoundException;
 import com.oodles.exceptions.ResponseHandler;
 import com.oodles.services.OTPService;
@@ -25,7 +26,7 @@ public class OTPSystemController {
 		String result = null;
 		
 			result = otpService.sendOTP(userId);
-			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, StringConstant.Success, null, result);
 		
 	}
 	@RequestMapping(value="/v1/user/mobile/verify",method=RequestMethod.PUT)
@@ -33,7 +34,7 @@ public class OTPSystemController {
 		String result = null;
 		
 			result = otpService.verifyOtp(requestOTP);
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, StringConstant.Success, null, result);
 		
 	}
 	}

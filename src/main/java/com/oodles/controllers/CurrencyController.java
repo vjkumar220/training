@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.dto.CryptoCurrencyDto;
+import com.oodles.dto.StringConstant;
 import com.oodles.exceptions.ResponseHandler;
 import com.oodles.models.CryptoCurrency;
 import com.oodles.services.CurrencyService;
@@ -37,7 +38,7 @@ public Map addCurrency(@Valid @RequestBody CryptoCurrencyDto cryptoCurrency)  {
 	Map result=null;
 	
 		 result=currencyService.addCurrency(cryptoCurrency);
-		 return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
+		 return ResponseHandler.generateResponse(HttpStatus.CREATED, false, StringConstant.Success, null, result);
 		
 }
 /**
@@ -46,8 +47,8 @@ public Map addCurrency(@Valid @RequestBody CryptoCurrencyDto cryptoCurrency)  {
  */
 @GetMapping(value = "/v1/admin/currencies")
 public List<CryptoCurrency> viewAllCurrency() {
-	List<CryptoCurrency> result = currencyService.retrieveAllCurrency();
-	return result;
+	
+	return currencyService.retrieveAllCurrency();
 }
 /**
  * Update Currency
@@ -61,12 +62,12 @@ public List<CryptoCurrency> viewAllCurrency() {
  */
 @RequestMapping(method = RequestMethod.PUT, value = "/v1/admin/currencies/{currencyId}/{coinName}/{fees}/{symbol}/{initialSupply}/{price}")
 @ResponseBody
-public Map updateCurrency(@PathVariable Long currencyId,@PathVariable String coinName,@PathVariable Long fees,@PathVariable String symbol,@PathVariable Long initialSupply,@PathVariable Long price)
+public Map updateCurrency(@PathVariable Long currencyId,@PathVariable String coinName,@PathVariable Long fees,@PathVariable String symbol,@PathVariable Double initialSupply,@PathVariable Double price)
 {
 	CryptoCurrency cryptocurrency=null;
 
 	cryptocurrency =currencyService.updateCurrency(currencyId,coinName,fees,symbol,initialSupply,price);
-	return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, cryptocurrency);
+	return ResponseHandler.generateResponse(HttpStatus.OK, false, StringConstant.Success, null, cryptocurrency);
 
 }
 /**
@@ -82,7 +83,7 @@ public Map deleteCurrency(@PathVariable String currencyId)
 		
 		
 		 result=currencyService.deleteCurrency(currencyId);
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false,StringConstant.Success, null, result);
 		
 }
 }

@@ -1,10 +1,8 @@
 package com.oodles.services;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +18,7 @@ import com.oodles.models.BuyTransaction;
 import com.oodles.models.CryptoCurrency;
 import com.oodles.models.CryptoWallet;
 import com.oodles.models.FiatWallet;
+import com.oodles.models.ProfitBook;
 import com.oodles.models.SellOrder;
 import com.oodles.models.SellTransaction;
 import com.oodles.models.User;
@@ -28,6 +27,7 @@ import com.oodles.repository.BuyTransactionRepository;
 import com.oodles.repository.CryptoCurrencyRepository;
 import com.oodles.repository.CryptoWalletRepository;
 import com.oodles.repository.FiatWalletRepository;
+import com.oodles.repository.ProfitBookRepository;
 import com.oodles.repository.SellOrderRepository;
 import com.oodles.repository.SellTransactionRepository;
 
@@ -42,15 +42,14 @@ public class OrderMatchingService {
 	private CryptoCurrencyRepository cryptoCurrencyRepository;
 	@Autowired
 	private FiatWalletRepository fiatWalletRepository;
-
 	@Autowired
 	private CryptoWalletRepository cryptoWalletRepository;
 	@Autowired
 	private BuyTransactionRepository buyTransactionRepository;
-
 	@Autowired
 	private SellTransactionRepository sellTransactionRepository;
-
+    @Autowired
+    private ProfitBookRepository profitBookRepository;
 	public List<BuyOrder> buyList() {
 		List<BuyOrder> result = buyOrderRepository.findAllByStatus(OrderStatus.PENDING);
 
@@ -197,27 +196,29 @@ public class OrderMatchingService {
 								Double updatedbuyerCryptoBalance = currentcryptobalanceofbuyer + noOfCointobesell;
 								buycwType.setBalance(updatedbuyerCryptoBalance);
 								Double currentcryptoShadowbalanceofbuyer = buycwType.getShadowBalance();
-								Double updatedbuyerCryptoShadowBalance = currentcryptoShadowbalanceofbuyer + noOfCointobesell;
+								Double updatedbuyerCryptoShadowBalance = currentcryptoShadowbalanceofbuyer
+										+ noOfCointobesell;
 								buycwType.setShadowBalance(updatedbuyerCryptoShadowBalance);
-								
-								
+
 								cryptoWalletRepository.save(buycwType);
 								// seller fiat balance
 								Double currentfiatbalanceofseller = sellUserId.getFiatwallet().getBalance();
 								Double sellamount = (desiredpriceforsell * noOfCointobesell);
 								Double updatedsellerFiatBalance = currentfiatbalanceofseller + sellamount;
 								sellfwType.setBalance(updatedsellerFiatBalance);
-								
+
 								Double currentfiatShadowbalanceofseller = sellUserId.getFiatwallet().getShadowBalance();
 								Double updatedsellerFiatShadowBalance = currentfiatShadowbalanceofseller + sellamount;
 								sellfwType.setShadowBalance(updatedsellerFiatShadowBalance);
-								
+
 								fiatWalletRepository.save(sellfwType);
 								// seller crypto balance
 								Double currentcryptobalanceofseller = sellcwType.getBalance();
 								Double updatedsellerCryptoBalance = currentcryptobalanceofseller - noOfCointobesell;
 								sellcwType.setBalance(updatedsellerCryptoBalance);
 								cryptoWalletRepository.save(sellcwType);
+								//profit
+								Double profitAmount=buygrossamount-sellamount;
 								// buy and order book maintain
 								Double currentremainingcoinofbuy = buy.getRemainingCoin();
 								Double updateremainingcoinofbuy = currentremainingcoinofbuy - noOfCointobesell;
@@ -251,6 +252,14 @@ public class OrderMatchingService {
 								buyTransaction.setBuyOrder(buy);
 								buyTransaction.setSellOrder(sell);
 								buyTransactionRepository.save(buyTransaction);
+
+								ProfitBook equalcoinprofit=new ProfitBook();
+								equalcoinprofit.setBuyerId(buyerUserId);
+								equalcoinprofit.setFees(fees);
+								equalcoinprofit.setProfitAmount(profitAmount);
+								equalcoinprofit.setSellerId(sellerUserId);
+								profitBookRepository.save(equalcoinprofit);
+								
 								logger.info("for same coin quantity saved");
 								result.put("responseMessage", "success");
 
@@ -268,7 +277,8 @@ public class OrderMatchingService {
 								Double currentcryptobalanceofbuyer = buycwType.getBalance();
 								Double updatedbuyerCryptoBalance = currentcryptobalanceofbuyer + noOfCointobebuy;
 								Double currentcryptoShadowbalanceofbuyer = buycwType.getShadowBalance();
-								Double updatedbuyerCryptoShadowBalance = currentcryptoShadowbalanceofbuyer + noOfCointobebuy;
+								Double updatedbuyerCryptoShadowBalance = currentcryptoShadowbalanceofbuyer
+										+ noOfCointobebuy;
 								buycwType.setBalance(updatedbuyerCryptoBalance);
 								buycwType.setShadowBalance(updatedbuyerCryptoShadowBalance);
 								cryptoWalletRepository.save(buycwType);
@@ -286,6 +296,8 @@ public class OrderMatchingService {
 								Double updatedsellerCryptoBalance = currentcryptobalanceofseller - noOfCointobebuy;
 								sellcwType.setBalance(updatedsellerCryptoBalance);
 								cryptoWalletRepository.save(sellcwType);
+								//Profit
+								Double profitAmount=buygrossamount-sellamount;
 								// buy and order book maintain
 								Double currentremainingcoinofbuy = buy.getRemainingCoin();
 								Double updateremainingcoinofbuy = currentremainingcoinofbuy - noOfCointobebuy;
@@ -320,6 +332,14 @@ public class OrderMatchingService {
 								buyTransaction.setBuyOrder(buy);
 								buyTransaction.setSellOrder(sell);
 								buyTransactionRepository.save(buyTransaction);
+
+								ProfitBook equalcoinprofit=new ProfitBook();
+								equalcoinprofit.setBuyerId(buyerUserId);
+								equalcoinprofit.setFees(fees);
+								equalcoinprofit.setProfitAmount(profitAmount);
+								equalcoinprofit.setSellerId(sellerUserId);
+								profitBookRepository.save(equalcoinprofit);
+								
 								logger.info("for same coin quantity saved");
 								result.put("responseMessage", "success");
 
@@ -334,19 +354,22 @@ public class OrderMatchingService {
 								// buyer cryptowallet balance
 								Double currentcryptobalanceofbuyer = buycwType.getBalance();
 								Double updatedbuyerCryptoBalance = currentcryptobalanceofbuyer + noOfCointobesell;
-								//buyer shadow balance
-								Double currentcryptoshadowbalanceofbuyer=buycwType.getShadowBalance();
-								Double updatedbuyerCryptoshadowbalanceofbuyer=currentcryptoshadowbalanceofbuyer+noOfCointobesell;
+								// buyer shadow balance
+								Double currentcryptoshadowbalanceofbuyer = buycwType.getShadowBalance();
+								Double updatedbuyerCryptoshadowbalanceofbuyer = currentcryptoshadowbalanceofbuyer
+										+ noOfCointobesell;
 								buycwType.setShadowBalance(updatedbuyerCryptoshadowbalanceofbuyer);
 								buycwType.setBalance(updatedbuyerCryptoBalance);
 								cryptoWalletRepository.save(buycwType);
 								// seller fiat balance
 								Double currentfiatbalanceofseller = sellUserId.getFiatwallet().getBalance();
 								Double updatedsellerFiatBalance = currentfiatbalanceofseller + amountforsell;
-								//seller fiat shadow balance
+								// seller fiat shadow balance
 								Double currentfiatShadowbalanceofseller = sellUserId.getFiatwallet().getShadowBalance();
-								Double updatedsellerFiatShadowBalance = currentfiatShadowbalanceofseller + amountforsell;
-								sellfwType.setShadowBalance(updatedsellerFiatShadowBalance);;
+								Double updatedsellerFiatShadowBalance = currentfiatShadowbalanceofseller
+										+ amountforsell;
+								sellfwType.setShadowBalance(updatedsellerFiatShadowBalance);
+								;
 								sellfwType.setBalance(updatedsellerFiatBalance);
 								fiatWalletRepository.save(sellfwType);
 								// seller crypto balance
@@ -354,6 +377,9 @@ public class OrderMatchingService {
 								Double updatedsellerCryptoBalance = currentcryptobalanceofseller - noOfCointobesell;
 								sellcwType.setBalance(updatedsellerCryptoBalance);
 								cryptoWalletRepository.save(sellcwType);
+								//Profit
+								Double profitAmount=grossamountbuy-amountforsell;
+								
 								// buy and order book maintain
 								Double currentremainingcoinofbuy = buy.getRemainingCoin();
 								Double updateremainingcoinofbuy = currentremainingcoinofbuy - noOfCointobesell;
@@ -389,6 +415,16 @@ public class OrderMatchingService {
 								buyTransaction.setBuyOrder(buy);
 								buyTransaction.setSellOrder(sell);
 								buyTransactionRepository.save(buyTransaction);
+								
+								ProfitBook equalcoinprofit=new ProfitBook();
+								equalcoinprofit.setBuyerId(buyerUserId);
+								equalcoinprofit.setFees(fees);
+								equalcoinprofit.setProfitAmount(profitAmount);
+								equalcoinprofit.setSellerId(sellerUserId);
+								profitBookRepository.save(equalcoinprofit);
+								
+								
+								
 								logger.info("for same coin quantity saved");
 								result.put("responseMessage", "success");
 							}
@@ -402,14 +438,3 @@ public class OrderMatchingService {
 
 	}
 }
-
-
-
-
-
-
-
-
-
-
-

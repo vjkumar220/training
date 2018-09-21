@@ -1,18 +1,21 @@
 package com.oodles.models;
 
 public class AuthToken {
-	  private String token;
+	 private String token;
 
 	    public AuthToken(){
 
 	    }
 
-		public String getToken() {
-			return token;
-		}
+	    public AuthToken(String token){
+	        this.token = token;
+	    }
 
-		public void setToken(String token) {
-			this.token = token;
-		}
-	    
+	    public String getToken() {
+	        return token;
+	    }
+
+	    public void setToken(String token) {
+	        this.token = token;
+	    }
 }

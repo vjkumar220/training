@@ -1,10 +1,7 @@
 package com.oodles.config;
-/*package com.oodles.configuration;
 
 
-	import static com.devglan.model.Constants.ACCESS_TOKEN_VALIDITY_SECONDS;
-import static com.devglan.model.Constants.AUTHORITIES_KEY;
-import static com.devglan.model.Constants.SIGNING_KEY;
+
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -12,9 +9,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +22,15 @@ import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import static com.oodles.models.Constants.ACCESS_TOKEN_VALIDITY_SECONDS;
+import static com.oodles.models.Constants.AUTHORITIES_KEY;
+import static com.oodles.models.Constants.SIGNING_KEY;
 	@Component
 	public class TokenProvider implements Serializable {
 
@@ -92,4 +97,3 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 	}
 
-*/

@@ -19,6 +19,7 @@ import com.oodles.dto.CryptoWithdrawDto;
 import com.oodles.dto.FiatApprovalDto;
 import com.oodles.dto.FiatDepositDto;
 import com.oodles.dto.FiatWithdrawDto;
+import com.oodles.dto.StringConstant;
 import com.oodles.exceptions.ResponseHandler;
 import com.oodles.services.WalletService;
 
@@ -41,7 +42,7 @@ public class WalletController {
 			
 			result = walletService.createFiatWallet(userId);
 			logger.info("created fiatwallet");
-			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, StringConstant.Success, null, result);
 
 	}
 
@@ -56,7 +57,7 @@ public class WalletController {
 		Map result = null;
 		
 			result = walletService.createCryptoWallet(cryptoWalletDTO);
-			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, StringConstant.Success, null, result);
 		
 	}
 
@@ -75,7 +76,7 @@ public class WalletController {
 			logger.info("userWalletDTO =" + fiatDepositDTO);
 			result = walletService.createFiatDeposit(fiatDepositDTO);
 			logger.info("created fiatwallet");
-			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, StringConstant.Success, null, result);
 
 	}
 
@@ -92,7 +93,7 @@ public class WalletController {
 		
 			result = walletService.fiatDepositApproval(fiatApprovalDTO);
 			logger.info("Approval controller end");
-			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false,StringConstant.Success, null, result);
 
 		
 	}
@@ -110,7 +111,7 @@ public class WalletController {
 
 			result = walletService.createCryptoDeposit(cryptoDepositDTO);
 
-			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, StringConstant.Success, null, result);
 
 	}
 	/**
@@ -128,7 +129,7 @@ public class WalletController {
 
 			result = walletService.cryptoDepositApproval(cryptoApprovalDTO);
 			logger.info("Approval controller end");
-			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, StringConstant.Success, null, result);
 
 	}
 	/**
@@ -146,7 +147,7 @@ public class WalletController {
 
 			result = walletService.createFiatWithdraw(fiatWithdrawDTO);
 			logger.info("Approval controller end");
-			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false,StringConstant.Success, null, result);
 
 	}
 	/**
@@ -164,7 +165,7 @@ public class WalletController {
 
 			result = walletService.createCryptoWithdraw(cryptoWithdrawDTO);
 			logger.info("Approval controller end");
-			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, StringConstant.Success, null, result);
 
 	}
 

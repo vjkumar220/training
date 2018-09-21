@@ -9,19 +9,43 @@ import javax.persistence.Id;
 public class ProfitBook {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-	private Long bookID;
-	private Double EarnedAmount;
-	public Long getBookID() {
-		return bookID;
+	private Long profitID;
+	
+	private Double ProfitAmount;
+	private Long fees;
+	private Long sellerId;
+	private Long buyerId;
+	public Long getProfitID() {
+		return profitID;
 	}
-	public void setBookID(Long bookID) {
-		this.bookID = bookID;
+	public void setProfitID(Long profitID) {
+		this.profitID = profitID;
 	}
-	public Double getEarnedAmount() {
-		return EarnedAmount;
+	public Double getProfitAmount() {
+		return ProfitAmount;
 	}
-	public void setEarnedAmount(Double earnedAmount) {
-		EarnedAmount = earnedAmount;
+	public void setProfitAmount(Double profitAmount) {
+		ProfitAmount = profitAmount;
 	}
+	public Long getFees() {
+		return fees;
+	}
+	public void setFees(Long fees) {
+		this.fees = fees;
+	}
+	public Long getSellerId() {
+		return sellerId;
+	}
+	public void setSellerId(Long sellerId) {
+		this.sellerId = sellerId;
+	}
+	public Long getBuyerId() {
+		return buyerId;
+	}
+	public void setBuyerId(Long buyerId) {
+		this.buyerId = buyerId;
+	}
+	
+	
 	
 }

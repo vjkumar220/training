@@ -9,13 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.oodles.dto.CryptoCurrencyDto;
+import com.oodles.enums.OrderStatus;
 import com.oodles.models.CryptoCurrency;
+import com.oodles.models.SellOrder;
 import com.oodles.repository.CryptoCurrencyRepository;
+import com.oodles.repository.SellOrderRepository;
 
 @Service
 public class CurrencyService {
 	@Autowired
 	private CryptoCurrencyRepository cryptoCurrencyRepository;
+	@Autowired
+	private SellOrderRepository sellOrderRepository;
 	/**
 	 * Add Currency
 	 * @param cryptoCurrency
@@ -26,8 +31,9 @@ public class CurrencyService {
 		String coinName=cryptoCurrency.getCoinName();
 		String symbol=cryptoCurrency.getSymbol();
 		Long fees=cryptoCurrency.getFees();
-		Long initialSupply=cryptoCurrency.getInitialSupply();
-		Long price=cryptoCurrency.getPrice();
+		Double initialSupply=cryptoCurrency.getInitialSupply();
+		Double price=cryptoCurrency.getPrice();
+		
 		CryptoCurrency cryptoname = cryptoCurrencyRepository.findBycoinName(cryptoCurrency.getCoinName());
 		CryptoCurrency cryptosymbol=cryptoCurrencyRepository.findBySymbol(cryptoCurrency.getSymbol());
 		if(cryptoname == null && cryptosymbol==null){
@@ -38,6 +44,8 @@ public class CurrencyService {
 			currency.setInitialSupply(initialSupply);
 			currency.setPrice(price);
 			cryptoCurrencyRepository.save(currency);
+			
+			
 			result.put("responseMessage", "success");
 		}
 		return result;
@@ -47,8 +55,8 @@ public class CurrencyService {
 	 * @return
 	 */
 	public List<CryptoCurrency> retrieveAllCurrency(){
-		List<CryptoCurrency> result = cryptoCurrencyRepository.findAll();
-		return result;
+		 
+		return cryptoCurrencyRepository.findAll();
 	}
 	/**
 	 * Update Currency
@@ -61,7 +69,7 @@ public class CurrencyService {
 	 * @return
 	 */
 	
-	public CryptoCurrency updateCurrency(Long currencyId,String coinName,Long fees,String symbol,Long initialSupply,Long price)
+	public CryptoCurrency updateCurrency(Long currencyId,String coinName,Long fees,String symbol,Double initialSupply,Double price)
 	{
 		Optional<CryptoCurrency> value=cryptoCurrencyRepository.findById(currencyId);
 		CryptoCurrency cryptocurrency = value.get();
