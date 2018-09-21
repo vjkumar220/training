@@ -32,7 +32,7 @@ public class WithdrawController {
 	 * @return
 	 */
 
-	@PostMapping(value = "/fiat/wallet")
+	@PostMapping(value = "user/fiat/wallet")
 	public Map<String, Object> fiatWithdraw(@Valid @RequestBody FiatWithrawDto fiatWithrawDto) {
 		Map<Object, Object> result = withdrawService.fiatWithdraw(fiatWithrawDto);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
@@ -45,7 +45,7 @@ public class WithdrawController {
 	 * @return
 	 */
 
-	@PostMapping(value = "/crypto/wallet")
+	@PostMapping(value = "user/crypto/wallet")
 	public Map<String, Object> cryptoWithdraw(@Valid @RequestBody CryptoWithdrawDto cryptoWithdrawDto) {
 		Map<Object, Object> result = withdrawService.cryptoWithdraw(cryptoWithdrawDto);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);

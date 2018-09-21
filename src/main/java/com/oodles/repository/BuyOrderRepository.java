@@ -12,4 +12,6 @@ public interface BuyOrderRepository extends JpaRepository<BuyOrder, Long>{
 	
 	List<BuyOrder> findAllByBuyOrderStatus(OrderStatus status);
 
+	BuyOrder findByBuyOrderId(Long buyId);
+
 }

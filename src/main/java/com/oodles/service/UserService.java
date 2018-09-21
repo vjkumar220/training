@@ -1,12 +1,20 @@
 package com.oodles.service;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +28,15 @@ import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 
-@Component("shivam4848@gmail.com")
-@Service
-public class UserService {
+//@Component("shivam4848@gmail.com")
+@Service(value = "userService")
+public class UserService implements UserDetailsService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder bcryptEncoder;
 
 	private static JavaMailSender javaMailSender;
 
@@ -43,6 +54,30 @@ public class UserService {
 	static {
 		Twilio.init(ACCOUNT_SID, AUTH_ID);
 	}
+	
+	
+	
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		System.out.println(username);
+		User user = userRepository.findByEmail(username);
+		System.out.println(user);
+		if (user == null) {
+			throw new UsernameNotFoundException("Invalid username or password.");
+		}
+		return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
+				getAuthority(user));
+	}
+	private Set<SimpleGrantedAuthority> getAuthority(User user) {
+		Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+		user.getRoles().forEach(role -> {
+			// authorities.add(new SimpleGrantedAuthority(role.getName()));
+			authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleType()));
+		});
+		return authorities;
+		// return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+	}
+	
 	/**
 	 * Creating new User
 	 * @param user
@@ -62,7 +97,7 @@ public class UserService {
 			newUser.setName(name);
 			newUser.setEmail(email);
 			newUser.setPhoneNumber(phoneNumber);
-			newUser.setPassword(password);
+			newUser.setPassword(bcryptEncoder.encode(password));
 			newUser.setCountry(country);
 			userRepository.save(newUser);
 			result.put("responseMessage", "Welcome to our Trade Exchnage");

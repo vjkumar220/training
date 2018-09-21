@@ -9,7 +9,7 @@ public class UserDto {
 	
 	@NotNull(message = "Enter the name")
 	@Size(min = 2, message = "Name should have atleast 2 characters")
-	@Pattern(regexp = "{A-Za-z}*" , message =  "Only enter the characters in the name")
+	@Pattern(regexp = "[A-Za-z]+" , message =  "Only enter the characters in the name")
 	private String name;
 	@NotNull(message = "Enter the email")
 	@Email(message = "Enter Valid Email Id")
@@ -32,6 +32,7 @@ public class UserDto {
 	private String phoneNumber;
 	@NotNull(message = "Enter the country")
 	@Size(min = 2, message = "Enter the valid country name")
+	@Pattern(regexp = "[A-Za-z]+" , message =  "Only enter the characters in the name")
 	private String country;
 	public String getName() {
 		return name;

@@ -1,14 +1,24 @@
-package com.oodles.service;
+package com.oodles.domain;
 
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-
+@Entity
 public class ProfitTable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long profitId;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+	private Date profitOn;
 	
 	@NotNull
 	private Double profitAmount;
@@ -71,6 +81,14 @@ public class ProfitTable {
 
 	public void setTotalProfit(Double totalProfit) {
 		this.totalProfit = totalProfit;
+	}
+
+	public Date getProfitOn() {
+		return profitOn;
+	}
+
+	public void setProfitOn(Date profitOn) {
+		this.profitOn = profitOn;
 	}
 	
 	

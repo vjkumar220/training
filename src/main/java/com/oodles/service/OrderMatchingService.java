@@ -15,6 +15,7 @@ import com.oodles.domain.BuyTransaction;
 import com.oodles.domain.CryptoCurrency;
 import com.oodles.domain.CryptoWallet;
 import com.oodles.domain.FiatWallet;
+import com.oodles.domain.ProfitTable;
 import com.oodles.domain.SellOrder;
 import com.oodles.domain.SellTransaction;
 import com.oodles.enumeration.CryptoName;
@@ -24,6 +25,7 @@ import com.oodles.repository.BuyTransactionRepository;
 import com.oodles.repository.CryptoCurrencyRepository;
 import com.oodles.repository.CryptoWalletRepository;
 import com.oodles.repository.FiatWalletRepository;
+import com.oodles.repository.ProfitTableRepository;
 import com.oodles.repository.SellOrderRepository;
 import com.oodles.repository.SellTransactionRepository;
 
@@ -45,6 +47,8 @@ public class OrderMatchingService {
 	private BuyTransactionRepository buyTransactionRepository;
 	@Autowired
 	private FiatWalletRepository fiatWalletRepository;
+	@Autowired
+	private ProfitTableRepository profitTableRepository;
 
 	public List<BuyOrder> buyList() {
 		List<BuyOrder> result = buyOrderRepository.findAllByBuyOrderStatus(OrderStatus.PENDING);
@@ -201,6 +205,9 @@ public class OrderMatchingService {
 								sellerFiatWallet.setShadowBalance(sellerUpdatedShadowBalance);
 								// seller crypto wallet
 								sellerCryptoWallet.setBalance(updatedSellerCryptoBalance);
+								//profit for Admin
+								Double profitAmount = ((buyCoinQuantity * desiredBuyPrice) - (sellerCoinQuantity * desiredSellerPrice));
+								Double totalProfit = (profitAmount + fee);
 								SellTransaction sellTransaction = new SellTransaction();
 								sellTransaction.setBuyerId(buyerId);
 								sellTransaction.setSellerId(sellerId);
@@ -225,6 +232,13 @@ public class OrderMatchingService {
 								buyTransaction.setSellOrder(sellOrder);
 								buyTransaction.setStatus(OrderStatus.COMPLETED.toString());
 								buyTransaction.setTransationFee(fee);
+								ProfitTable profitTable = new ProfitTable();
+								profitTable.setBuyerId(buyerId);
+								profitTable.setFees(fee);
+								profitTable.setProfitAmount(profitAmount);
+								profitTable.setSellerId(sellerId);
+								profitTable.setTotalProfit(totalProfit);
+								profitTableRepository.save(profitTable);
 								sellOrderRepository.save(sellOrder);
 								buyOrderRepository.save(buyOrder);
 								buyTransactionRepository.save(buyTransaction);
@@ -235,23 +249,6 @@ public class OrderMatchingService {
 								fiatWalletRepository.save(buyerFiatWallet);
 								return "Your exact order is matched";
 							} 
-
-							else if (buyOrder.getRemainingBuyCoinQuantity() > sellOrder.getRemainingSellCoinQuantity()) {
-								//buyer pending 
-								
-								//Buyer Fiat Balance
-								
-								
-								SellTransaction sellTransaction = new SellTransaction();
-								
-							}
-							
-							else if(buyOrder.getRemainingBuyCoinQuantity() < sellOrder.getRemainingSellCoinQuantity()) {
-								
-								
-								
-								
-							}
 
 						}
 

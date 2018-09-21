@@ -54,12 +54,12 @@ public class GlobalControllerExceptionHandler {
 		return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, null);
 	}
 
-	@ExceptionHandler(value = { ResourceNotFoundException.class })
+	/*@ExceptionHandler(value = { ResourceNotFoundException.class })
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public Map<String, Object> noresourceFoundException(Exception ex) {
 		LOG.error(ex.getCause().toString());
 		return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Id does not exist", null, null);
-	}
+	}*/
 	
 	@ExceptionHandler(value = { ResourceNotFoundException.class })
 	@ResponseStatus(HttpStatus.NOT_FOUND)

@@ -31,7 +31,7 @@ public class User implements Serializable {
 	private Long id;
 	@NotNull(message = "Enter the name")
 	@Size(min = 2, message = "Name should have atleast 2 characters")
-	@Pattern(regexp = "{A-Za-z}*")
+	@Pattern(regexp = "[A-Za-z]+" , message =  "Only enter the characters in the name")
 	private String name;
 	@NotNull(message = "Enter the email")
 	@Email(message = "Enter Valid Email Id")
@@ -50,6 +50,7 @@ public class User implements Serializable {
 	private String phoneNumber;
 	@NotNull(message = "Enter the country")
 	@Size(min = 2, message = "Enter the valid country name")
+	@Pattern(regexp = "[A-Za-z]+" , message =  "Only enter the characters in the name")
 	private String country;
 
 	private String status = "inactive";
@@ -69,7 +70,7 @@ public class User implements Serializable {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<FiatDeposit> fiatDeposit;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "roleId"))
 	private Set<Role> roles;
 
