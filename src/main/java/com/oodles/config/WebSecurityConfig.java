@@ -23,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Resource(name = "userService")
+    @Resource(name = "userDetailService")
     private UserDetailsService userDetailsService;
 
     @Autowired
@@ -49,8 +49,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().
-                authorizeRequests()
-                .antMatchers("/token/*", "/signup").permitAll()
+                authorizeRequests()                
+             /*   .antMatchers("/v1/user/**").hasRole("USER")
+                .antMatchers("/v1/admin/**").hasRole("ADMIN")*/
+                .antMatchers("/token/*", "/v1/user/signup").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()

@@ -6,15 +6,16 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.config.TokenProvider;
 import com.oodles.models.AuthToken;
 import com.oodles.models.LoginUser;
 import com.oodles.services.UserService;
-
-import static  com.oodles.models.Constants.TOKEN_PREFIX;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/token")
