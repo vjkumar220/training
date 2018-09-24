@@ -24,7 +24,7 @@ import com.oodles.enumeration.CryptoName;
 public class CryptoWallet implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long cryptoWalletId;
 	private Double shadowBalance;
 	private Double balance;

@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 public class User implements Serializable {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	@NotNull(message = "Enter the name")
 	@Size(min = 2, message = "Name should have atleast 2 characters")
@@ -79,6 +79,10 @@ public class User implements Serializable {
 	private String emailCode;
 	
 	private String passToken;
+	
+	private Long expiryTimeOfOtp;
+	
+	private Long expiryTimeOfEmail;
 
 	
 	public Long getId() {
@@ -208,6 +212,20 @@ public class User implements Serializable {
 	public void setSellOrder(Set<SellOrder> sellOrder) {
 		this.sellOrder = sellOrder;
 	}
-	
-	
+
+	public long getExpiryTimeOfOtp() {
+		return expiryTimeOfOtp;
+	}
+
+	public void setExpiryTimeOfOtp(long expiryTimeOfOtp) {
+		this.expiryTimeOfOtp = expiryTimeOfOtp;
+	}
+
+	public long getExpiryTimeOfEmail() {
+		return expiryTimeOfEmail;
+	}
+
+	public void setExpiryTimeOfEmail(long expiryTimeOfEmail) {
+		this.expiryTimeOfEmail = expiryTimeOfEmail;
+	}
 }

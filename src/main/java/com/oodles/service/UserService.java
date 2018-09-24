@@ -15,14 +15,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import com.oodles.domain.Role;
 import com.oodles.domain.User;
 import com.oodles.dto.EmailDto;
 import com.oodles.dto.EmailVerifyDto;
 import com.oodles.dto.OtpDto;
 import com.oodles.dto.UserDto;
+import com.oodles.repository.RoleRepository;
 import com.oodles.repository.UserRepository;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
@@ -34,7 +35,10 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
+	@Autowired
+	private RoleRepository roleRepository;
+
 	@Autowired
 	private BCryptPasswordEncoder bcryptEncoder;
 
@@ -47,16 +51,14 @@ public class UserService implements UserDetailsService {
 
 	private Map<String, OtpDto> otp_data = new HashMap<>();
 	private Map<String, EmailDto> email_data = new HashMap<>();
-	private String id ;
+	private String id;
 	// get it from properties file
 	private final static String ACCOUNT_SID = "ACe2f058ec28715b76bdeaac2da52d1324";
 	private final static String AUTH_ID = "66384b401747451a0cf47404f3ae8d4c";
 	static {
 		Twilio.init(ACCOUNT_SID, AUTH_ID);
 	}
-	
-	
-	
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		System.out.println(username);
@@ -68,18 +70,18 @@ public class UserService implements UserDetailsService {
 		return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
 				getAuthority(user));
 	}
+
 	private Set<SimpleGrantedAuthority> getAuthority(User user) {
 		Set<SimpleGrantedAuthority> authorities = new HashSet<>();
 		user.getRoles().forEach(role -> {
-			// authorities.add(new SimpleGrantedAuthority(role.getName()));
 			authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleType()));
 		});
 		return authorities;
-		// return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
 	}
-	
+
 	/**
 	 * Creating new User
+	 * 
 	 * @param user
 	 * @return
 	 */
@@ -93,22 +95,30 @@ public class UserService implements UserDetailsService {
 		User userEmail = userRepository.findByEmail(email);
 		User userNumber = userRepository.findByPhoneNumber(phoneNumber);
 		if (userEmail == null && userNumber == null) {
+			Role role = roleRepository.findByRoleType("USER");
 			User newUser = new User();
+			HashSet<Role> roleSet = new HashSet<>();
+			roleSet.add(role);
+			HashSet<User> userSet = new HashSet<>();
+			userSet.add(newUser);
 			newUser.setName(name);
 			newUser.setEmail(email);
 			newUser.setPhoneNumber(phoneNumber);
 			newUser.setPassword(bcryptEncoder.encode(password));
 			newUser.setCountry(country);
+			newUser.setRoles(roleSet);
+			role.setUsers(userSet);
 			userRepository.save(newUser);
 			result.put("responseMessage", "Welcome to our Trade Exchnage");
 			return result;
 		}
-		result.put("responseMessage", "Mail or phone number is present");
+		result.put("responseMessage", "e-Mail or phone number is alredy present");
 		return result;
 	}
 
 	/**
-	 *  get all users
+	 * get all users
+	 * 
 	 * @return
 	 */
 	public List<User> retrieveAllUser() {
@@ -120,9 +130,10 @@ public class UserService implements UserDetailsService {
 	 * @param id
 	 * @return
 	 */
-/*	public Optional<User> 
-	}*/
-	
+	/*
+	 * public Optional<User> }
+	 */
+
 	public Map findUserById(String id) {
 		Map<Object, Optional<User>> result = new HashMap<>();
 		Map<Object, String> output = new HashMap<>();
@@ -134,9 +145,9 @@ public class UserService implements UserDetailsService {
 		output.put("responseMessage", "User Not found");
 		return output;
 	}
-		
 
-	/** delete user by id
+	/**
+	 * delete user by id
 	 * 
 	 * @param id
 	 * @return
@@ -153,7 +164,8 @@ public class UserService implements UserDetailsService {
 	}
 
 	/**
-	 *  update user
+	 * update user
+	 * 
 	 * @param id
 	 * @param name
 	 * @param email
@@ -162,80 +174,113 @@ public class UserService implements UserDetailsService {
 	 * @param country
 	 * @return
 	 */
-	public User updateUser(String id, String name, String email, String password, String phoneNumber, String country) {
-		Optional<User> value = userRepository.findById(Long.parseLong(id));
-		User user = value.get();
-		if (value.isPresent() && (!user.getName().equalsIgnoreCase(name)) && (!user.getEmail().equalsIgnoreCase(email))
-				&& (!user.getPassword().equalsIgnoreCase(password))
-				&& (!user.getPhoneNumber().equalsIgnoreCase(phoneNumber))) {
-			user.setName(name);
-			user.setCountry(country);
-			user.setEmail(email);
-			user.setPhoneNumber(phoneNumber);
-			user.setPassword(password);
-			userRepository.save(user);
+
+	public Map updateUserFeilds(Long userId, String name, String email, String password, String phoneNumber,
+			String country) {
+		Map<Object, Object> result = new HashMap<>();
+		Optional<User> userValue = userRepository.findById(userId);
+		if (userValue.isPresent()) {
+			User user = userValue.get();
+			if (name.equalsIgnoreCase(null)) {
+				user.setCountry(country);
+				user.setEmail(email);
+				user.setPhoneNumber(phoneNumber);
+				user.setPassword(password);
+				userRepository.save(user);
+				result.put("responseMessage", "Your");
+
+			}
 		}
-		return user;
+		result.put("resposeMessage", "User Not Found");
+		return result;
 	}
 
-	public Map updateUserRow(String id, String name, String email, String password, String phoneNumber, String country) {
+	public Map updateUser(String id, String name, String email, String password, String phoneNumber, String country) {
 		Map<Object, Object> result = new HashMap<>();
 		Optional<User> value = userRepository.findById(Long.parseLong(id));
-		if(value.isPresent()) {
+		User user = value.get();
+		if (value.isPresent()) {
+			if ((!user.getName().equalsIgnoreCase(name)) && (!user.getEmail().equalsIgnoreCase(email))
+					&& (!user.getPassword().equalsIgnoreCase(password))
+					&& (!user.getPhoneNumber().equalsIgnoreCase(phoneNumber))) {
+				user.setName(name);
+				user.setCountry(country);
+				user.setEmail(email);
+				user.setPhoneNumber(phoneNumber);
+				user.setPassword(password);
+				userRepository.save(user);
+			}
+		}
+		result.put("responseMessage", "User Not Found");
+		return result;
+	}
+
+	public Map updateUserRow(String id, String name, String email, String password, String phoneNumber,
+			String country) {
+		Map<Object, Object> result = new HashMap<>();
+		Optional<User> value = userRepository.findById(Long.parseLong(id));
+		if (value.isPresent()) {
 			User user = value.get();
-			if(name!=null) {
+			if (name != null) {
 				user.setName(name);
 				userRepository.save(user);
 				result.put("responseMessageForName", "User name is update");
 				return result;
-			}
-			else if(email != null) {
-				
+			} else if (email != null) {
+
 				user.setEmail(email);
 				userRepository.save(user);
 				result.put("responseMessageForEmail", "Name of the is update");
 				return result;
 			}
-			
-			
+
 		}
 		result.put("responseMessage", "User Is Not found");
 		return result;
 	}
+
 	/**
 	 * Send OTP
+	 * 
 	 * @param userId
 	 * @return
 	 */
 	public String sendOTP(String userId) {
 		Optional<User> value = userRepository.findById(Long.parseLong(userId));
-		User user = value.get();
-		if (value.isPresent() && user.getPhoneNumber() != null) {
-			String otpCode = String.valueOf((int) (Math.random() * (10000 - 1000)) + 1000);
-			OtpDto otp = new OtpDto();
-			otp.setMobileNumber(user.getPhoneNumber());
-			otp.setOtp(String.valueOf(otpCode));
-			otp.setExpirytime(System.currentTimeMillis() + 500000);
-			user.setMobileCode(otpCode);
-			userRepository.save(user);
-			otp_data.put(user.getPhoneNumber(), otp);
-			id = userId;
-			Message.creator(new PhoneNumber("+918700153661"), new PhoneNumber("+19852384430"),
-					"Your OTP is" + "" + otp.getOtp()).create();
-			return "Your OTP send successfully..!!";
+		if (value.isPresent()) {
+			User user = value.get();
+			if (user.getPhoneNumber() != null) {
+				String otpCode = String.valueOf((int) (Math.random() * (10000 - 1000)) + 1000);
+				long expiryTimeOfOtp = System.currentTimeMillis() + 500000;
+				OtpDto otp = new OtpDto();
+				otp.setMobileNumber(user.getPhoneNumber());
+				otp.setOtp(String.valueOf(otpCode));
+				otp.setExpirytime(expiryTimeOfOtp);
+				user.setMobileCode(otpCode);
+				user.setExpiryTimeOfOtp(expiryTimeOfOtp);
+				userRepository.save(user);
+				otp_data.put(user.getPhoneNumber(), otp);
+				id = userId;
+				Message.creator(new PhoneNumber("+918700153661"), new PhoneNumber("+19852384430"),
+						"Your OTP is" + "" + otp.getOtp()).create();
+				return "Your OTP send successfully..!!";
+			}
+			return "Phone Number not Present";
 		}
 		return "User not found";
 	}
 
 	/**
-	 *  verify otp
+	 * verify otp
+	 * 
 	 * @param mobilenumber
 	 * @param requestOTP
 	 * @return
 	 */
-	public String verifyOtp(String mobilenumber, OtpDto requestOTP) {
+	public String verifyOtp(String mobilenumber, Long OTP) {
+		OtpDto requestOTP = new OtpDto();
 		User mobileNumber = userRepository.findByPhoneNumber(requestOTP.getMobileNumber());
-		if (requestOTP.getOtp() == null || requestOTP.getOtp().trim().length() <= 0) {
+		if (OTP == null) {
 			return "Please provide OTP";
 		}
 		if (otp_data.containsKey(mobilenumber)) {
@@ -256,7 +301,8 @@ public class UserService implements UserDetailsService {
 	}
 
 	/**
-	 *  Send mail
+	 * Send mail
+	 * 
 	 * @param userId
 	 * @return
 	 */
@@ -284,7 +330,8 @@ public class UserService implements UserDetailsService {
 	}
 
 	/**
-	 *  Verify Email
+	 * Verify Email
+	 * 
 	 * @param email
 	 * @param verifyEmail
 	 * @return
@@ -321,7 +368,8 @@ public class UserService implements UserDetailsService {
 	}
 
 	/**
-	 *  Forget Password sending verification password
+	 * Forget Password sending verification password
+	 * 
 	 * @param userId
 	 * @return
 	 */
@@ -349,7 +397,8 @@ public class UserService implements UserDetailsService {
 	}
 
 	/**
-	 *  Updating Password by sending verification mail
+	 * Updating Password by sending verification mail
+	 * 
 	 * @param email
 	 * @param verifyEmail
 	 * @return

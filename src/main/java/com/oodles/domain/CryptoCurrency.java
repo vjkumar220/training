@@ -22,7 +22,7 @@ import com.oodles.enumeration.CryptoName;
 public class CryptoCurrency {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long currencyId;
 	
 	@NotNull

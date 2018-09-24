@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class SellTransaction {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long sellTransactionId;
 
 	private Double coinQuantity;

@@ -1,6 +1,7 @@
 package com.oodles.controller;
 
-import java.util.HashMap;
+import static com.oodles.util.Constants.SUCCESS;
+
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -14,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.dto.CryptoWithdrawDto;
 import com.oodles.dto.FiatWithrawDto;
-import com.oodles.exception.ResourceNotFoundException;
 import com.oodles.service.WithdrawService;
 import com.oodles.util.ResponseHandler;
+
 
 @RestController
 @RequestMapping("/withdraw")
@@ -35,7 +36,7 @@ public class WithdrawController {
 	@PostMapping(value = "user/fiat/wallet")
 	public Map<String, Object> fiatWithdraw(@Valid @RequestBody FiatWithrawDto fiatWithrawDto) {
 		Map<Object, Object> result = withdrawService.fiatWithdraw(fiatWithrawDto);
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, result);
 	}
 
 	/**
@@ -48,7 +49,7 @@ public class WithdrawController {
 	@PostMapping(value = "user/crypto/wallet")
 	public Map<String, Object> cryptoWithdraw(@Valid @RequestBody CryptoWithdrawDto cryptoWithdrawDto) {
 		Map<Object, Object> result = withdrawService.cryptoWithdraw(cryptoWithdrawDto);
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, result);
 
 	}
 }

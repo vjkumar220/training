@@ -113,7 +113,6 @@ public class OrderMatchingService {
 					String coinName = listBuyOrder.getBuyCoinName();
 					CryptoName coinNameValue = CryptoName.valueOf(coinName);
 					CryptoCurrency cryptoCurrency = cryptoCurrencyRepository.findByCoinName(coinNameValue);
-
 					log.info(" both the coinName matched");
 
 					if (listBuyOrder.getBuyPrice().equals(listSellOrder.getSellPrice())) {

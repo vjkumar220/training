@@ -26,7 +26,7 @@ import com.oodles.enumeration.OrderStatus;
 public class SellOrder {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long sellOrderId;
 	@Enumerated(EnumType.STRING)
 	private OrderStatus sellOrderStatus;

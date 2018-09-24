@@ -1,5 +1,7 @@
 package com.oodles.controller;
 
+import static com.oodles.util.Constants.SUCCESS;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +23,9 @@ import com.oodles.dto.ApprovalDto;
 import com.oodles.dto.CryptoApprovalDto;
 import com.oodles.dto.CryptoDepositDto;
 import com.oodles.dto.FiatDepositDto;
-import com.oodles.exception.ResourceNotFoundException;
 import com.oodles.service.DepositService;
 import com.oodles.util.ResponseHandler;
+
 
 @RestController
 @RequestMapping(value = "/v1")
@@ -44,7 +46,7 @@ public class DepositController {
 	public Map<String, Object> createFiatDeposit(@Valid @RequestBody FiatDepositDto depositDto) {
 		Map<Object, Object> result = new HashMap<>();
 		result = depositService.fiatDeposit(depositDto);
-		return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
+		return ResponseHandler.generateResponse(HttpStatus.CREATED, false, SUCCESS, null, result);
 	}
 
 	/**
@@ -56,7 +58,7 @@ public class DepositController {
 	@GetMapping(value = "admin/pending/request")
 	public Map<String, Object> getAllPendingReq() {
 		List<FiatDeposit> pendingList = depositService.getAllPendingRequest();
-		return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, pendingList);
+		return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, pendingList);
 
 	}
 
@@ -70,7 +72,7 @@ public class DepositController {
 	@PostMapping(value = "admin/approve/fiat/deposit")
 	public Map<String, Object> approveFiatDepositRequest(@Valid @RequestBody ApprovalDto approvalDto) {
 		Map<Object, Object> result = depositService.approveDeposit(approvalDto);
-		return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+		return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, result);
 	}
 
 	/**
@@ -83,7 +85,7 @@ public class DepositController {
 	@PostMapping(value = "user/crypto/deposit")
 	public Map<String, Object> createCryptoDeposit(@Valid @RequestBody CryptoDepositDto cryptoDepositDto) {
 		Map<Object, Object> result = depositService.cryptoDeposit(cryptoDepositDto);
-		return ResponseHandler.generateResponse(HttpStatus.CREATED, false, "success", null, result);
+		return ResponseHandler.generateResponse(HttpStatus.CREATED, false, SUCCESS, null, result);
 
 	}
 
@@ -97,6 +99,6 @@ public class DepositController {
 	@PostMapping(value = "admin/approve/crypto/deposit")
 	public Map<String, Object> approveCryptoDepositRequest(@Valid @RequestBody CryptoApprovalDto cryptoApprovalDto) {
 		Map<Object, Object> result = depositService.approveCryptoRequest(cryptoApprovalDto);
-		return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, result);
+		return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, result);
 	}
 }

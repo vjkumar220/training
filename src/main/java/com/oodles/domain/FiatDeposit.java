@@ -26,7 +26,7 @@ import com.oodles.enumeration.DepositStatus;
 public class FiatDeposit {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long depositId;
 	@NotNull
 	@Min(value = 0, message = " Enter amount is greater than zero")

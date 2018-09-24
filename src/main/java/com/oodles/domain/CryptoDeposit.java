@@ -16,7 +16,7 @@ import com.oodles.enumeration.DepositStatus;
 @Entity
 public class CryptoDeposit {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long cryptoDepositId;
 	
 	private String coinType;

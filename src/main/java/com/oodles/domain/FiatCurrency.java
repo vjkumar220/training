@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class FiatCurrency implements Serializable{
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long currencyId;
 	@NotNull
 	private String 	coinName;
