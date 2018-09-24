@@ -29,7 +29,7 @@ private UserRepository userRepository;
 		Role role = roleRepository.findByroleType(roleType);
 		if(role == null){
 			
-			Role newRole=new Role("ADMIN");
+			Role newRole=new Role();
 			newRole.setRoleType(roleType);	
 			roleRepository.save(newRole);
 			

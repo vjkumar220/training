@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.oodles.dto.EnableDto;
 import com.oodles.dto.UserDto;
 import com.oodles.models.Role;
 import com.oodles.models.User;
+import com.oodles.repository.RoleRepository;
 import com.oodles.repository.UserRepository;
 
 
@@ -25,6 +27,8 @@ public class UserService {
 	private UserRepository userRepository;
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	private RoleRepository roleRepository;
 	/**
 	 * create
 	 * @param user
@@ -40,7 +44,14 @@ public class UserService {
 		User useremail = userRepository.findByEmail(user.getEmail());
 		User usermobilenumber=userRepository.findByMobilenumber(user.getMobilenumber());
 		if(useremail == null&&usermobilenumber==null){
-			User newUser=new User();
+			Role role = roleRepository.findByroleType("USER");
+			User newUser = new User();
+			HashSet<Role> roleSet = new HashSet<>();
+			roleSet.add(role);
+			
+			HashSet<User> userSet = new HashSet<>();
+			userSet.add(newUser);
+			//User newUser=new User();
 			newUser.setName(name);
 			newUser.setEmail(email);
 			newUser.setMobilenumber(mobilenumber);
@@ -48,12 +59,17 @@ public class UserService {
 			newUser.setCountry(country);
 			newUser.setEnabled("Inactive");
 			
+			newUser.setRole(roleSet);
+			role.setUser(userSet);
+			
+			
+			/*
 			HashSet<Role> roleSet=new HashSet();
 			Role userRole=new Role("USER");
 			
 			roleSet.add(userRole);
 			newUser.setRole(roleSet);
-			
+			*/
 			userRepository.save(newUser);
 			result.put("responseMessage", "success");
 			return result;
@@ -149,5 +165,24 @@ public  Map deleteUser(String id) {
 		return output;
 		
 }
+
+public Map<String, Object> enableUser(EnableDto userEnableDTO) {
 	
+	Map<String, Object> result = new HashMap<String, Object>();
+	String newstatus = userEnableDTO.getStatus().toString();
+	Long userId = userEnableDTO.getUserId();
+	Optional<User> value=userRepository.findById(userId);
+	 User user = value.get();
+	 if(value.isPresent())
+	 {
+		 
+			
+		 user.setEnabled(newstatus);
+			 userRepository.save(user);
+			 result.put("responseMessage", "Success");
+				return result;
+	 }result.put("responseMessage", "user id does not exist");
+	return result;
+
+}
 }

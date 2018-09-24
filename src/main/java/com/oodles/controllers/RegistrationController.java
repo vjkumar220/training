@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.oodles.dto.EnableDto;
 import com.oodles.dto.StringConstant;
 import com.oodles.dto.UserDto;
 import com.oodles.exceptions.ResponseHandler;
@@ -100,5 +101,17 @@ public class RegistrationController {
 			result = userService.deleteUser(id);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, StringConstant.Success, null, result);
 		
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/v1/admin/users/action")
+
+	public Map enableUser(@RequestBody EnableDto enableDTO) {
+		
+		Map result = null;
+		
+
+			result = userService.enableUser(enableDTO);
+			
+			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, StringConstant.Success, null, result);
+
 	}
 }

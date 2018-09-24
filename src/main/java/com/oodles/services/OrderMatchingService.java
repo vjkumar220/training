@@ -369,7 +369,7 @@ public class OrderMatchingService {
 								Double updatedsellerFiatShadowBalance = currentfiatShadowbalanceofseller
 										+ amountforsell;
 								sellfwType.setShadowBalance(updatedsellerFiatShadowBalance);
-								;
+								
 								sellfwType.setBalance(updatedsellerFiatBalance);
 								fiatWalletRepository.save(sellfwType);
 								// seller crypto balance

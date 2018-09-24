@@ -26,10 +26,7 @@ public class Role {
     private Set<User> user;
     
     
-	public Role(String roleType) {
-		super();
-		this.roleType = roleType;
-	}
+	
 	public Long getRoleId() {
 		return roleId;
 	}
