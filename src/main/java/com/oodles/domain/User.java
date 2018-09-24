@@ -40,7 +40,7 @@ public class User implements Serializable {
 	// in this regexp checking atleast one upper and lower cases, number, special
 	// char
 	@NotNull(message = "Enter the password")
-	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&].{8,}$", message = " Enter Password Valid password")
+	@Pattern(regexp = "^.*(?=.{8,})(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$", message = " Enter Password Valid password")
 	private String Password;
 
 	// In this regexp we checking phone number length 10 and number starting with
@@ -84,7 +84,6 @@ public class User implements Serializable {
 	
 	private Long expiryTimeOfEmail;
 
-	
 	public Long getId() {
 		return id;
 	}
@@ -157,6 +156,30 @@ public class User implements Serializable {
 		this.cryptoWallets = cryptoWallets;
 	}
 
+	public Set<BuyOrder> getBuyOrder() {
+		return buyOrder;
+	}
+
+	public void setBuyOrder(Set<BuyOrder> buyOrder) {
+		this.buyOrder = buyOrder;
+	}
+
+	public Set<SellOrder> getSellOrder() {
+		return sellOrder;
+	}
+
+	public void setSellOrder(Set<SellOrder> sellOrder) {
+		this.sellOrder = sellOrder;
+	}
+
+	public Set<FiatDeposit> getFiatDeposit() {
+		return fiatDeposit;
+	}
+
+	public void setFiatDeposit(Set<FiatDeposit> fiatDeposit) {
+		this.fiatDeposit = fiatDeposit;
+	}
+
 	public Set<Role> getRoles() {
 		return roles;
 	}
@@ -181,14 +204,6 @@ public class User implements Serializable {
 		this.emailCode = emailCode;
 	}
 
-	public Set<FiatDeposit> getFiatDeposit() {
-		return fiatDeposit;
-	}
-
-	public void setFiatDeposit(Set<FiatDeposit> fiatDeposit) {
-		this.fiatDeposit = fiatDeposit;
-	}
-
 	public String getPassToken() {
 		return passToken;
 	}
@@ -197,35 +212,20 @@ public class User implements Serializable {
 		this.passToken = passToken;
 	}
 
-	public Set<BuyOrder> getBuyOrder() {
-		return buyOrder;
-	}
-
-	public void setBuyOrder(Set<BuyOrder> buyOrder) {
-		this.buyOrder = buyOrder;
-	}
-
-	public Set<SellOrder> getSellOrder() {
-		return sellOrder;
-	}
-
-	public void setSellOrder(Set<SellOrder> sellOrder) {
-		this.sellOrder = sellOrder;
-	}
-
-	public long getExpiryTimeOfOtp() {
+	public Long getExpiryTimeOfOtp() {
 		return expiryTimeOfOtp;
 	}
 
-	public void setExpiryTimeOfOtp(long expiryTimeOfOtp) {
+	public void setExpiryTimeOfOtp(Long expiryTimeOfOtp) {
 		this.expiryTimeOfOtp = expiryTimeOfOtp;
 	}
 
-	public long getExpiryTimeOfEmail() {
+	public Long getExpiryTimeOfEmail() {
 		return expiryTimeOfEmail;
 	}
 
-	public void setExpiryTimeOfEmail(long expiryTimeOfEmail) {
+	public void setExpiryTimeOfEmail(Long expiryTimeOfEmail) {
 		this.expiryTimeOfEmail = expiryTimeOfEmail;
 	}
+
 }

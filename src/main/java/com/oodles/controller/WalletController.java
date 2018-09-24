@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.dto.CryptoWalletDto;
@@ -18,6 +19,7 @@ import com.oodles.service.WalletService;
 import com.oodles.util.ResponseHandler;
 
 @RestController
+@RequestMapping("/v1")
 public class WalletController {
 	Logger logger = LoggerFactory.getLogger(WalletController.class);
 	@Autowired

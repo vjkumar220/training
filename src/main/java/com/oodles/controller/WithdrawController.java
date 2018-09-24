@@ -20,7 +20,7 @@ import com.oodles.util.ResponseHandler;
 
 
 @RestController
-@RequestMapping("/withdraw")
+@RequestMapping("/v1")
 public class WithdrawController {
 
 	@Autowired
@@ -33,7 +33,7 @@ public class WithdrawController {
 	 * @return
 	 */
 
-	@PostMapping(value = "user/fiat/wallet")
+	@PostMapping(value = "user/withdraw/fiat/wallet")
 	public Map<String, Object> fiatWithdraw(@Valid @RequestBody FiatWithrawDto fiatWithrawDto) {
 		Map<Object, Object> result = withdrawService.fiatWithdraw(fiatWithrawDto);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, result);
@@ -46,7 +46,7 @@ public class WithdrawController {
 	 * @return
 	 */
 
-	@PostMapping(value = "user/crypto/wallet")
+	@PostMapping(value = "user/withdraw/crypto/wallet")
 	public Map<String, Object> cryptoWithdraw(@Valid @RequestBody CryptoWithdrawDto cryptoWithdrawDto) {
 		Map<Object, Object> result = withdrawService.cryptoWithdraw(cryptoWithdrawDto);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, result);

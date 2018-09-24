@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -29,9 +31,9 @@ import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 
-//@Component("shivam4848@gmail.com")
 @Service(value = "userService")
 public class UserService implements UserDetailsService {
+	Logger log = LoggerFactory.getLogger(UserService.class);
 
 	@Autowired
 	private UserRepository userRepository;
@@ -51,7 +53,8 @@ public class UserService implements UserDetailsService {
 
 	private Map<String, OtpDto> otp_data = new HashMap<>();
 	private Map<String, EmailDto> email_data = new HashMap<>();
-	private String id;
+	private Map<String, EmailVerifyDto> email_data_pass = new HashMap<>();
+	private Long id;
 	// get it from properties file
 	private final static String ACCOUNT_SID = "ACe2f058ec28715b76bdeaac2da52d1324";
 	private final static String AUTH_ID = "66384b401747451a0cf47404f3ae8d4c";
@@ -61,9 +64,8 @@ public class UserService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		System.out.println(username);
+		log.info("User name"+username);
 		User user = userRepository.findByEmail(username);
-		System.out.println(user);
 		if (user == null) {
 			throw new UsernameNotFoundException("Invalid username or password.");
 		}
@@ -245,8 +247,8 @@ public class UserService implements UserDetailsService {
 	 * @param userId
 	 * @return
 	 */
-	public String sendOTP(String userId) {
-		Optional<User> value = userRepository.findById(Long.parseLong(userId));
+	public String sendOTP(Long userId) {
+		Optional<User> value = userRepository.findById(userId);
 		if (value.isPresent()) {
 			User user = value.get();
 			if (user.getPhoneNumber() != null) {
@@ -255,12 +257,11 @@ public class UserService implements UserDetailsService {
 				OtpDto otp = new OtpDto();
 				otp.setMobileNumber(user.getPhoneNumber());
 				otp.setOtp(String.valueOf(otpCode));
-				otp.setExpirytime(expiryTimeOfOtp);
+				//otp.setExpirytime(expiryTimeOfOtp);
 				user.setMobileCode(otpCode);
 				user.setExpiryTimeOfOtp(expiryTimeOfOtp);
 				userRepository.save(user);
 				otp_data.put(user.getPhoneNumber(), otp);
-				id = userId;
 				Message.creator(new PhoneNumber("+918700153661"), new PhoneNumber("+19852384430"),
 						"Your OTP is" + "" + otp.getOtp()).create();
 				return "Your OTP send successfully..!!";
@@ -277,18 +278,29 @@ public class UserService implements UserDetailsService {
 	 * @param requestOTP
 	 * @return
 	 */
-	public String verifyOtp(String mobilenumber, Long OTP) {
-		OtpDto requestOTP = new OtpDto();
-		User mobileNumber = userRepository.findByPhoneNumber(requestOTP.getMobileNumber());
-		if (OTP == null) {
+	public String verifyOtp(OtpDto requestOTP) {
+		if (requestOTP.getOtp() == null || requestOTP.getOtp().trim().length() <= 0) {
 			return "Please provide OTP";
-		}
-		if (otp_data.containsKey(mobilenumber)) {
-			OtpDto otp = otp_data.get(mobilenumber);
+			}
+		User user = userRepository.findByPhoneNumber(requestOTP.getMobileNumber());
+		Long expiryTime = user.getExpiryTimeOfOtp();
+		String otpCode = user.getMobileCode();
+		if (otp_data.containsKey(requestOTP.getMobileNumber()) ) {
+			OtpDto otp = otp_data.get(requestOTP.getMobileNumber());
 			if (otp != null) {
-				if (otp.getExpirytime() >= System.currentTimeMillis()) {
+				if (user.getExpiryTimeOfOtp() >= System.currentTimeMillis()) {
 					if (requestOTP.getOtp().equals(otp.getOtp())) {
-
+						Optional<User> value = userRepository.findById(user.getId());
+						if (value.isPresent()) {
+							User user1 = value.get();
+							String emailCode = user1.getEmailCode();
+							String mobileCode = user1.getMobileCode();
+							if (emailCode != null && mobileCode != null) {
+								user1.setStatus("active");
+								userRepository.save(user);
+							}
+						}
+						otp_data.remove(requestOTP.getMobileNumber());
 						return "OTP is verified successfully";
 					}
 					return "OTP is invalid";
@@ -306,15 +318,16 @@ public class UserService implements UserDetailsService {
 	 * @param userId
 	 * @return
 	 */
-	public String sendMail(String userId) {
-		Optional<User> value = userRepository.findById(Long.parseLong(userId));
+	public String sendMail(Long userId) {
+		Optional<User> value = userRepository.findById(userId);
 		User user = value.get();
 		String emailTo = user.getEmail();
 		String otpCode = String.valueOf((int) (Math.random() * (10000 - 1000)) + 1000);
 		String body = "Your Verification OTP-" + otpCode;
+		Long expiryTimeOfEmail = (System.currentTimeMillis() + 200000);
 		EmailDto verifyEmail = new EmailDto();
 		verifyEmail.setEmail(emailTo);
-		verifyEmail.setExpirytime(System.currentTimeMillis() + 200000);
+		//verifyEmail.setExpirytime( expiryTimeOfEmail);
 		verifyEmail.setOtp(otpCode);
 		email_data.put(emailTo, verifyEmail);
 		SimpleMailMessage mail = new SimpleMailMessage();
@@ -323,8 +336,8 @@ public class UserService implements UserDetailsService {
 		mail.setSubject("Please verify your OTP");
 		mail.setText(body);
 		user.setEmailCode(otpCode);
+		user.setExpiryTimeOfEmail(expiryTimeOfEmail);
 		userRepository.save(user);
-		id = userId;
 		javaMailSender.send(mail);
 		return "Your verification code has been send to your mail";
 	}
@@ -340,12 +353,13 @@ public class UserService implements UserDetailsService {
 		if (verifyEmail.getOtp() == null || verifyEmail.getOtp().trim().length() <= 0) {
 			return "Please provide Verification code";
 		}
+		User newUser = userRepository.findByEmail(verifyEmail.getEmail());
 		if (email_data.containsKey(email)) {
 			EmailDto emailDto = email_data.get(email);
 			if (emailDto != null) {
-				if (emailDto.getExpirytime() >= System.currentTimeMillis()) {
+				if (newUser.getExpiryTimeOfEmail() >= System.currentTimeMillis()) {
 					if (verifyEmail.getOtp().equals(emailDto.getOtp())) {
-						Optional<User> value = userRepository.findById(Long.parseLong(id));
+						Optional<User> value = userRepository.findById(newUser.getId());
 						if (value.isPresent()) {
 							User user = value.get();
 							String emailCode = user.getEmailCode();
@@ -373,17 +387,17 @@ public class UserService implements UserDetailsService {
 	 * @param userId
 	 * @return
 	 */
-	public String forgetPassword(String userId) {
-		Optional<User> value = userRepository.findById(Long.parseLong(userId));
+	public String forgetPassword(Long userId) {
+		Optional<User> value = userRepository.findById(userId);
 		User user = value.get();
 		String emailTo = user.getEmail();
 		String otpCode = String.valueOf((int) (Math.random() * (10000 - 1000)) + 1000);
 		String body = "Your Verification OTP code for reset password -" + otpCode;
-		EmailDto verifyEmail = new EmailDto();
+		EmailVerifyDto verifyEmail = new EmailVerifyDto();
 		verifyEmail.setEmail(emailTo);
 		verifyEmail.setExpirytime(System.currentTimeMillis() + 200000);
 		verifyEmail.setOtp(otpCode);
-		email_data.put(emailTo, verifyEmail);
+		email_data_pass.put(emailTo, verifyEmail);
 		SimpleMailMessage mail = new SimpleMailMessage();
 		mail.setFrom("shivam4848@gmail.com");
 		mail.setTo(emailTo);
@@ -409,11 +423,11 @@ public class UserService implements UserDetailsService {
 			return "Please provide Verification code";
 		}
 		if (email_data.containsKey(email)) {
-			EmailDto emailDto = email_data.get(email);
+			EmailVerifyDto emailDto = email_data_pass.get(email);
 			if (emailDto != null) {
 				if (emailDto.getExpirytime() >= System.currentTimeMillis()) {
 					if (verifyEmail.getOtp().equals(emailDto.getOtp())) {
-						Optional<User> foundUser = userRepository.findById(Long.parseLong(id));
+						Optional<User> foundUser = userRepository.findById(id);
 						User user = foundUser.get();
 						user.setPassword(password);
 						userRepository.save(user);

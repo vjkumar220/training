@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,7 +34,7 @@ import com.oodles.service.UserService;
 import com.oodles.util.ResponseHandler;;
 
 @RestController
-//@RequestMapping("v1")
+/*@RequestMapping("/v1")*/
 public class UserController {
 	Logger logger = LoggerFactory.getLogger(UserController.class);
 	@Autowired
@@ -56,7 +57,7 @@ public class UserController {
 	 * 
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ADMIN')")
+	//@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = "/admin/users")
 	public Map<String, Object> viewAllUsers() {
 		List<User> output = userService.retrieveAllUser();
@@ -69,7 +70,7 @@ public class UserController {
 	 * @param id
 	 * @return
 	 */
-	@PreAuthorize("hasRole('USER')")
+	//@PreAuthorize("hasRole('USER')")
 	@GetMapping(value = "/user/{userId}")
 	public Map<String, Object> findUserById(@PathVariable String userId) {
 		Map result = userService.findUserById(userId);
@@ -122,14 +123,14 @@ public class UserController {
 	 * @return
 	 */
 	@PostMapping(value = "user/send/otp/{userId}")
-	public Map<String, Object> sendOtp(@PathVariable String userId) {
+	public Map<String, Object> sendOtp(@PathVariable Long userId) {
 		String result = userService.sendOTP(userId);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, result);
 	}
 
-	@PutMapping(value = "user/veify/otp/mobileNumber")
-	public Map<String, Object> verifyOtp(@PathVariable String mobileNumber, @RequestParam Long OTP) {
-		String result = userService.verifyOtp(mobileNumber,OTP);
+	@PutMapping(value = "user/veify/otp/")
+	public Map<String, Object> verifyOtp(@RequestBody OtpDto requestOTP) {
+		String result = userService.verifyOtp(requestOTP);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, result);
 	}
 
@@ -141,7 +142,7 @@ public class UserController {
 	 */
 
 	@PostMapping(value = "user/send/verification/mail/{userId}")
-	public Map<String, Object> sendMail(@PathVariable String userId) {
+	public Map<String, Object> sendMail(@PathVariable Long userId) {
 		logger.info("Mail controller send mail");
 		String result = userService.sendMail(userId);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, result);
@@ -162,7 +163,7 @@ public class UserController {
 
 	// Sending Mail for Reset password
 	@PostMapping(value = "user/verification/mail/forget/password/userId/{userId}")
-	public Map<String, Object> forgetPasswordMail(@PathVariable String userId) {
+	public Map<String, Object> forgetPasswordMail(@PathVariable Long userId) {
 
 		String result = userService.forgetPassword(userId);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, result);

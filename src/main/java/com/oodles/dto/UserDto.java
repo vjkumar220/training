@@ -20,7 +20,7 @@ public class UserDto {
 	 * char
 	 */
 	@NotNull(message = "Enter the atlest 8 character and Enter the atlest one upper case , lower case , special symbol and number ")
-	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&].{8,}$", message = " Enter Password Valid password")
+	@Pattern(regexp = "^.*(?=.{8,})(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$", message = " Enter Password Valid password")
 	private String Password;
 
 	/**
