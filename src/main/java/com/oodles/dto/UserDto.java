@@ -22,6 +22,9 @@ public class UserDto {
 	 @NotBlank
 	 @Pattern(regexp="[a-zA-Z]+", message="Enter Alphabet only")
     private String country;
+	
+	 
+	 
 public String getName() {
 	return name;
 }

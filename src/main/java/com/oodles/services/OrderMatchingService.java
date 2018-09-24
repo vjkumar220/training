@@ -240,6 +240,8 @@ public class OrderMatchingService {
 								sellTransaction.setStatus(TransactionStatus.COMPLETED);
 								sellTransaction.setBuyOrder(buy);
 								sellTransaction.setSellOrder(sell);
+								sellTransaction.setBuyerId(buyerUserId);
+								sellTransaction.setSellerId(sellerUserId);
 								sellTransactionRepository.save(sellTransaction);
 								BuyTransaction buyTransaction = new BuyTransaction();
 								buyTransaction.setCoinQuantity(noOfCointobesell);
@@ -251,6 +253,8 @@ public class OrderMatchingService {
 								buyTransaction.setStatus(TransactionStatus.COMPLETED);
 								buyTransaction.setBuyOrder(buy);
 								buyTransaction.setSellOrder(sell);
+								buyTransaction.setBuyerId(buyerUserId);
+								buyTransaction.setSellerId(sellerUserId);
 								buyTransactionRepository.save(buyTransaction);
 
 								ProfitBook equalcoinprofit=new ProfitBook();
@@ -320,6 +324,8 @@ public class OrderMatchingService {
 								sellTransaction.setStatus(TransactionStatus.COMPLETED);
 								sellTransaction.setBuyOrder(buy);
 								sellTransaction.setSellOrder(sell);
+								sellTransaction.setBuyerId(buyerUserId);
+								sellTransaction.setSellerId(sellerUserId);
 								sellTransactionRepository.save(sellTransaction);
 								BuyTransaction buyTransaction = new BuyTransaction();
 								buyTransaction.setCoinQuantity(noOfCointobebuy);
@@ -331,6 +337,8 @@ public class OrderMatchingService {
 								buyTransaction.setStatus(TransactionStatus.COMPLETED);
 								buyTransaction.setBuyOrder(buy);
 								buyTransaction.setSellOrder(sell);
+								buyTransaction.setBuyerId(buyerUserId);
+								buyTransaction.setSellerId(sellerUserId);
 								buyTransactionRepository.save(buyTransaction);
 
 								ProfitBook equalcoinprofit=new ProfitBook();
@@ -403,6 +411,8 @@ public class OrderMatchingService {
 								sellTransaction.setStatus(TransactionStatus.COMPLETED);
 								sellTransaction.setBuyOrder(buy);
 								sellTransaction.setSellOrder(sell);
+								sellTransaction.setBuyerId(buyerUserId);
+								sellTransaction.setSellerId(sellerUserId);
 								sellTransactionRepository.save(sellTransaction);
 								BuyTransaction buyTransaction = new BuyTransaction();
 								buyTransaction.setCoinQuantity(noOfCointobebuy);
@@ -414,6 +424,8 @@ public class OrderMatchingService {
 								buyTransaction.setStatus(TransactionStatus.COMPLETED);
 								buyTransaction.setBuyOrder(buy);
 								buyTransaction.setSellOrder(sell);
+								buyTransaction.setBuyerId(buyerUserId);
+								buyTransaction.setSellerId(sellerUserId);
 								buyTransactionRepository.save(buyTransaction);
 								
 								ProfitBook equalcoinprofit=new ProfitBook();

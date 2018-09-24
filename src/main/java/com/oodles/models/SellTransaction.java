@@ -26,7 +26,8 @@ public class SellTransaction {
 		 private Double netAmount;
 		private Long fees;
 		 private Double grossAmount;
-		 
+		 private Long buyerId;
+		 private Long sellerId;
 		 @ManyToOne(fetch = FetchType.LAZY)
 		    @JoinColumn(name = "sellerorderid", nullable = false)
 		 @JsonBackReference(value="selltransaction-sellorder")
@@ -117,6 +118,22 @@ public class SellTransaction {
 
 		public void setBuyOrder(BuyOrder buyOrder) {
 			this.buyOrder = buyOrder;
+		}
+
+		public Long getBuyerId() {
+			return buyerId;
+		}
+
+		public void setBuyerId(Long buyerId) {
+			this.buyerId = buyerId;
+		}
+
+		public Long getSellerId() {
+			return sellerId;
+		}
+
+		public void setSellerId(Long sellerId) {
+			this.sellerId = sellerId;
 		}
 	
 		

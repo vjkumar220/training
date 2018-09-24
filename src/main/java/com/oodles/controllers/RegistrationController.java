@@ -60,7 +60,7 @@ public class RegistrationController {
 		Map result = null;
 
 		
-			result = userService.retriveUser(id);
+			result = userService.retrieveUser(id);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, StringConstant.Success, null, result);
 		
 	}

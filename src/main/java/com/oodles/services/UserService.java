@@ -94,7 +94,7 @@ public class UserService {
 	 * @param id
 	 * @return
 	 */
-	public Map retriveUser(String id)
+	public Map retrieveUser(String id)
 	{
 		Map<Object, Optional<User>> result = new HashMap<>();
 		Map<Object, String> output = new HashMap<>();
