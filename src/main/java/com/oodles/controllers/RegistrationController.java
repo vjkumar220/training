@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,6 +56,7 @@ public class RegistrationController {
 	 * @param id
 	 * @return
 	 */
+	@CrossOrigin(origins = {"http://localhost:4200","http://localhost:8080"})
 	@RequestMapping(method = RequestMethod.GET, value = "/v1/admin/users/{userid}")
 	public Map getUser(@PathVariable(value = "userid") String id) {
 		Map result = null;

@@ -8,6 +8,8 @@ import javax.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -55,8 +57,18 @@ public class GlobalControllerExceptionHandler {
         LOG.error(ex.getCause().toString());
         return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "No Resource found", null, null);
     }
-
-    
+    @ExceptionHandler(value = { AuthenticationException.class })
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String,Object>  authenticationException(Exception ex) {
+        LOG.error(ex.getCause().toString());
+        return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Not Authenticated", null, null);
+    }
+    @ExceptionHandler(value = { AccessDeniedException.class })
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String,Object>  accessDeniedException(Exception ex) {
+        LOG.error(ex.getCause().toString());
+        return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Access is denied", null, null);
+    }
     
     
 }
