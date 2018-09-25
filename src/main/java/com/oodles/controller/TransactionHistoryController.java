@@ -18,19 +18,18 @@ import com.oodles.service.TransactionHistoryService;
 import com.oodles.util.ResponseHandler;
 
 @RestController
-@RequestMapping(value = "/v1")
 public class TransactionHistoryController {
 	
 	@Autowired
 	private TransactionHistoryService transactionHistoryService;
 	
-	@GetMapping(value = "user/transaction/history/buyer/{buyerId}")
+	@GetMapping(value = "v1/user/transaction/history/buyer/{buyerId}")
 	public Map<String, Object> buyerHistory(@PathVariable Long buyerId) {
 		List<BuyTransaction> output = transactionHistoryService.buyTransactionHistory(buyerId);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, output);
 	}
 	
-	@GetMapping(value = "user/transaction/history/seller/{sellerId}")
+	@GetMapping(value = "v1/user/transaction/history/seller/{sellerId}")
 	public Map<String, Object> sellerHistory(@PathVariable Long sellerId) {
 		List<SellTransaction> output = transactionHistoryService.sellTransactionHistory(sellerId);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, output);

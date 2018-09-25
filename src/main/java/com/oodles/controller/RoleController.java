@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.domain.Role;
+import com.oodles.dto.RoleDto;
 import com.oodles.dto.UserRoleDto;
 import com.oodles.service.RoleService;
 import com.oodles.util.ResponseHandler;
 
 @RestController
-@RequestMapping(value = "/v1")
 public class RoleController {
 	Logger logger = LoggerFactory.getLogger(UserController.class);
 	@Autowired
@@ -31,8 +31,8 @@ public class RoleController {
 	 * @param role
 	 * @return
 	 */
-	@PostMapping(value = "admin/role")
-	public Map<String, Object> createUser(@Valid @RequestBody Role role) {
+	@PostMapping(value = "v1/admin/role")
+	public Map<String, Object> createUser(@Valid @RequestBody RoleDto role) {
 		Map<Object, Object> output = roleService.createRole(role);
 		return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, output);
 	}
@@ -43,7 +43,7 @@ public class RoleController {
 	 * @param userRoleDto
 	 * @return
 	 */
-	@PostMapping(value = "admin/assign/role")
+	@PostMapping(value = "v1/admin/assign/role")
 	public Map<String, Object> assingRoleToUser(@RequestBody UserRoleDto userRoleDto) {
 		Map<Object, Object> output = roleService.assignRole(userRoleDto);
 		return ResponseHandler.generateResponse(HttpStatus.OK, false, "success", null, output);

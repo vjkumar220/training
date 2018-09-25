@@ -19,7 +19,6 @@ import com.oodles.service.WalletService;
 import com.oodles.util.ResponseHandler;
 
 @RestController
-@RequestMapping("/v1")
 public class WalletController {
 	Logger logger = LoggerFactory.getLogger(WalletController.class);
 	@Autowired
@@ -31,7 +30,7 @@ public class WalletController {
 	 * @param cryptoWallet
 	 * @return
 	 */
-	@PostMapping(value = "user/create/crypto/wallet")
+	@PostMapping(value = "v1/user/create/crypto/wallet")
 	public Map<String, Object> createCryptoWallet(@RequestBody CryptoWalletDto cryptoWallet) {
 		Map<String, Object> result = walletService.createCryptoWallet(cryptoWallet);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, result);
@@ -43,7 +42,7 @@ public class WalletController {
 	 * @param fiatWalletDto
 	 * @return
 	 */
-	@PostMapping(value = "user/create/fiat/wallet")
+	@PostMapping(value = "v1/user/create/fiat/wallet")
 	public Map<String, Object> createFiatWallet(@RequestBody FiatWalletDto fiatWalletDto) {
 		Map<String, Object> result = walletService.createFiatWallet(fiatWalletDto);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, result);

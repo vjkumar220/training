@@ -19,7 +19,6 @@ import com.oodles.service.OrderService;
 import com.oodles.util.ResponseHandler;
 
 @RestController
-@RequestMapping("/v1")
 public class OrderController {
 
 	@Autowired
@@ -32,7 +31,7 @@ public class OrderController {
 	 * @return
 	 */
 
-	@PostMapping(value = "user/buy/order")
+	@PostMapping(value = "v1/user/buy/order")
 	public Map<String, Object> buyOrderGenerated(@Valid @RequestBody BuyOrderDto buyOrderDto) {
 		String result = orderService.buyOrder(buyOrderDto);
 		return ResponseHandler.generateResponse(HttpStatus.CREATED, false, SUCCESS, null, result);
@@ -44,7 +43,7 @@ public class OrderController {
 	 * @param sellOrderDto
 	 * @return
 	 */
-	@PostMapping(value = "user/sell/order")
+	@PostMapping(value = "v1/user/sell/order")
 	public Map<String, Object> sellOrderGenerated(@Valid @RequestBody SellOrderDto sellOrderDto) {
 		String result = orderService.sellOrder(sellOrderDto);
 		return ResponseHandler.generateResponse(HttpStatus.CREATED, false, SUCCESS, null, result);

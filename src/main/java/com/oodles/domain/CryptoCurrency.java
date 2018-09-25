@@ -28,7 +28,7 @@ public class CryptoCurrency {
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private CryptoName coinName;
-	@NotNull
+	@NotBlank
 	private String symbol;
 	@NotNull
 	private Double fees;

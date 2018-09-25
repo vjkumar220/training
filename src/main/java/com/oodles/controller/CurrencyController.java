@@ -28,7 +28,7 @@ import com.oodles.util.ResponseHandler;
 
 
 @RestController
-@RequestMapping(value = "/v1")
+@RequestMapping(value = "")
 public class CurrencyController {
 
 	@Autowired
@@ -43,7 +43,7 @@ public class CurrencyController {
 	 * @param cryptoCurrency
 	 * @return
 	 */
-	@PostMapping(value = "admin/currency/crypto")
+	@PostMapping(value = "v1/admin/currency/crypto")
 	public Map<String, Object> createCryptoCurrency(@Valid @RequestBody CryptoCurrencyDto cryptoCurrency) {
 		Map<Object, Object> result = cryptoCurrencyService.createCurrency(cryptoCurrency);
 		return ResponseHandler.generateResponse(HttpStatus.CREATED, false, SUCCESS, null, result);
@@ -55,7 +55,7 @@ public class CurrencyController {
 	 * @param fiatCurrency
 	 * @return
 	 */
-	@PostMapping(value = "admin/currency/fiat/currency")
+	@PostMapping(value = "v1/admin/currency/fiat/currency")
 	public Map<String, Object> createFiatCurrency(@Valid @RequestBody FiatCurrencyDto fiatCurrency) {
 		Map<Object, Object> result = fiatCurrencyService.createFiatCurrency(fiatCurrency);
 		return ResponseHandler.generateResponse(HttpStatus.CREATED, false, SUCCESS, null, result);
@@ -63,7 +63,7 @@ public class CurrencyController {
 
 	// Getting all existing currency
 
-	@GetMapping("admin/crypto/currencies")
+	@GetMapping("v1/admin/crypto/currencies")
 	public Map<String, Object> getAllCryptoCurrency() {
 		List<CryptoCurrency> currencyList = cryptoCurrencyService.getAllCurrency();
 		return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, currencyList);
@@ -77,14 +77,14 @@ public class CurrencyController {
 	 * @return
 	 */
 
-	@DeleteMapping("admin/crypto/currency/{currencyId}")
+	@DeleteMapping("v1/admin/crypto/currency/{currencyId}")
 	public Map<String, Object> deleteCryptoCurrency(@PathVariable String currencyId) {
 		String result = cryptoCurrencyService.deleteCurrency(currencyId);
 		return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, result);
 
 	}
 
-	@PutMapping(value = "admin/currency/crypto/{currencyID}/fees/{fees}/initialSupply/{initialSupply}/price/{price}")
+	@PutMapping(value = "v1/admin/currency/crypto/{currencyID}/fees/{fees}/initialSupply/{initialSupply}/price/{price}")
 	public Map<String, Object> updateCryptoCurrency(@RequestParam Long currencyId, @RequestParam Double fees,
 			@RequestParam Double initialSupply, @RequestParam Double price) {
 		 String result = cryptoCurrencyService.updateCryptoCurrency(currencyId, fees, initialSupply, price);

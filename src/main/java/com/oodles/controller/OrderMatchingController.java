@@ -14,7 +14,6 @@ import com.oodles.service.OrderMatchingService;
 import com.oodles.util.ResponseHandler;
 
 @RestController
-@RequestMapping(value = "/v1")
 public class OrderMatchingController {
 
 	@Autowired
@@ -30,7 +29,7 @@ public class OrderMatchingController {
 		return orderMatchingService.buyList();
 	}*/
 
-	@GetMapping("admin/orderMatching")
+	@GetMapping("v1/admin/orderMatching")
 	public Map<String, Object> orderMatching() {
 		String output = orderMatchingService.orderMatch();
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, output);

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.oodles.domain.Role;
 import com.oodles.domain.User;
+import com.oodles.dto.RoleDto;
 import com.oodles.dto.UserRoleDto;
 import com.oodles.repository.RoleRepository;
 import com.oodles.repository.UserRepository;
@@ -26,7 +27,7 @@ public class RoleService {
 	 * @param role
 	 * @return
 	 */
-	public Map<Object, Object> createRole(Role role) {
+	public Map<Object, Object> createRole(RoleDto role) {
 		Map<Object, Object> result = new HashMap<>();
 		String roleType = role.getRoleType();
 		Role userRoleype = roleRepository.findByRoleType(roleType);

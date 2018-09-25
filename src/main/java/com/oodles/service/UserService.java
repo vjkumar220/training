@@ -64,7 +64,7 @@ public class UserService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		log.info("User name"+username);
+		log.info("User name" + username);
 		User user = userRepository.findByEmail(username);
 		if (user == null) {
 			throw new UsernameNotFoundException("Invalid username or password.");
@@ -257,7 +257,7 @@ public class UserService implements UserDetailsService {
 				OtpDto otp = new OtpDto();
 				otp.setMobileNumber(user.getPhoneNumber());
 				otp.setOtp(String.valueOf(otpCode));
-				//otp.setExpirytime(expiryTimeOfOtp);
+				// otp.setExpirytime(expiryTimeOfOtp);
 				user.setMobileCode(otpCode);
 				user.setExpiryTimeOfOtp(expiryTimeOfOtp);
 				userRepository.save(user);
@@ -281,11 +281,11 @@ public class UserService implements UserDetailsService {
 	public String verifyOtp(OtpDto requestOTP) {
 		if (requestOTP.getOtp() == null || requestOTP.getOtp().trim().length() <= 0) {
 			return "Please provide OTP";
-			}
+		}
 		User user = userRepository.findByPhoneNumber(requestOTP.getMobileNumber());
 		Long expiryTime = user.getExpiryTimeOfOtp();
 		String otpCode = user.getMobileCode();
-		if (otp_data.containsKey(requestOTP.getMobileNumber()) ) {
+		if (otp_data.containsKey(requestOTP.getMobileNumber())) {
 			OtpDto otp = otp_data.get(requestOTP.getMobileNumber());
 			if (otp != null) {
 				if (user.getExpiryTimeOfOtp() >= System.currentTimeMillis()) {
@@ -327,7 +327,7 @@ public class UserService implements UserDetailsService {
 		Long expiryTimeOfEmail = (System.currentTimeMillis() + 200000);
 		EmailDto verifyEmail = new EmailDto();
 		verifyEmail.setEmail(emailTo);
-		//verifyEmail.setExpirytime( expiryTimeOfEmail);
+		// verifyEmail.setExpirytime( expiryTimeOfEmail);
 		verifyEmail.setOtp(otpCode);
 		email_data.put(emailTo, verifyEmail);
 		SimpleMailMessage mail = new SimpleMailMessage();
@@ -443,4 +443,28 @@ public class UserService implements UserDetailsService {
 		return "Email Address is not found";
 	}
 
+	/**
+	 * Changing status of a User by admin
+	 */
+
+	public Map<Object, Object> statusChange(Long userId, String status) {
+		Map<Object, Object> result = new HashMap<>();
+		Optional<User> findUser = userRepository.findById(userId);
+		if (findUser.isPresent()) {
+			User user = findUser.get();
+			String userStatus = user.getStatus();
+			if (userStatus.equalsIgnoreCase(status)) {
+				result.put("responseMessage", "User is alredy" + status);
+				return result;
+			} else {
+				user.setStatus(status);
+				userRepository.save(user);
+				result.put("responseMessage", "User status is updated to" + status);
+				return result;
+			}
+		}
+		result.put("responseMessage", "User Not FOund");
+		return result;
+
+	}
 }
