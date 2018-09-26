@@ -31,6 +31,8 @@ import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 
+import javassist.tools.rmi.ObjectNotFoundException;
+
 @Service(value = "userService")
 public class UserService implements UserDetailsService {
 	Logger log = LoggerFactory.getLogger(UserService.class);
@@ -40,12 +42,14 @@ public class UserService implements UserDetailsService {
 	private RoleRepository roleRepository;
 	@Autowired
 	private BCryptPasswordEncoder bcryptEncoder;
-	
+
 	private static JavaMailSender javaMailSender;
+
 	@Autowired
 	public UserService(JavaMailSender javaMailSender) {
 		UserService.javaMailSender = javaMailSender;
 	}
+
 	private Map<String, OtpDto> otp_data = new HashMap<>();
 	private Map<String, EmailDto> email_data = new HashMap<>();
 	private Map<String, EmailVerifyDto> email_data_pass = new HashMap<>();
@@ -56,16 +60,25 @@ public class UserService implements UserDetailsService {
 	static {
 		Twilio.init(ACCOUNT_SID, AUTH_ID);
 	}
+
+	@SuppressWarnings("null")
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String username) throws  ObjectNotFoundException{
 		log.info("User name" + username);
 		User user = userRepository.findByEmail(username);
-		if (user == null) {
-			throw new UsernameNotFoundException("Invalid username or password.");
+		System.out.println(user.getStatus());
+		if (user.getStatus().equalsIgnoreCase("inactive")) {
+			throw new ObjectNotFoundException("user is inactive");
+		} 
+		else if( user == null) {
+			throw new UsernameNotFoundException("Invalid username or password. or user is inactive");
 		}
-		return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
-				getAuthority(user));
+		else {
+			return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
+					getAuthority(user));
+		}
 	}
+
 	private Set<SimpleGrantedAuthority> getAuthority(User user) {
 		Set<SimpleGrantedAuthority> authorities = new HashSet<>();
 		user.getRoles().forEach(role -> {
@@ -110,6 +123,7 @@ public class UserService implements UserDetailsService {
 		result.put("responseMessage", "e-Mail or phone number is alredy present");
 		return result;
 	}
+
 	/**
 	 * get all users
 	 * 
@@ -118,6 +132,7 @@ public class UserService implements UserDetailsService {
 	public List<User> retrieveAllUser() {
 		return userRepository.findAll();
 	}
+
 	/**
 	 * 
 	 * @param id
@@ -164,7 +179,8 @@ public class UserService implements UserDetailsService {
 	 * @return
 	 */
 
-	public Map<Object, Object> updateUser(String id, String name, String email, String password, String phoneNumber, String country) {
+	public Map<Object, Object> updateUser(String id, String name, String email, String password, String phoneNumber,
+			String country) {
 		Map<Object, Object> result = new HashMap<>();
 		Optional<User> value = userRepository.findById(Long.parseLong(id));
 		User user = value.get();
@@ -183,7 +199,6 @@ public class UserService implements UserDetailsService {
 		result.put("responseMessage", "User Not Found");
 		return result;
 	}
-
 
 	/**
 	 * Send OTP
@@ -213,8 +228,10 @@ public class UserService implements UserDetailsService {
 		}
 		return "User not found";
 	}
+
 	/**
 	 * verify otp
+	 * 
 	 * @param mobilenumber
 	 * @param requestOTP
 	 * @return
@@ -252,6 +269,7 @@ public class UserService implements UserDetailsService {
 		}
 		return "Mobile number is not found";
 	}
+
 	/**
 	 * Send mail
 	 * 
@@ -281,6 +299,7 @@ public class UserService implements UserDetailsService {
 		javaMailSender.send(mail);
 		return "Your verification code has been send to your mail";
 	}
+
 	/**
 	 * Verify Email
 	 * 

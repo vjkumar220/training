@@ -8,6 +8,7 @@ import javax.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -57,6 +58,18 @@ public class GlobalControllerExceptionHandler {
         LOG.error(ex.getCause().toString());
         return ResponseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "No Resource found", null, null);
     }
-
+    @ExceptionHandler(value = {org.springframework.security.core.userdetails.UsernameNotFoundException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String,Object>  InternalAuthenticationServiceException(org.springframework.security.core.userdetails.UsernameNotFoundException ex) {
+        LOG.error(ex.getCause().toString());
+        return ResponseHandler.generateResponse(HttpStatus.UNAUTHORIZED, true, "USER name, password , or you are not active user ", null, null);
+    }
+    
+    @ExceptionHandler(value = {AuthenticationException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String,Object>  AuthenticationException(AuthenticationException ex) {
+        LOG.error(ex.getCause().toString());
+        return ResponseHandler.generateResponse(HttpStatus.UNAUTHORIZED, true, "USER name, password , or you are not active user ", null, null);
+    }
 }
     
