@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,7 +54,7 @@ public class UserController {
 	 * 
 	 * @return
 	 */
-	//@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = "v1/admin/users")
 	public Map<String, Object> viewAllUsers() {
 		List<User> output = userService.retrieveAllUser();
@@ -67,10 +68,10 @@ public class UserController {
 	 * @return
 	 */
 	@CrossOrigin(origins = {"http://localhost:4201","http://localhost:8080"})
-	//@PreAuthorize("hasRole('USER')")
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping(value = "v1/user/{userId}")
 	public Map<String, Object> findUserById(@PathVariable String userId) {
-		Map result = userService.findUserById(userId);
+		Map<Object, Object> result = userService.findUserById(userId);
 		return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, result);
 	}
 
@@ -80,6 +81,7 @@ public class UserController {
 	 * @param id
 	 * @return
 	 */
+	@PreAuthorize("hasRole('USER')")
 	@DeleteMapping(value = "v1/user/{userId}")
 	public Map<String, Object> deleteUser(@PathVariable String userId) {
 		Map<Object, Object> output = userService.deleteUser(userId);
@@ -98,11 +100,12 @@ public class UserController {
 	 * @param country
 	 * @return
 	 */
+	@PreAuthorize("hasRole('USER')")
 	@PutMapping(value = "v1//user/feild/{userId}/{name}/{email}/{password}/{phoneNumber}/{country}")
 	public Map<String, Object> updateUser(@RequestParam String userId, @RequestParam String name,
 			@RequestParam @Email String email, @RequestParam String password,
 			@RequestParam String phoneNumber, @RequestParam String country) {
-		Map<String,String> user = userService.updateUser(userId, name, email, password, phoneNumber, country);
+		Map<Object, Object> user = userService.updateUser(userId, name, email, password, phoneNumber, country);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, user);
 	}
 
@@ -112,12 +115,18 @@ public class UserController {
 	 * @param userId
 	 * @return
 	 */
+	@PreAuthorize("hasRole('USER')")
 	@PostMapping(value = "v1/user/send/otp/{userId}")
 	public Map<String, Object> sendOtp(@PathVariable Long userId) {
 		String result = userService.sendOTP(userId);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, result);
 	}
-
+/**
+ * Verify user by OTP
+ * @param requestOTP
+ * @return
+ */
+	@PreAuthorize("hasRole('USER')")
 	@PutMapping(value = "v1/user/veify/otp/")
 	public Map<String, Object> verifyOtp(@RequestBody OtpDto requestOTP) {
 		String result = userService.verifyOtp(requestOTP);
@@ -130,7 +139,7 @@ public class UserController {
 	 * @param userId
 	 * @return
 	 */
-
+	@PreAuthorize("hasRole('USER')")
 	@PostMapping(value = "v1/user/send/verification/mail/{userId}")
 	public Map<String, Object> sendMail(@PathVariable Long userId) {
 		logger.info("Mail controller send mail");
@@ -145,13 +154,19 @@ public class UserController {
 	 * @param verifyEmail
 	 * @return
 	 */
-	@PutMapping(value = "v1/user/verify/mail/{emailAddress}/verification")
-	public Map<String, Object> verifyMail(@PathVariable String emailAddress, @RequestBody EmailDto verifyEmail) {
-		String result = userService.verifyEmail(emailAddress, verifyEmail);
+	@PreAuthorize("hasRole('USER')")
+	@PutMapping(value = "v1/user/verify/mail/")
+	public Map<String, Object> verifyMail( @RequestBody EmailDto verifyEmail) {
+		String result = userService.verifyEmail(verifyEmail);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, result);
 	}
 
-	// Sending Mail for Reset password
+	/**
+	 *  Sending Mail for Reset password
+	 * @param userId
+	 * @return
+	 */
+	@PreAuthorize("hasRole('USER')")
 	@PostMapping(value = "v1/user/verification/mail/forget/password/userId/{userId}")
 	public Map<String, Object> forgetPasswordMail(@PathVariable Long userId) {
 
@@ -165,6 +180,7 @@ public class UserController {
 	 * @param verifyEmail
 	 * @return
 	 */
+	@PreAuthorize("hasRole('USER')")
 	@PutMapping(value = "v1/user/emailAddress/{emailAddress}/password")
 	public Map<String, Object> updatePassword(@PathVariable String emailAddress,
 			@RequestBody EmailVerifyDto verifyEmail) {
@@ -173,6 +189,13 @@ public class UserController {
 		
 	}
 	
+	/**
+	 * Admin can activate the user according to his need
+	 * @param userId
+	 * @param status
+	 * @return
+	 */
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping(value ="v1/admin/user/action")
 	public Map<String , Object> statusChange(@RequestParam Long userId , @RequestParam String status){
 		Map<Object, Object> result = userService.statusChange(userId, status);

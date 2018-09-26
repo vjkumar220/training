@@ -26,31 +26,22 @@ import com.oodles.repository.UserRepository;
 
 @Service
 public class OrderService {
-
 	Logger log = LoggerFactory.getLogger(OrderService.class);
-
 	@Autowired
 	private BuyOrderRepository buyOrderRepository;
-
 	@Autowired
 	private UserRepository userRepository;
-
 	@Autowired
 	private CryptoWalletRepository cryptoWalletRepository;
-
 	@Autowired
 	private SellOrderRepository sellOrderRepository;
-
 	@Autowired
 	private FiatWalletRepository fiatWalletRepository;
-	
 	@Autowired
 	private CryptoCurrencyRepository cryptoCurrencyRepository;
-
 	/**
 	 * This function is working for placing buy order
 	 */
-
 	public String buyOrder(BuyOrderDto buyOrderDto) {
 		CryptoName coinNameDto = buyOrderDto.getCoinName();
 		Double coinQuantity = buyOrderDto.getCoinQuantity();
@@ -77,12 +68,7 @@ public class OrderService {
 					if (shadowBalance >= orderPrice) {
 						log.info(coinNameDto.toString());
 						Double updateShadowBalance = (shadowBalance - orderPrice);
-						
 						BuyOrder buyOrder = new BuyOrder(OrderStatus.PENDING, buyPrice, coinNameDto.toString(), coinQuantity, orderPrice, coinQuantity, orderFee, user);
-						
-						//BuyOrder buyOrder = new BuyOrder(OrderStatus.PENDING, buyPrice, coinNameDto.toString(), coinQuantity, orderPrice, coinQuantity, user);
-						/*BuyOrder buyOrder = new BuyOrder(OrderStatus.PENDING, buyPrice, coinNameDto.toString(),
-								coinQuantity, orderPrice, user);*/
 						fiatWallet.setShadowBalance(updateShadowBalance);
 						fiatWalletRepository.save(fiatWallet);
 						buyOrderRepository.save(buyOrder);
@@ -95,15 +81,12 @@ public class OrderService {
 			return "Fiat Wallet Not Found";
 		}
 		return "User Not Found";
-
 	}
-	
 	/**
 	 * This function is working for creating sell order
 	 * @param sellOrderDto
 	 * @return
 	 */
-
 	public String sellOrder(SellOrderDto sellOrderDto) {
 		CryptoName coinName = sellOrderDto.getCoinName();
 		Double coinQuantity = sellOrderDto.getCoinQuantity();
@@ -143,6 +126,5 @@ public class OrderService {
 			return "Crypto Wallet is not found";
 		}
 		return "User Not Found";
-
 	}
 }

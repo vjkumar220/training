@@ -47,7 +47,6 @@ public class DepositService {
 	 * @param depositDto
 	 * @return
 	 */
-
 	public Map<Object, Object> fiatDeposit(FiatDepositDto depositDto) {
 		HashMap<Object, Object> result = new HashMap<>();
 		Long userId = depositDto.getUserId();
@@ -77,7 +76,6 @@ public class DepositService {
 	 * 
 	 * @return
 	 */
-
 	public List<FiatDeposit> getAllPendingRequest() {
 		return fiatDepositRepository.findAllByDepositStatus(DepositStatus.PENDING);
 	}
@@ -88,7 +86,6 @@ public class DepositService {
 	 * @param approvalDto
 	 * @return
 	 */
-
 	public Map<Object, Object> approveDeposit(ApprovalDto approvalDto) {
 		HashMap<Object, Object> result = new HashMap<>();
 		Long userIdDto = approvalDto.getUserId();
@@ -138,7 +135,6 @@ public class DepositService {
 							fiatDepositRepository.save(foundDeposit);
 							result.put("responseMessage", "Your request is Rejected");
 							return result;
-
 						}
 					}
 				}
@@ -156,7 +152,6 @@ public class DepositService {
 	 * @param cryptoDepositDto
 	 * @return
 	 */
-
 	public Map<Object, Object> cryptoDeposit(CryptoDepositDto cryptoDepositDto) {
 		HashMap<Object, Object> result = new HashMap<>();
 		CryptoName coinName = cryptoDepositDto.getCoinName();
@@ -183,7 +178,6 @@ public class DepositService {
 	 * @param cryptoApprovalDto
 	 * @return
 	 */
-
 	public Map<Object, Object> approveCryptoRequest(CryptoApprovalDto cryptoApprovalDto) {
 		HashMap<Object, Object> result = new HashMap<>();
 		DepositStatus depositStatusDto = cryptoApprovalDto.getDepositStatus();
@@ -220,7 +214,6 @@ public class DepositService {
 							result.put("responseMessage", "Your request is rejected");
 							return result;
 						}
-
 					}
 				}
 			}
@@ -230,5 +223,4 @@ public class DepositService {
 		result.put("responseMessage", "Order is not present");
 		return result;
 	}
-
 }

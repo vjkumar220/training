@@ -9,7 +9,7 @@ public class UserDto {
 	
 	@NotNull(message = "Enter the name")
 	@Size(min = 2, message = "Name should have atleast 2 characters")
-	@Pattern(regexp = "[A-Za-z]+" , message =  "Only enter the characters in the name")
+	@Pattern(regexp = "^[a-zA-Z ]*$" , message =  "Only enter the characters in the name")
 	private String name;
 	@NotNull(message = "Enter the email")
 	@Email(message = "Enter Valid Email Id")

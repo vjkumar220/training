@@ -64,7 +64,6 @@ public class CryptoCurrencyService {
 			CryptoCurrency result = value.get();
 			if (value.isPresent() && (!result.getCurrencyId().equals(id))) {
 				currencyRepository.deleteById(Long.parseLong(id));
-
 				return "Your currency deleted";
 			}
 		}
@@ -105,14 +104,20 @@ public class CryptoCurrencyService {
 		}
 		return "Currency is not present";
 	}
+	/**
+	 * Updating Crypto Currency
+	 * @param currencyId
+	 * @param fees
+	 * @param initialSupply
+	 * @param price
+	 * @return
+	 */
 
 	public String updateCryptoCurrency(Long currencyId, Double fees, Double initialSupply, Double price) {
-
 		Optional<CryptoCurrency> findCurrency = currencyRepository.findById(currencyId);
 		if (findCurrency.isPresent()) {
 			CryptoCurrency cryptoCurrency = findCurrency.get();
-			if ( (!cryptoCurrency.getFees().equals(fees))
-					&& (!cryptoCurrency.getInitialSupply().equals(initialSupply))
+			if ((!cryptoCurrency.getFees().equals(fees)) && (!cryptoCurrency.getInitialSupply().equals(initialSupply))
 					&& (!cryptoCurrency.getPrice().equals(price))) {
 				cryptoCurrency.setFees(fees);
 				cryptoCurrency.setInitialSupply(initialSupply);
@@ -121,9 +126,7 @@ public class CryptoCurrencyService {
 				return "Your crypto currency is updated";
 			}
 			return "Already existing value you are updating";
-
 		}
 		return "Currency Not Found";
-
 	}
 }

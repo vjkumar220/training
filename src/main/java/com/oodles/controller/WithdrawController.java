@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,7 @@ public class WithdrawController {
 	 * @param fiatWithrawDto
 	 * @return
 	 */
-
+	@PreAuthorize("hasRole('USER')")
 	@PostMapping(value = "v1/user/withdraw/fiat/wallet")
 	public Map<String, Object> fiatWithdraw(@Valid @RequestBody FiatWithrawDto fiatWithrawDto) {
 		Map<Object, Object> result = withdrawService.fiatWithdraw(fiatWithrawDto);
@@ -44,7 +45,7 @@ public class WithdrawController {
 	 * @param cryptoWithdrawDto
 	 * @return
 	 */
-
+	@PreAuthorize("hasRole('USER')")
 	@PostMapping(value = "v1/user/withdraw/crypto/wallet")
 	public Map<String, Object> cryptoWithdraw(@Valid @RequestBody CryptoWithdrawDto cryptoWithdrawDto) {
 		Map<Object, Object> result = withdrawService.cryptoWithdraw(cryptoWithdrawDto);

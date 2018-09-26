@@ -49,8 +49,10 @@ public class WithdrawService {
 		if (findWallet.isPresent()) {
 			FiatWallet fiatWallet = findWallet.get();
 			Double fiatBalance = fiatWallet.getBalance();
+			Double fiatShadowBlance = fiatWallet.getShadowBalance();
 			if (fiatBalance >= amount) {
 				fiatWallet.setBalance(fiatBalance - amount);
+				fiatWallet.setShadowBalance(fiatShadowBlance - amount);
 				FiatWithdraw withdraw = new FiatWithdraw();
 				withdraw.setAmount(amount);
 				withdraw.setFiatWallet(fiatWallet);
@@ -77,8 +79,10 @@ public class WithdrawService {
 		if (findCryptoWallet.isPresent()) {
 			CryptoWallet cryptoWallet = findCryptoWallet.get();
 			Double cryptoBalance = cryptoWallet.getBalance();
+			Double cryptoShadowBlance = cryptoWallet.getShadowBalance();
 			if (cryptoBalance >= coinQuantity) {
 				cryptoWallet.setBalance(cryptoBalance - coinQuantity);
+				cryptoWallet.setShadowBalance(cryptoShadowBlance - coinQuantity);  
 				CryptoWithdraw withdraw = new CryptoWithdraw();
 				withdraw.setCoinCointain(coinQuantity);
 				withdraw.setCoinName(coinName);

@@ -12,10 +12,8 @@ import com.oodles.repository.FiatCurrencyRepository;
 
 @Service
 public class FiatCurrencyService {
-
 	@Autowired
 	private FiatCurrencyRepository fiatCurrencyRepository;
-
 	/**
 	 *  Add new Fiat Currency
 	 * @param fiatCurrency

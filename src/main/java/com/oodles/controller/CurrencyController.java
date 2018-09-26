@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +44,7 @@ public class CurrencyController {
 	 * @param cryptoCurrency
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(value = "v1/admin/currency/crypto")
 	public Map<String, Object> createCryptoCurrency(@Valid @RequestBody CryptoCurrencyDto cryptoCurrency) {
 		Map<Object, Object> result = cryptoCurrencyService.createCurrency(cryptoCurrency);
@@ -55,14 +57,18 @@ public class CurrencyController {
 	 * @param fiatCurrency
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(value = "v1/admin/currency/fiat/currency")
 	public Map<String, Object> createFiatCurrency(@Valid @RequestBody FiatCurrencyDto fiatCurrency) {
 		Map<Object, Object> result = fiatCurrencyService.createFiatCurrency(fiatCurrency);
 		return ResponseHandler.generateResponse(HttpStatus.CREATED, false, SUCCESS, null, result);
 	}
 
-	// Getting all existing currency
-
+	/**
+	 *  Getting all existing currency
+	 * @return
+	 */
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("v1/admin/crypto/currencies")
 	public Map<String, Object> getAllCryptoCurrency() {
 		List<CryptoCurrency> currencyList = cryptoCurrencyService.getAllCurrency();
@@ -76,14 +82,14 @@ public class CurrencyController {
 	 * @param currencyId
 	 * @return
 	 */
-
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("v1/admin/crypto/currency/{currencyId}")
 	public Map<String, Object> deleteCryptoCurrency(@PathVariable String currencyId) {
 		String result = cryptoCurrencyService.deleteCurrency(currencyId);
 		return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, result);
 
 	}
-
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping(value = "v1/admin/currency/crypto/{currencyID}/fees/{fees}/initialSupply/{initialSupply}/price/{price}")
 	public Map<String, Object> updateCryptoCurrency(@RequestParam Long currencyId, @RequestParam Double fees,
 			@RequestParam Double initialSupply, @RequestParam Double price) {

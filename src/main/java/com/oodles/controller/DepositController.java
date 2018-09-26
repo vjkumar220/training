@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,7 +41,7 @@ public class DepositController {
 	 * @param depositDto
 	 * @return
 	 */
-
+	@PreAuthorize("hasRole('USER')")
 	@PostMapping(value = "v1//user/fiat/deposit")
 	public Map<String, Object> createFiatDeposit(@Valid @RequestBody FiatDepositDto depositDto) {
 		Map<Object, Object> result = new HashMap<>();
@@ -53,7 +54,7 @@ public class DepositController {
 	 * 
 	 * @return
 	 */
-
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(value = "v1/admin/pending/request")
 	public Map<String, Object> getAllPendingReq() {
 		List<FiatDeposit> pendingList = depositService.getAllPendingRequest();
@@ -67,7 +68,7 @@ public class DepositController {
 	 * @param approvalDto
 	 * @return
 	 */
-
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(value = "v1/admin/approve/fiat/deposit")
 	public Map<String, Object> approveFiatDepositRequest(@Valid @RequestBody ApprovalDto approvalDto) {
 		Map<Object, Object> result = depositService.approveDeposit(approvalDto);
@@ -80,7 +81,7 @@ public class DepositController {
 	 * @param cryptoDepositDto
 	 * @return
 	 */
-
+	@PreAuthorize("hasRole('USER')")
 	@PostMapping(value = "v1/user/crypto/deposit")
 	public Map<String, Object> createCryptoDeposit(@Valid @RequestBody CryptoDepositDto cryptoDepositDto) {
 		Map<Object, Object> result = depositService.cryptoDeposit(cryptoDepositDto);
@@ -94,7 +95,7 @@ public class DepositController {
 	 * @param cryptoApprovalDto
 	 * @return
 	 */
-
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(value = "v1/admin/approve/crypto/deposit")
 	public Map<String, Object> approveCryptoDepositRequest(@Valid @RequestBody CryptoApprovalDto cryptoApprovalDto) {
 		Map<Object, Object> result = depositService.approveCryptoRequest(cryptoApprovalDto);

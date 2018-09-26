@@ -10,12 +10,10 @@ import com.oodles.repository.ProfitTableRepository;
 
 @Service
 public class ProfitTableService {
-	
 	@Autowired
 	private ProfitTableRepository profitTableRepository;
 	
 	public List<ProfitTable> profitList(){
 		return profitTableRepository.findAll();
 	}
-
 }

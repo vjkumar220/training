@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,7 +29,7 @@ public class OrderMatchingController {
 	public List<BuyOrder> buyList() {
 		return orderMatchingService.buyList();
 	}*/
-
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("v1/admin/orderMatching")
 	public Map<String, Object> orderMatching() {
 		String output = orderMatchingService.orderMatch();

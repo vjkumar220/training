@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,12 +24,13 @@ public class TransactionHistoryController {
 	@Autowired
 	private TransactionHistoryService transactionHistoryService;
 	
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping(value = "v1/user/transaction/history/buyer/{buyerId}")
 	public Map<String, Object> buyerHistory(@PathVariable Long buyerId) {
 		List<BuyTransaction> output = transactionHistoryService.buyTransactionHistory(buyerId);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, output);
 	}
-	
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping(value = "v1/user/transaction/history/seller/{sellerId}")
 	public Map<String, Object> sellerHistory(@PathVariable Long sellerId) {
 		List<SellTransaction> output = transactionHistoryService.sellTransactionHistory(sellerId);

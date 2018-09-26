@@ -32,7 +32,6 @@ import com.oodles.repository.SellTransactionRepository;
 @Service
 public class OrderMatchingService {
 	Logger log = LoggerFactory.getLogger(OrderMatchingService.class);
-
 	@Autowired
 	private BuyOrderRepository buyOrderRepository;
 	@Autowired
@@ -49,7 +48,6 @@ public class OrderMatchingService {
 	private FiatWalletRepository fiatWalletRepository;
 	@Autowired
 	private ProfitTableRepository profitTableRepository;
-
 	public List<BuyOrder> buyList() {
 		List<BuyOrder> result = buyOrderRepository.findAllByBuyOrderStatus(OrderStatus.PENDING);
 		log.info("buy Order result");
@@ -76,13 +74,11 @@ public class OrderMatchingService {
 		log.info("sell order result after sorted");
 		return result;
 	}
-
 	/**
 	 * Order Matching
 	 * 
 	 * @return
 	 */
-
 	public String orderMatch() {
 		List<SellOrder> list1 = sellOrderRepository.findAllBySellOrderStatus(OrderStatus.PENDING);
 		log.info("sell order result");
@@ -93,7 +89,6 @@ public class OrderMatchingService {
 			}
 		});
 		Collections.reverse(list1);
-
 		List<BuyOrder> list2 = buyOrderRepository.findAllByBuyOrderStatus(OrderStatus.PENDING);
 		log.info("buy Order result");
 		Collections.sort(list2, new Comparator<BuyOrder>() {
@@ -102,101 +97,105 @@ public class OrderMatchingService {
 				return o1.getBuyPrice().compareTo(o2.getBuyPrice());
 			}
 		});
-
 		for (BuyOrder listBuyOrder : list2) {
-
 			for (SellOrder listSellOrder : list1) {
-
-				// Checking Buyer Coin Name and seller Coin Name
+				/**
+				 * Checking Buyer Coin Name and seller Coin Name
+				 */
 				if (listBuyOrder.getBuyCoinName().equals(listSellOrder.getSellCoinName())) {
 					String coinName = listBuyOrder.getBuyCoinName();
 					CryptoName coinNameValue = CryptoName.valueOf(coinName);
 					CryptoCurrency cryptoCurrency = cryptoCurrencyRepository.findByCoinName(coinNameValue);
 					Double currencyFees = cryptoCurrency.getFees();
-
+					/**
+					 * Checking buyer and seller price
+					 */
 					if (listBuyOrder.getBuyPrice() >= listSellOrder.getSellPrice()) {
 						Long sellId = listSellOrder.getSellOrderId();
 						Long buyId = listBuyOrder.getBuyOrderId();
-
 						Optional<SellOrder> sellOrderDetails = sellOrderRepository.findById(sellId);
 						Optional<BuyOrder> buyOrderDetails = buyOrderRepository.findById(buyId);
-						// Checking SellOrder and buyer Order is present or not
-
+						/**
+						 * Checking SellOrder and buyer Order is present or not
+						 */
 						if (sellOrderDetails.isPresent() && buyOrderDetails.isPresent()) {
 							SellOrder sellOrder = sellOrderDetails.get();
 							BuyOrder buyOrder = buyOrderDetails.get();
-							// Seller Details
-							Double desiredSellerPrice = sellOrder.getSellPrice();
+							/**
+							 * Seller Details
+							 */
 							Double sellerCoinQuantity = sellOrder.getSellCoinQuantity();
-							Double sellerGrossAmount = sellOrder.getOrderPrice();
-							Double sellerRemaningCoin = sellOrder.getRemainingSellCoinQuantity();
-
-							// Seller and buyer Id
+							/**
+							 * Seller and buyer Id
+							 */
 							Long sellerId = sellOrder.getUser().getId();
 							Long buyerId = buyOrder.getUser().getId();
-
-							// Seller Fiat Wallet details
+							/**
+							 * Seller Fiat Wallet details
+							 */
 							FiatWallet sellerFiatWallet = sellOrder.getUser().getFiatWallet();
-
-							// Seller Crypto wallet details
+							/**
+							 * Seller Crypto wallet details
+							 */
 							CryptoWallet sellerCryptoWallet = cryptoWalletRepository.findByCoinNameAndUserId(coinName,
 									sellerId);
-
-							// Buyers Details
+							/**
+							 * Buyers Details
+							 */
 							Double desiredBuyPrice = buyOrder.getBuyPrice();
 							Double buyCoinQuantity = buyOrder.getBuyCoinQuantity();
-							Double buyRemainingCoin = buyOrder.getRemainingBuyCoinQuantity();
-							Double fee = buyOrder.getFeeForBuyers();
 							Double buyerNetAmount = (desiredBuyPrice * buyCoinQuantity);
 							Double buyerGrossAmount = buyOrder.getOrderPrice();
-
-							// Buyer Fiat Wallet details
+							/**
+							 * Buyer Fiat Wallet details
+							 */
 							FiatWallet buyerFiatWallet = buyOrder.getUser().getFiatWallet();
-
-							// Buyer Crypto wallet details
+							/**
+							 * Buyer Crypto wallet details
+							 */
 							CryptoWallet buyerCryptoWallet = cryptoWalletRepository.findByCoinNameAndUserId(coinName,
 									buyerId);
-
+							/**
+							 * Checking buyer quantity and seller quantity
+							 */
 							if (listBuyOrder.getRemainingBuyCoinQuantity()
 									.equals(listSellOrder.getRemainingSellCoinQuantity())) {
-								Double sellerNetAmount = (desiredSellerPrice * sellerCoinQuantity);
-								
-								
-								Double netAmountofSeller = (listSellOrder.getSellPrice() * listSellOrder.getRemainingSellCoinQuantity()); 
-								Double netAmountofBuyer = (listBuyOrder.getBuyPrice() * listBuyOrder.getRemainingBuyCoinQuantity());
+								Double sellCoinQuntity = listSellOrder.getRemainingSellCoinQuantity();
+								Double netAmountofSeller = (listSellOrder.getSellPrice()
+										* listSellOrder.getRemainingSellCoinQuantity());
+								Double netAmountofBuyer = (listBuyOrder.getBuyPrice()
+										* listBuyOrder.getRemainingBuyCoinQuantity());
+								Double profit = ((listBuyOrder.getBuyPrice() - listSellOrder.getSellPrice())
+										* listBuyOrder.getRemainingBuyCoinQuantity());
 								Double feesForbuyer = (netAmountofBuyer * (currencyFees / 100));
-								Double buyerCryptoBalance =(buyerCryptoWallet.getBalance());
-								
 								Double grossAmountOfBuyer = (netAmountofBuyer + feesForbuyer);
-								
-								
 								sellOrder.setRemainingSellCoinQuantity(0.0);
 								buyOrder.setRemainingBuyCoinQuantity(0.0);
 								sellOrder.setSellOrderStatus(OrderStatus.COMPLETED);
 								buyOrder.setBuyOrderStatus(OrderStatus.COMPLETED);
-								// Buyer Fiat Wallet
+								/**
+								 * Buyer Fiat Wallet
+								 */
 								buyerFiatWallet.setBalance(buyerFiatWallet.getBalance() - grossAmountOfBuyer);
 								buyerCryptoWallet.setBalance(buyerCryptoWallet.getBalance() + buyCoinQuantity);
-								buyerCryptoWallet.setShadowBalance(buyerCryptoWallet.getShadowBalance() + buyCoinQuantity);
-														
+								buyerCryptoWallet
+										.setShadowBalance(buyerCryptoWallet.getShadowBalance() + buyCoinQuantity);
 								sellerFiatWallet.setBalance(sellerFiatWallet.getBalance() + netAmountofSeller);
-								sellerFiatWallet.setShadowBalance(sellerFiatWallet.getShadowBalance() + netAmountofSeller);
+								sellerFiatWallet
+										.setShadowBalance(sellerFiatWallet.getShadowBalance() + netAmountofSeller);
 								sellerCryptoWallet.setBalance(sellerCryptoWallet.getBalance() - sellerCoinQuantity);
-								
-								Double profit = ((listBuyOrder.getBuyPrice()*listBuyOrder.getRemainingBuyCoinQuantity())-(listSellOrder.getSellPrice()*listSellOrder.getRemainingSellCoinQuantity()));
 								SellTransaction sellTransaction = new SellTransaction();
 								sellTransaction.setBuyerId(buyerId);
 								sellTransaction.setSellerId(sellerId);
 								sellTransaction.setBuyOrder(buyOrder);
 								sellTransaction.setCoinName(coinName);
-								sellTransaction.setCoinQuantity(listSellOrder.getRemainingSellCoinQuantity());
+								sellTransaction.setCoinQuantity(sellCoinQuntity);
 								sellTransaction.setExchangeRateSellDesiredPrice(listSellOrder.getSellPrice());
 								sellTransaction.setGrossAmount(netAmountofSeller);
 								sellTransaction.setNetAmount(netAmountofSeller);
 								sellTransaction.setSellOrder(sellOrder);
 								sellTransaction.setTransactionStatus(OrderStatus.COMPLETED.toString());
 								sellTransaction.setTransationFee(0.0);
-								
 								BuyTransaction buyTransaction = new BuyTransaction();
 								buyTransaction.setBuyerId(buyerId);
 								buyTransaction.setBuyOrder(buyOrder);
@@ -209,14 +208,12 @@ public class OrderMatchingService {
 								buyTransaction.setSellOrder(sellOrder);
 								buyTransaction.setStatus(OrderStatus.COMPLETED.toString());
 								buyTransaction.setTransationFee(feesForbuyer);
-								
 								ProfitTable profitTable = new ProfitTable();
 								profitTable.setBuyerId(buyerId);
 								profitTable.setFees(feesForbuyer);
 								profitTable.setProfitAmount(profit);
 								profitTable.setSellerId(sellerId);
 								profitTable.setTotalProfit(profit + feesForbuyer);
-								
 								profitTableRepository.save(profitTable);
 								sellOrderRepository.save(sellOrder);
 								buyOrderRepository.save(buyOrder);
@@ -226,64 +223,49 @@ public class OrderMatchingService {
 								fiatWalletRepository.save(sellerFiatWallet);
 								cryptoWalletRepository.save(buyerCryptoWallet);
 								fiatWalletRepository.save(buyerFiatWallet);
-								return "Your exact order is matched";
-							} else if (listBuyOrder.getRemainingBuyCoinQuantity() > listSellOrder
+								return "success";
+							}
+							/**
+							 * If the buyer quantity is more than seller quantity
+							 */
+							else if (listBuyOrder.getRemainingBuyCoinQuantity() > listSellOrder
 									.getRemainingSellCoinQuantity()) {
-
 								Double coinQuantityDiffrence = (listBuyOrder.getRemainingBuyCoinQuantity()
 										- listSellOrder.getRemainingSellCoinQuantity());
-								Double buyOrderPrice = listBuyOrder.getBuyPrice();
-								Double netAmountOfBuyer = (listBuyOrder.getBuyPrice() * listBuyOrder.getRemainingBuyCoinQuantity());
-								Double feesOfBuyer =  (netAmountOfBuyer * (currencyFees / 100));
+								Double sellCoinQuantity = listSellOrder.getRemainingSellCoinQuantity();
+								Double netAmountOfBuyer = (listBuyOrder.getBuyPrice()
+										* listSellOrder.getRemainingSellCoinQuantity());
+								Double feesOfBuyer = (netAmountOfBuyer * (currencyFees / 100));
 								Double grossAmountofBuyer = (feesOfBuyer + netAmountOfBuyer);
-
 								buyOrder.setRemainingBuyCoinQuantity(coinQuantityDiffrence);
-								buyOrderRepository.save(buyOrder);
-								
 								buyerFiatWallet.setBalance(buyerFiatWallet.getBalance() - grossAmountofBuyer);
-								fiatWalletRepository.save(buyerFiatWallet);
-								
-								buyerCryptoWallet.setBalance(buyerCryptoWallet.getBalance() + listSellOrder
-										.getRemainingSellCoinQuantity());
-								buyerCryptoWallet
-										.setShadowBalance(buyerCryptoWallet.getShadowBalance() + listSellOrder
-												.getRemainingSellCoinQuantity());
-								cryptoWalletRepository.save(buyerCryptoWallet);
-								
-								Double netAmountOfSeller = (listSellOrder.getSellPrice() * listSellOrder.getSellCoinQuantity());
+								buyerCryptoWallet.setBalance(
+										buyerCryptoWallet.getBalance() + listSellOrder.getRemainingSellCoinQuantity());
+								buyerCryptoWallet.setShadowBalance(buyerCryptoWallet.getShadowBalance()
+										+ listSellOrder.getRemainingSellCoinQuantity());
+								Double netAmountOfSeller = (listSellOrder.getSellPrice()
+										* listSellOrder.getSellCoinQuantity());
 								sellerFiatWallet.setBalance(sellerFiatWallet.getBalance() + netAmountOfSeller);
-								sellerFiatWallet.setShadowBalance(sellerFiatWallet.getShadowBalance() + netAmountOfSeller);
-								fiatWalletRepository.save(sellerFiatWallet);
-								
-								sellerCryptoWallet.setBalance(sellerCryptoWallet.getBalance()- listSellOrder
-										.getRemainingSellCoinQuantity());
-								cryptoWalletRepository.save(sellerCryptoWallet);
-								
-								Double profitAmount = ((listBuyOrder.getRemainingBuyCoinQuantity() * listBuyOrder.getBuyPrice())
-										- (listSellOrder.getRemainingSellCoinQuantity() * listSellOrder.getSellPrice()));
-								Double totalProfit = (profitAmount + feesOfBuyer);
-
+								sellerFiatWallet
+										.setShadowBalance(sellerFiatWallet.getShadowBalance() + netAmountOfSeller);
+								sellerCryptoWallet.setBalance(
+										sellerCryptoWallet.getBalance() - listSellOrder.getRemainingSellCoinQuantity());
 								sellOrder.setRemainingSellCoinQuantity(0.0);
 								buyOrder.setRemainingBuyCoinQuantity(coinQuantityDiffrence);
 								sellOrder.setSellOrderStatus(OrderStatus.COMPLETED);
 								buyOrder.setBuyOrderStatus(OrderStatus.PENDING);
-
-								buyOrderRepository.save(buyOrder);
-								sellOrderRepository.save(sellOrder);
-
 								SellTransaction sellTransaction = new SellTransaction();
 								sellTransaction.setBuyerId(buyerId);
 								sellTransaction.setSellerId(sellerId);
 								sellTransaction.setBuyOrder(buyOrder);
 								sellTransaction.setCoinName(coinName);
-								sellTransaction.setCoinQuantity(listSellOrder.getRemainingSellCoinQuantity());
+								sellTransaction.setCoinQuantity(sellCoinQuantity);
 								sellTransaction.setExchangeRateSellDesiredPrice(listSellOrder.getSellPrice());
-								sellTransaction.setGrossAmount(listSellOrder.getSellPrice() * listSellOrder.getRemainingSellCoinQuantity());
-								sellTransaction.setNetAmount(listSellOrder.getSellPrice() * listSellOrder.getRemainingSellCoinQuantity());
+								sellTransaction.setGrossAmount(netAmountOfSeller);
+								sellTransaction.setNetAmount(netAmountOfSeller);
 								sellTransaction.setSellOrder(sellOrder);
 								sellTransaction.setTransactionStatus(OrderStatus.COMPLETED.toString());
-								sellTransactionRepository.save(sellTransaction);
-
+								sellTransaction.setTransationFee(0.0);
 								BuyTransaction buyTransaction = new BuyTransaction();
 								buyTransaction.setBuyerId(buyerId);
 								buyTransaction.setBuyOrder(buyOrder);
@@ -296,54 +278,61 @@ public class OrderMatchingService {
 								buyTransaction.setSellOrder(sellOrder);
 								buyTransaction.setStatus(OrderStatus.COMPLETED.toString());
 								buyTransaction.setTransationFee(feesOfBuyer);
-								buyTransactionRepository.save(buyTransaction);
-
+								Double profitForAdmin = ((listBuyOrder.getBuyPrice() - listSellOrder.getSellPrice())
+										* (listBuyOrder.getRemainingBuyCoinQuantity()
+												- listSellOrder.getRemainingSellCoinQuantity()));
 								ProfitTable profitTable = new ProfitTable();
 								profitTable.setBuyerId(buyerId);
-								profitTable.setFees((netAmountOfBuyer * (currencyFees / 100)));
-								profitTable.setProfitAmount((listBuyOrder.getBuyPrice()*listBuyOrder.getRemainingBuyCoinQuantity())-(listSellOrder.getSellPrice()*listSellOrder.getRemainingSellCoinQuantity()));
+								profitTable.setFees(feesOfBuyer);
+								profitTable.setProfitAmount(profitForAdmin);
 								profitTable.setSellerId(sellerId);
-								profitTable.setTotalProfit((netAmountOfBuyer * (currencyFees / 100))+(listBuyOrder.getBuyPrice()*listBuyOrder.getRemainingBuyCoinQuantity())-(listSellOrder.getSellPrice()*listSellOrder.getRemainingSellCoinQuantity()));
+								profitTable.setTotalProfit(feesOfBuyer + profitForAdmin);
 								profitTableRepository.save(profitTable);
-
-								return "Your exact order is matched";
-
-							} else if (listBuyOrder.getRemainingBuyCoinQuantity() < listSellOrder
-									.getRemainingSellCoinQuantity()) {
-								
-								Double coinQuantityDiffrence = (listSellOrder.getRemainingSellCoinQuantity() - listBuyOrder.getRemainingBuyCoinQuantity());
-								Double netAmountOfBuyer = (listBuyOrder.getBuyPrice() * listBuyOrder.getRemainingBuyCoinQuantity());
-								Double feesOfBuyer =  (netAmountOfBuyer * (currencyFees / 100));
-								Double grossAmountofBuyer = (feesOfBuyer + netAmountOfBuyer);
-								
-								buyerFiatWallet.setBalance(buyerFiatWallet.getBalance() - grossAmountofBuyer);
-								fiatWalletRepository.save(buyerFiatWallet);
-								
-								buyerCryptoWallet.setBalance(buyerCryptoWallet.getBalance() + listBuyOrder.getRemainingBuyCoinQuantity());
-								buyerCryptoWallet.setShadowBalance(buyerCryptoWallet.getShadowBalance() + listBuyOrder.getRemainingBuyCoinQuantity());
-								cryptoWalletRepository.save(buyerCryptoWallet);
-								
-								Double sellOrderPrice = listSellOrder.getSellPrice();
-								Double sellOrderCoinQuantity = listSellOrder.getRemainingSellCoinQuantity();
-								Double netAmountOfSeller = (listSellOrder.getRemainingSellCoinQuantity() * listSellOrder.getSellPrice());
-								
-								sellerFiatWallet.setBalance(sellerFiatWallet.getBalance() + netAmountOfSeller);
-								sellerFiatWallet.setShadowBalance(sellerFiatWallet.getShadowBalance() + netAmountOfSeller);
-								fiatWalletRepository.save(sellerFiatWallet);
-								
-								sellerCryptoWallet.setBalance(sellerCryptoWallet.getBalance() - listSellOrder.getRemainingSellCoinQuantity());
+								buyOrderRepository.save(buyOrder);
+								buyTransactionRepository.save(buyTransaction);
+								sellTransactionRepository.save(sellTransaction);
+								buyOrderRepository.save(buyOrder);
+								sellOrderRepository.save(sellOrder);
 								cryptoWalletRepository.save(sellerCryptoWallet);
-								
-								
+								fiatWalletRepository.save(sellerFiatWallet);
+								cryptoWalletRepository.save(buyerCryptoWallet);
+								fiatWalletRepository.save(buyerFiatWallet);
+								return "success";
+							}
+							/**
+							 * Seller coin quantity is more than buyer
+							 */
+							else if (listBuyOrder.getRemainingBuyCoinQuantity() < listSellOrder
+									.getRemainingSellCoinQuantity()) {
+								Double coinQuantityDiffrence = (listSellOrder.getRemainingSellCoinQuantity()
+										- listBuyOrder.getRemainingBuyCoinQuantity());
+								Double netAmountOfBuyer = (listBuyOrder.getBuyPrice()
+										* listBuyOrder.getRemainingBuyCoinQuantity());
+								Double feesOfBuyer = (netAmountOfBuyer * (currencyFees / 100));
+								Double grossAmountofBuyer = (feesOfBuyer + netAmountOfBuyer);
+								Double buyerCryptoBalance = (buyerCryptoWallet.getBalance()
+										+ listBuyOrder.getRemainingBuyCoinQuantity());
+								Double buyerCryptoShadowBalance = (buyerCryptoWallet.getShadowBalance()
+										+ listBuyOrder.getRemainingBuyCoinQuantity());
+								Double buyerCoinQuantity = listBuyOrder.getRemainingBuyCoinQuantity();
+								Double netAmountOfSeller = (listSellOrder.getSellPrice()
+										* listBuyOrder.getRemainingBuyCoinQuantity());
+								Double sellerFiatBalance = (sellerFiatWallet.getBalance() + netAmountOfSeller);
+								Double sellShadowBalance = (sellerFiatWallet.getShadowBalance() + netAmountOfSeller);
+								Double profitOfAdmin = ((listBuyOrder.getBuyPrice() - listSellOrder.getSellPrice())
+										* (listSellOrder.getRemainingSellCoinQuantity()
+												- listBuyOrder.getRemainingBuyCoinQuantity()));
+								buyerFiatWallet.setBalance(buyerFiatWallet.getBalance() - grossAmountofBuyer);
+								buyerCryptoWallet.setBalance(buyerCryptoBalance);
+								buyerCryptoWallet.setShadowBalance(buyerCryptoShadowBalance);
+								sellerFiatWallet.setBalance(sellerFiatBalance);
+								sellerFiatWallet.setShadowBalance(sellShadowBalance);
+								sellerCryptoWallet.setBalance(
+										sellerCryptoWallet.getBalance() - listBuyOrder.getRemainingBuyCoinQuantity());
 								sellOrder.setRemainingSellCoinQuantity(coinQuantityDiffrence);
 								buyOrder.setRemainingBuyCoinQuantity(0.0);
 								sellOrder.setSellOrderStatus(OrderStatus.PENDING);
 								buyOrder.setBuyOrderStatus(OrderStatus.COMPLETED);
-
-								buyOrderRepository.save(buyOrder);
-								sellOrderRepository.save(sellOrder);
-								
-								
 								SellTransaction sellTransaction = new SellTransaction();
 								sellTransaction.setBuyerId(buyerId);
 								sellTransaction.setSellerId(sellerId);
@@ -351,17 +340,15 @@ public class OrderMatchingService {
 								sellTransaction.setCoinName(coinName);
 								sellTransaction.setCoinQuantity(listSellOrder.getRemainingSellCoinQuantity());
 								sellTransaction.setExchangeRateSellDesiredPrice(listSellOrder.getSellPrice());
-								sellTransaction.setGrossAmount(listSellOrder.getSellPrice() * listSellOrder.getRemainingSellCoinQuantity());
-								sellTransaction.setNetAmount(listSellOrder.getSellPrice() * listSellOrder.getRemainingSellCoinQuantity());
+								sellTransaction.setGrossAmount(netAmountOfSeller);
+								sellTransaction.setNetAmount(netAmountOfSeller);
 								sellTransaction.setSellOrder(sellOrder);
 								sellTransaction.setTransactionStatus(OrderStatus.COMPLETED.toString());
 								sellTransaction.setTransationFee(0.0);
-								sellTransactionRepository.save(sellTransaction);
-
 								BuyTransaction buyTransaction = new BuyTransaction();
 								buyTransaction.setBuyerId(buyerId);
 								buyTransaction.setBuyOrder(buyOrder);
-								buyTransaction.setCoinQuantity(listBuyOrder.getRemainingBuyCoinQuantity());
+								buyTransaction.setCoinQuantity(buyerCoinQuantity);
 								buyTransaction.setCointype(coinName);
 								buyTransaction.setExchangeRate(desiredBuyPrice);
 								buyTransaction.setGrossAmount(buyerGrossAmount);
@@ -370,26 +357,28 @@ public class OrderMatchingService {
 								buyTransaction.setSellOrder(sellOrder);
 								buyTransaction.setStatus(OrderStatus.COMPLETED.toString());
 								buyTransaction.setTransationFee(feesOfBuyer);
-								buyTransactionRepository.save(buyTransaction);
-
 								ProfitTable profitTable = new ProfitTable();
 								profitTable.setBuyerId(buyerId);
-								profitTable.setFees((netAmountOfBuyer * (currencyFees / 100)));
-								profitTable.setProfitAmount((listBuyOrder.getBuyPrice()*listBuyOrder.getRemainingBuyCoinQuantity())-(listSellOrder.getSellPrice()*listSellOrder.getRemainingSellCoinQuantity()));
+								profitTable.setFees(feesOfBuyer);
+								profitTable.setProfitAmount(profitOfAdmin);
 								profitTable.setSellerId(sellerId);
-								profitTable.setTotalProfit((netAmountOfBuyer * (currencyFees / 100))+(listBuyOrder.getBuyPrice()*listBuyOrder.getRemainingBuyCoinQuantity())-(listSellOrder.getSellPrice()*listSellOrder.getRemainingSellCoinQuantity()));
+								profitTable.setTotalProfit(feesOfBuyer + profitOfAdmin);
 								profitTableRepository.save(profitTable);
-								return "Order is matched";	
+								buyTransactionRepository.save(buyTransaction);
+								sellTransactionRepository.save(sellTransaction);
+								buyOrderRepository.save(buyOrder);
+								sellOrderRepository.save(sellOrder);
+								cryptoWalletRepository.save(sellerCryptoWallet);
+								fiatWalletRepository.save(sellerFiatWallet);
+								cryptoWalletRepository.save(buyerCryptoWallet);
+								fiatWalletRepository.save(buyerFiatWallet);
+								return "success";
 							}
-
 						}
-
 					}
 				}
-
 			}
 		}
 		return "No order found to match";
 	}
-
 }
