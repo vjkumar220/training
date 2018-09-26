@@ -83,7 +83,7 @@ public Map deleteCurrency(@PathVariable String currencyId)
 		
 		
 		 result=currencyService.deleteCurrency(currencyId);
-			return ResponseHandler.generateResponse(HttpStatus.OK, false,StringConstant.Success, null, result);
+			return ResponseHandler.generateResponse(HttpStatus.NO_CONTENT, false,StringConstant.Success, null, result);
 		
 }
 }

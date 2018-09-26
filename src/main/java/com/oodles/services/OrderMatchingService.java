@@ -183,7 +183,8 @@ public class OrderMatchingService {
 							BuyOrder buy = buyOrderRepository.findByBuyOrderId(buyId);
 							SellOrder sell = sellOrderRepository.findBySellOrderId(sellId);
 							if (buylistentry.getRemainingCoin() > selllistentry.getRemainingCoin()) {
-
+                                if(buyerUserId!=sellerUserId)
+                                {
 								// buyer fiat balance
 								Double currentfiatbalanceofbuyer = buyUserId.getFiatwallet().getBalance();
 								Double buyamount = (desiredpriceforbuy * noOfCointobesell);
@@ -266,10 +267,12 @@ public class OrderMatchingService {
 								
 								logger.info("for same coin quantity saved");
 								result.put("responseMessage", "success");
-
+                                }
 							}
 
 							else if (buylistentry.getRemainingCoin() < selllistentry.getRemainingCoin()) {
+								if(buyerUserId!=sellerUserId)
+								{
 								// buyer fiat balance
 								Double currentfiatbalanceofbuyer = buyUserId.getFiatwallet().getBalance();
 								Double buyamount = (desiredpriceforbuy * noOfCointobebuy);
@@ -350,10 +353,11 @@ public class OrderMatchingService {
 								
 								logger.info("for same coin quantity saved");
 								result.put("responseMessage", "success");
-
+								}
 							} else if ((buylistentry.getRemainingCoin()).equals(selllistentry.getRemainingCoin())) {
 								// logger.info("coin quantity match");
-
+                            if(buyerUserId!=sellerUserId)
+                            {
 								// buyer fiat balance
 								Double currentfiatbalanceofbuyer = buyUserId.getFiatwallet().getBalance();
 								Double updatedbuyerFiatBalance = currentfiatbalanceofbuyer - grossamountbuy;
@@ -439,7 +443,7 @@ public class OrderMatchingService {
 								
 								logger.info("for same coin quantity saved");
 								result.put("responseMessage", "success");
-							}
+							}}
 						}
 
 					}

@@ -28,7 +28,7 @@ public class OrderMatchingTask {
 	public void sayHello() {
 		List<BuyOrder> buyOrderList = buyOrderRepository.findAllByStatus(OrderStatus.PENDING);
 		List<SellOrder> sellOrderList = sellOrderRepository.findAllByStatus(OrderStatus.PENDING);
-		if (buyOrderList != null || sellOrderList != null) {
+		if (buyOrderList != null ) {
 
 		
 		orderMatchingService.orderMatch();

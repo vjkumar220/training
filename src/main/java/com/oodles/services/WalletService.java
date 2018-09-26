@@ -65,8 +65,11 @@ public class WalletService {
 		Optional<User> user = userRepository.findById(userId);
 		if (user.isPresent()) {
 			User foundUser = user.get();
+			if(foundUser.getEnabled().equalsIgnoreCase("Active"))
+			{
 			FiatWallet newWalletType = fiatWalletRepository.findByUser(foundUser);
 			if (newWalletType == null) {
+			
 				FiatWallet wallet = new FiatWallet();
 				wallet.setCoinName("INR");
 				wallet.setWalletType("Fiat");
@@ -78,6 +81,8 @@ public class WalletService {
 				return result;
 			}
 			result.put("responseMessage", "User's fiat wallet is already there");
+			return result;
+			}result.put("responseMessage", "Verify you account");
 			return result;
 		}
 		result.put("responseMessage", "User Not Found");
@@ -101,6 +106,8 @@ public class WalletService {
 		if (user.isPresent()) {
 			logger.info("in user if");
 			User foundUser = user.get();
+			if(foundUser.getEnabled().equalsIgnoreCase("Active"))
+			{
 			CryptoWallet newWalletType = cryptoWalletRepository.findByCoinNameAndUserId(coinName.toString(), foundUser.getId());
 			
 			if (newWalletType == null) {
@@ -117,6 +124,8 @@ public class WalletService {
 				return result;
 			}
 			result.put("responseMessage", " crypto wallet alredy present");
+			return result;
+			}result.put("responseMessage", " Verify your account");
 			return result;
 		}
 		result.put("responseMessage", "User Not Found");

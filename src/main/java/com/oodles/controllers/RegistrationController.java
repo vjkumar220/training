@@ -31,7 +31,7 @@ public class RegistrationController {
 	 * @param user
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/signup")
+	@RequestMapping(method = RequestMethod.POST, value = "v1/signup")
 
 	public Map createUser(@Valid @RequestBody UserDto user) {
 		Map result = null;
@@ -101,7 +101,7 @@ public class RegistrationController {
 
 		
 			result = userService.deleteUser(id);
-			return ResponseHandler.generateResponse(HttpStatus.OK, false, StringConstant.Success, null, result);
+			return ResponseHandler.generateResponse(HttpStatus.NO_CONTENT, false, StringConstant.Success, null, result);
 		
 	}
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/admin/users/action")
