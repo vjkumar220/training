@@ -11,9 +11,15 @@ import org.springframework.stereotype.Service;
 import com.oodles.dto.CryptoCurrencyDto;
 import com.oodles.enums.OrderStatus;
 import com.oodles.models.CryptoCurrency;
+import com.oodles.models.CryptoWallet;
+import com.oodles.models.FiatWallet;
 import com.oodles.models.SellOrder;
+import com.oodles.models.User;
 import com.oodles.repository.CryptoCurrencyRepository;
+import com.oodles.repository.CryptoWalletRepository;
+import com.oodles.repository.FiatWalletRepository;
 import com.oodles.repository.SellOrderRepository;
+import com.oodles.repository.UserRepository;
 
 @Service
 public class CurrencyService {
@@ -21,6 +27,14 @@ public class CurrencyService {
 	private CryptoCurrencyRepository cryptoCurrencyRepository;
 	@Autowired
 	private SellOrderRepository sellOrderRepository;
+	@Autowired
+	private FiatWalletRepository fiatWalletRepository;
+
+	@Autowired
+	private CryptoWalletRepository cryptoWalletRepository;
+
+	@Autowired
+	private UserRepository userRepository;
 	/**
 	 * Add Currency
 	 * @param cryptoCurrency
@@ -43,11 +57,57 @@ public class CurrencyService {
 			currency.setFees(fees);
 			currency.setInitialSupply(initialSupply);
 			currency.setPrice(price);
-			cryptoCurrencyRepository.save(currency);
 			
 			
+			//Create a crypto wallet for admin
+             Long userId=(long) 2;
+			Optional<User> user = userRepository.findById(userId);
+			if (user.isPresent()) {
+				
+				User foundUser = user.get();
+				if(foundUser.getEnabled().equalsIgnoreCase("Active"))
+				{
+				CryptoWallet newWalletType = cryptoWalletRepository.findByCoinNameAndUserId(coinName.toString(), foundUser.getId());
+				
+				if (newWalletType == null) {
+					
+					CryptoWallet wallet = new CryptoWallet();
+					wallet.setBalance(initialSupply);
+					wallet.setCoinName(coinName.toString());
+					wallet.setShadowBalance(initialSupply);
+					wallet.setUser(foundUser);
+					wallet.setWalletType("Crypto");
+	//create fiat wallet of admin
+					
+						FiatWallet newWalletsType = fiatWalletRepository.findByUser(foundUser);
+						if (newWalletsType == null) {
+						
+							FiatWallet fwallet = new FiatWallet();
+							fwallet.setCoinName("INR");
+							fwallet.setWalletType("Fiat");
+							fwallet.setShadowBalance(0.0);
+							fwallet.setBalance(0.0);
+							fwallet.setUser(foundUser);
+			//sell order generation
+							SellOrder newOrder = new SellOrder();
+							newOrder.setCoinName(coinName);
+							newOrder.setSellDesiredPrice(price);
+							newOrder.setCoinQuantity(initialSupply);
+							newOrder.setRemainingCoin(initialSupply);
+							OrderStatus status = newOrder.getStatus();
+							newOrder.setStatus(status.PENDING);
+							newOrder.setUser(foundUser);
+							sellOrderRepository.save(newOrder);
+							
+							
+							
+							fiatWalletRepository.save(fwallet);
+					
+					cryptoWalletRepository.save(wallet);
+					cryptoCurrencyRepository.save(currency);
+				
 			result.put("responseMessage", "success");
-		}
+		}}}}}
 		return result;
 	}
 	/**

@@ -25,7 +25,14 @@ public class Role {
     @JsonBackReference(value="user-role")
     private Set<User> user;
     
-    
+    public Role() {
+        super();
+    }
+
+    public Role(final String roleType) {
+        super();
+        this.roleType = roleType;
+    }
 	
 	public Long getRoleId() {
 		return roleId;
