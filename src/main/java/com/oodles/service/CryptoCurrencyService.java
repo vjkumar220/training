@@ -5,18 +5,34 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.oodles.domain.CryptoCurrency;
+import com.oodles.domain.CryptoWallet;
+import com.oodles.domain.SellOrder;
+import com.oodles.domain.User;
 import com.oodles.dto.CryptoCurrencyDto;
 import com.oodles.enumeration.CryptoName;
+import com.oodles.enumeration.OrderStatus;
 import com.oodles.repository.CryptoCurrencyRepository;
+import com.oodles.repository.CryptoWalletRepository;
+import com.oodles.repository.SellOrderRepository;
+import com.oodles.repository.UserRepository;
 
 @Service
 public class CryptoCurrencyService {
+	Logger log = LoggerFactory.getLogger(CryptoCurrencyService.class);
 	@Autowired
 	private CryptoCurrencyRepository currencyRepository;
+	@Autowired
+	private CryptoWalletRepository cryptoWalletRepository;
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private SellOrderRepository sellOrderRepository;
 
 	/**
 	 * Creating Currency
@@ -36,8 +52,40 @@ public class CryptoCurrencyService {
 			newCurrency.setPrice(currency.getPrice());
 			newCurrency.setSymbol(currency.getSymbol());
 			currencyRepository.save(newCurrency);
-			result.put("responseMessage", "Crypto currency is generated");
-			return result;
+			log.info("Currency created");
+			Optional<User> user = userRepository.findById((long) 3);
+			log.info("User is find");
+			if (user.isPresent()) {
+				User foundUser = user.get();
+				CryptoCurrency findCryptoCurrency = currencyRepository.findByCoinName(currency.getCoinName());
+				if (findCryptoCurrency != null) {
+					log.info("Cureency is find");
+					CryptoWallet newWalletType = cryptoWalletRepository.findByCoinNameAndUser(currency.getCoinName().toString(),
+							foundUser);
+					log.info("Cureency is find");
+					if (newWalletType == null) {
+						log.info("wall");
+						CryptoWallet wallet = new CryptoWallet();
+						wallet.setBalance(currency.getInitialSupply());
+						wallet.setCoinName(currency.getCoinName().toString());
+						wallet.setShadowBalance(currency.getInitialSupply());
+						wallet.setUser(foundUser);
+						wallet.setWalletType("CRYPTO");
+						cryptoWalletRepository.save(wallet);
+						SellOrder sellOrder = new SellOrder();
+						sellOrder.setOrderPrice(currency.getPrice() * currency.getInitialSupply());
+						sellOrder.setRemainingSellCoinQuantity(currency.getInitialSupply());
+						sellOrder.setSellCoinName(currency.getCoinName().toString());
+						sellOrder.setSellCoinQuantity(currency.getInitialSupply());
+						sellOrder.setSellOrderStatus(OrderStatus.PENDING);
+						sellOrder.setSellPrice(currency.getPrice());
+						sellOrder.setUser(foundUser);
+						sellOrderRepository.save(sellOrder);
+						result.put("responseMessage", "Crypto currency is generated");
+						return result;
+					}
+				}
+			}
 		}
 		result.put("responseMessage", "Currency alredy exists");
 		return result;
@@ -49,7 +97,28 @@ public class CryptoCurrencyService {
 	 * @return
 	 */
 	public List<CryptoCurrency> getAllCurrency() {
-		return currencyRepository.findAll();
+		List<CryptoCurrency> listOfCryptoCurrency = currencyRepository.findAll();
+		List<CryptoWallet> listOfCryptoWallet =  cryptoWalletRepository.findAllByUserId((long) 3);
+		
+		for( CryptoWallet cryptoWallet : listOfCryptoWallet) {
+			for(CryptoCurrency cryptoCurrency : listOfCryptoCurrency) {
+				if(cryptoWallet.getCoinName().equalsIgnoreCase(cryptoCurrency.getCoinName().toString())) {
+					Double cryptoWalletBalance = cryptoWallet.getBalance();
+					Double cryptoCurrencyInitialSupply = cryptoCurrency.getInitialSupply();
+					Optional<CryptoCurrency> currencyValue = currencyRepository.findById(cryptoWallet.getCryptoWalletId());
+					if(currencyValue.isPresent() && cryptoCurrencyInitialSupply > cryptoWalletBalance) {
+						CryptoCurrency updatedCryptoCurrency = currencyValue.get();
+						Double updatedInitalSupply = (cryptoCurrency.getInitialSupply() -(cryptoCurrency.getInitialSupply()- cryptoWallet.getBalance()));
+						updatedCryptoCurrency.setInitialSupply(updatedInitalSupply);
+						currencyRepository.save(updatedCryptoCurrency);
+						
+					}
+				}
+				
+			}
+		}
+		List<CryptoCurrency> updatedListOfCryptoCurrency = currencyRepository.findAll();
+		return updatedListOfCryptoCurrency;
 	}
 
 	/**
@@ -104,8 +173,10 @@ public class CryptoCurrencyService {
 		}
 		return "Currency is not present";
 	}
+
 	/**
 	 * Updating Crypto Currency
+	 * 
 	 * @param currencyId
 	 * @param fees
 	 * @param initialSupply

@@ -51,7 +51,6 @@ public class WalletService {
 		logger.info("In service crypto wallet");
 		CryptoName coinName = cryptoWallet.getCoinName();
 		Long userId = cryptoWallet.getUserId();
-		System.out.println(coinName + "c" + userId);
 
 		Optional<User> user = userRepository.findById(userId);
 		if (user.isPresent()) {

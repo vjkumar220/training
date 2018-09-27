@@ -68,8 +68,8 @@ public class GlobalControllerExceptionHandler {
     @ExceptionHandler(value = {AuthenticationException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String,Object>  AuthenticationException(AuthenticationException ex) {
-        LOG.error(ex.getCause().toString());
-        return ResponseHandler.generateResponse(HttpStatus.UNAUTHORIZED, true, "USER name, password , or you are not active user ", null, null);
+        return ResponseHandler.generateResponse(HttpStatus.UNAUTHORIZED, true, "user name or password is not correct or you are in active ", null, null);
     }
+
 }
     

@@ -115,7 +115,6 @@ public class UserController {
 	 * @param userId
 	 * @return
 	 */
-	@PreAuthorize("hasRole('USER')")
 	@PostMapping(value = "v1/user/send/otp/{userId}")
 	public Map<String, Object> sendOtp(@PathVariable Long userId) {
 		String result = userService.sendOTP(userId);
@@ -126,7 +125,6 @@ public class UserController {
  * @param requestOTP
  * @return
  */
-	@PreAuthorize("hasRole('USER')")
 	@PutMapping(value = "v1/user/veify/otp/")
 	public Map<String, Object> verifyOtp(@RequestBody OtpDto requestOTP) {
 		String result = userService.verifyOtp(requestOTP);
@@ -139,7 +137,6 @@ public class UserController {
 	 * @param userId
 	 * @return
 	 */
-	@PreAuthorize("hasRole('USER')")
 	@PostMapping(value = "v1/user/send/verification/mail/{userId}")
 	public Map<String, Object> sendMail(@PathVariable Long userId) {
 		logger.info("Mail controller send mail");
@@ -154,7 +151,6 @@ public class UserController {
 	 * @param verifyEmail
 	 * @return
 	 */
-	@PreAuthorize("hasRole('USER')")
 	@PutMapping(value = "v1/user/verify/mail/")
 	public Map<String, Object> verifyMail( @RequestBody EmailDto verifyEmail) {
 		String result = userService.verifyEmail(verifyEmail);

@@ -50,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable().authorizeRequests().antMatchers("/token/*", "/signup" , "/v1/admin/role").permitAll()
+		http.cors().and().csrf().disable().authorizeRequests().antMatchers("/token/*", "/signup" , "/v1/admin/role" , "/v1/user/send/otp/{userId}" ,"/v1/user/veify/otp/" , "/v1/user/send/verification/mail/{userId}" ,"/v1/user/verify/mail/").permitAll()
 				.anyRequest().authenticated().and().exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
 				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);

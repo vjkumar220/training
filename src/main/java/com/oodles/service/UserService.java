@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import org.omg.CORBA.UnknownUserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +20,15 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.oodles.domain.FiatWallet;
 import com.oodles.domain.Role;
 import com.oodles.domain.User;
 import com.oodles.dto.EmailDto;
 import com.oodles.dto.EmailVerifyDto;
 import com.oodles.dto.OtpDto;
 import com.oodles.dto.UserDto;
+import com.oodles.exception.ResourceNotFoundException;
+import com.oodles.repository.FiatWalletRepository;
 import com.oodles.repository.RoleRepository;
 import com.oodles.repository.UserRepository;
 import com.twilio.Twilio;
@@ -40,6 +44,8 @@ public class UserService implements UserDetailsService {
 	private UserRepository userRepository;
 	@Autowired
 	private RoleRepository roleRepository;
+	@Autowired
+	private FiatWalletRepository fiatWalletRepository;
 	@Autowired
 	private BCryptPasswordEncoder bcryptEncoder;
 
@@ -61,24 +67,19 @@ public class UserService implements UserDetailsService {
 		Twilio.init(ACCOUNT_SID, AUTH_ID);
 	}
 
-	@SuppressWarnings("null")
 	@Override
-	public UserDetails loadUserByUsername(String username) throws  ObjectNotFoundException{
+	public UserDetails loadUserByUsername(String username){
 		log.info("User name" + username);
 		User user = userRepository.findByEmail(username);
-		System.out.println(user.getStatus());
-		if (user.getStatus().equalsIgnoreCase("inactive")) {
-			throw new ObjectNotFoundException("user is inactive");
-		} 
-		else if( user == null) {
-			throw new UsernameNotFoundException("Invalid username or password. or user is inactive");
-		}
-		else {
+		if(user == null) {
+			throw new UsernameNotFoundException("Invalid username or password.");
+			}
+		else if(user.getStatus().equalsIgnoreCase("inactive")){
+			throw new UsernameNotFoundException("Invalid username or password.");
+			}
 			return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
 					getAuthority(user));
-		}
 	}
-
 	private Set<SimpleGrantedAuthority> getAuthority(User user) {
 		Set<SimpleGrantedAuthority> authorities = new HashSet<>();
 		user.getRoles().forEach(role -> {
@@ -256,6 +257,16 @@ public class UserService implements UserDetailsService {
 							if (emailCode != null && mobileCode != null) {
 								user1.setStatus("active");
 								userRepository.save(user);
+								FiatWallet newWalletType = fiatWalletRepository.findByUser(user1);
+									if (newWalletType == null) {
+										FiatWallet wallet = new FiatWallet();
+										wallet.setCoinName("RUPEES");
+										wallet.setWalletType("FIAT");
+										wallet.setShadowBalance(0.0);
+										wallet.setBalance(0.0);
+										wallet.setUser(user1);
+										fiatWalletRepository.save(wallet);
+								}
 							}
 						}
 						otp_data.remove(requestOTP.getMobileNumber());
@@ -325,6 +336,16 @@ public class UserService implements UserDetailsService {
 							if (emailCode != null && mobileCode != null) {
 								user.setStatus("active");
 								userRepository.save(user);
+								FiatWallet newWalletType = fiatWalletRepository.findByUser(user);
+								if (newWalletType == null) {
+									FiatWallet wallet = new FiatWallet();
+									wallet.setCoinName("RUPEES");
+									wallet.setWalletType("FIAT");
+									wallet.setShadowBalance(0.0);
+									wallet.setBalance(0.0);
+									wallet.setUser(user);
+									fiatWalletRepository.save(wallet);
+							}
 							}
 						}
 						email_data.remove(verifyEmail.getEmail());
