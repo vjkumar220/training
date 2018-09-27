@@ -1,6 +1,7 @@
 package com.oodles.services;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +21,17 @@ public class AdminSupplyService {
 	public Map<String, Object> SupplyUpdation() {
 		Map<String, Object> result = new HashMap<String, Object>();
 		Long userId=(long) 2;
+		List<SellOrder> sellOrderList = sellOrderRepository.findByUserId(userId);
 		
-		SellOrder newWalletType = sellOrderRepository.findByUserId(userId);
-		String coinName=newWalletType.getCoinName();
-		Double remainingcoin=newWalletType.getRemainingCoin();
-		CryptoCurrency cryptoname = cryptoCurrencyRepository.findBycoinName(coinName);
+		for (SellOrder selllistentry : sellOrderList) {
+			Double remainingcoin=selllistentry.getRemainingCoin();
+		
+		CryptoCurrency cryptoname = cryptoCurrencyRepository.findBycoinName(selllistentry.getCoinName());
         if(cryptoname!=null)
         {
         	cryptoname.setInitialSupply(remainingcoin);
 		cryptoCurrencyRepository.save(cryptoname);
-        }
+        }}
 		return result;
 	}
 }

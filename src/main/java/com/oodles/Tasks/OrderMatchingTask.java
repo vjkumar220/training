@@ -14,6 +14,7 @@ import com.oodles.models.CryptoWallet;
 import com.oodles.models.SellOrder;
 import com.oodles.repository.BuyOrderRepository;
 import com.oodles.repository.SellOrderRepository;
+import com.oodles.services.AdminSupplyService;
 import com.oodles.services.OrderMatchingService;
 
 @Service
@@ -21,6 +22,8 @@ import com.oodles.services.OrderMatchingService;
 public class OrderMatchingTask {
 	@Autowired
 	private OrderMatchingService orderMatchingService;
+	@Autowired
+	private AdminSupplyService adminSupplyService;
 	@Autowired
 	private BuyOrderRepository buyOrderRepository;
 	@Autowired
@@ -33,7 +36,7 @@ public class OrderMatchingTask {
 
 		
 		orderMatchingService.orderMatch();
-
+		adminSupplyService.SupplyUpdation();
 		System.out.println("Transaction of Buy and Sell is processing");
 		
 		}

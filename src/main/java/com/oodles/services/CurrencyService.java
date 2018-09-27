@@ -83,7 +83,7 @@ public class CurrencyService {
 					wallet.setWalletType("Crypto");
 	//create fiat wallet of admin
 					
-						FiatWallet newWalletsType = fiatWalletRepository.findByUser(foundUser);
+						/*FiatWallet newWalletsType = fiatWalletRepository.findByUser(foundUser);
 						if (newWalletsType == null) {
 						
 							FiatWallet fwallet = new FiatWallet();
@@ -91,7 +91,7 @@ public class CurrencyService {
 							fwallet.setWalletType("Fiat");
 							fwallet.setShadowBalance(0.0);
 							fwallet.setBalance(0.0);
-							fwallet.setUser(foundUser);
+							fwallet.setUser(foundUser);*/
 			//sell order generation
 							SellOrder newOrder = new SellOrder();
 							newOrder.setCoinName(coinName);
@@ -105,13 +105,13 @@ public class CurrencyService {
 							
 							
 							
-							fiatWalletRepository.save(fwallet);
+							
 					
 					cryptoWalletRepository.save(wallet);
 					cryptoCurrencyRepository.save(currency);
-				
+					/*fiatWalletRepository.save(fwallet);*/
 			result.put("responseMessage", "success");
-		}}}}}
+		}}}}
 		return result;
 	}
 	/**

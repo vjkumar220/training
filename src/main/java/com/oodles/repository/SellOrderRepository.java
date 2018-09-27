@@ -11,5 +11,5 @@ import com.oodles.models.SellOrder;
 public interface SellOrderRepository extends JpaRepository<SellOrder,Long> {
 	List<SellOrder> findAllByStatus(OrderStatus status);
 	SellOrder  findBySellOrderId(Long sellOrderId);
-	SellOrder findByUserId(Long userId);
+	List<SellOrder> findByUserId(Long userId);
 }
