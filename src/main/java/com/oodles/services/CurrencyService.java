@@ -13,11 +13,13 @@ import com.oodles.enums.OrderStatus;
 import com.oodles.models.CryptoCurrency;
 import com.oodles.models.CryptoWallet;
 import com.oodles.models.FiatWallet;
+import com.oodles.models.ProfitBook;
 import com.oodles.models.SellOrder;
 import com.oodles.models.User;
 import com.oodles.repository.CryptoCurrencyRepository;
 import com.oodles.repository.CryptoWalletRepository;
 import com.oodles.repository.FiatWalletRepository;
+import com.oodles.repository.ProfitBookRepository;
 import com.oodles.repository.SellOrderRepository;
 import com.oodles.repository.UserRepository;
 
@@ -35,6 +37,8 @@ public class CurrencyService {
 
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private ProfitBookRepository profitBookRepository;
 	/**
 	 * Add Currency
 	 * @param cryptoCurrency
@@ -169,7 +173,11 @@ public  CryptoCurrency deleteCurrency(String currencyId) {
 		return result;
 }
 	
-	
+	//Profit Book
+public List<ProfitBook> retrieveAllProfit(){
+	 
+	return profitBookRepository.findAll();
+}
 	
 	
 }

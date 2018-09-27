@@ -19,6 +19,7 @@ import com.oodles.dto.CryptoCurrencyDto;
 import com.oodles.dto.StringConstant;
 import com.oodles.exceptions.ResponseHandler;
 import com.oodles.models.CryptoCurrency;
+import com.oodles.models.ProfitBook;
 import com.oodles.services.CurrencyService;
 
 @RestController
@@ -85,5 +86,10 @@ public Map deleteCurrency(@PathVariable String currencyId)
 		 result=currencyService.deleteCurrency(currencyId);
 			return ResponseHandler.generateResponse(HttpStatus.NO_CONTENT, false,StringConstant.Success, null, result);
 		
+}
+@GetMapping(value = "/v1/admin/profit")
+public List<ProfitBook> viewAllProfit() {
+	
+	return currencyService.retrieveAllProfit();
 }
 }
