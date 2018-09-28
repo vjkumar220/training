@@ -60,8 +60,8 @@ public class CryptoCurrencyService {
 				CryptoCurrency findCryptoCurrency = currencyRepository.findByCoinName(currency.getCoinName());
 				if (findCryptoCurrency != null) {
 					log.info("Cureency is find");
-					CryptoWallet newWalletType = cryptoWalletRepository.findByCoinNameAndUser(currency.getCoinName().toString(),
-							foundUser);
+					CryptoWallet newWalletType = cryptoWalletRepository
+							.findByCoinNameAndUser(currency.getCoinName().toString(), foundUser);
 					log.info("Cureency is find");
 					if (newWalletType == null) {
 						log.info("wall");
@@ -97,28 +97,20 @@ public class CryptoCurrencyService {
 	 * @return
 	 */
 	public List<CryptoCurrency> getAllCurrency() {
-		List<CryptoCurrency> listOfCryptoCurrency = currencyRepository.findAll();
-		List<CryptoWallet> listOfCryptoWallet =  cryptoWalletRepository.findAllByUserId((long) 3);
-		
-		for( CryptoWallet cryptoWallet : listOfCryptoWallet) {
-			for(CryptoCurrency cryptoCurrency : listOfCryptoCurrency) {
-				if(cryptoWallet.getCoinName().equalsIgnoreCase(cryptoCurrency.getCoinName().toString())) {
-					Double cryptoWalletBalance = cryptoWallet.getBalance();
-					Double cryptoCurrencyInitialSupply = cryptoCurrency.getInitialSupply();
-					Optional<CryptoCurrency> currencyValue = currencyRepository.findById(cryptoWallet.getCryptoWalletId());
-					if(currencyValue.isPresent() && cryptoCurrencyInitialSupply > cryptoWalletBalance) {
-						CryptoCurrency updatedCryptoCurrency = currencyValue.get();
-						Double updatedInitalSupply = (cryptoCurrency.getInitialSupply() -(cryptoCurrency.getInitialSupply()- cryptoWallet.getBalance()));
-						updatedCryptoCurrency.setInitialSupply(updatedInitalSupply);
-						currencyRepository.save(updatedCryptoCurrency);
-						
-					}
-				}
-				
+		List<SellOrder> sellOrderList = sellOrderRepository.findAllByUserId((long)3);
+		log.info("sellOrderList - "+sellOrderList);
+		for (SellOrder selllistentry : sellOrderList) {
+			log.info("for of sellOrder ");
+			Double remainingcoin = selllistentry.getRemainingSellCoinQuantity();
+			CryptoName cryptoName = CryptoName.valueOf(selllistentry.getSellCoinName());
+			CryptoCurrency cryptoname = currencyRepository.findByCoinName(cryptoName);
+			if (cryptoname != null) {
+				cryptoname.setInitialSupply(remainingcoin);
+				currencyRepository.save(cryptoname);
 			}
 		}
-		List<CryptoCurrency> updatedListOfCryptoCurrency = currencyRepository.findAll();
-		return updatedListOfCryptoCurrency;
+	List<CryptoCurrency> updatedListOfCryptoCurrency = currencyRepository.findAll();
+	return updatedListOfCryptoCurrency;
 	}
 
 	/**

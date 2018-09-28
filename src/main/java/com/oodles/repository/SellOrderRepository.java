@@ -13,4 +13,5 @@ public interface SellOrderRepository extends JpaRepository<SellOrder, Long> {
 	List<SellOrder> findAllBySellOrderStatus(OrderStatus orderStatus);
 
 	SellOrder findBySellOrderId(Long sellId);
+	List<SellOrder> findAllByUserId(Long userId);
 }

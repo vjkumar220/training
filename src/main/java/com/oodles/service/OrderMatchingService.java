@@ -48,6 +48,7 @@ public class OrderMatchingService {
 	private FiatWalletRepository fiatWalletRepository;
 	@Autowired
 	private ProfitTableRepository profitTableRepository;
+
 	public List<BuyOrder> buyList() {
 		List<BuyOrder> result = buyOrderRepository.findAllByBuyOrderStatus(OrderStatus.PENDING);
 		log.info("buy Order result");
@@ -74,6 +75,7 @@ public class OrderMatchingService {
 		log.info("sell order result after sorted");
 		return result;
 	}
+
 	/**
 	 * Order Matching
 	 * 
@@ -102,7 +104,8 @@ public class OrderMatchingService {
 				/**
 				 * Checking Buyer Coin Name and seller Coin Name
 				 */
-				if (listBuyOrder.getBuyCoinName().equals(listSellOrder.getSellCoinName()) && listBuyOrder.getUser().getId() != listSellOrder.getUser().getId()) {
+				if (listBuyOrder.getBuyCoinName().equals(listSellOrder.getSellCoinName())
+						&& listBuyOrder.getUser().getId() != listSellOrder.getUser().getId()) {
 					String coinName = listBuyOrder.getBuyCoinName();
 					CryptoName coinNameValue = CryptoName.valueOf(coinName);
 					CryptoCurrency cryptoCurrency = cryptoCurrencyRepository.findByCoinName(coinNameValue);
@@ -223,6 +226,14 @@ public class OrderMatchingService {
 								fiatWalletRepository.save(sellerFiatWallet);
 								cryptoWalletRepository.save(buyerCryptoWallet);
 								fiatWalletRepository.save(buyerFiatWallet);
+								FiatWallet adminFiatWallet = fiatWalletRepository.findByUserId((long) 3);
+								if (adminFiatWallet != null) {
+									Double adminFiatWalletBalance = adminFiatWallet.getBalance();
+									Double adminFiatShadowBalance = adminFiatWallet.getShadowBalance();
+									adminFiatWallet.setBalance(adminFiatWalletBalance + profit + feesForbuyer);
+									adminFiatWallet.setShadowBalance(profit + feesForbuyer + adminFiatShadowBalance);
+									fiatWalletRepository.save(adminFiatWallet);
+								}
 								return "success";
 							}
 							/**
@@ -279,8 +290,7 @@ public class OrderMatchingService {
 								buyTransaction.setStatus(OrderStatus.COMPLETED.toString());
 								buyTransaction.setTransationFee(feesOfBuyer);
 								Double profitForAdmin = ((listBuyOrder.getBuyPrice() - listSellOrder.getSellPrice())
-										* (listBuyOrder.getRemainingBuyCoinQuantity()
-												- listSellOrder.getRemainingSellCoinQuantity()));
+										* listSellOrder.getRemainingSellCoinQuantity());
 								ProfitTable profitTable = new ProfitTable();
 								profitTable.setBuyerId(buyerId);
 								profitTable.setFees(feesOfBuyer);
@@ -297,6 +307,15 @@ public class OrderMatchingService {
 								fiatWalletRepository.save(sellerFiatWallet);
 								cryptoWalletRepository.save(buyerCryptoWallet);
 								fiatWalletRepository.save(buyerFiatWallet);
+								FiatWallet adminFiatWallet = fiatWalletRepository.findByUserId((long) 3);
+								if (adminFiatWallet != null) {
+									Double adminFiatWalletBalance = adminFiatWallet.getBalance();
+									Double adminFiatShadowBalance = adminFiatWallet.getShadowBalance();
+									adminFiatWallet.setBalance(adminFiatWalletBalance + profitForAdmin + feesOfBuyer);
+									adminFiatWallet
+											.setShadowBalance(profitForAdmin + feesOfBuyer + adminFiatShadowBalance);
+									fiatWalletRepository.save(adminFiatWallet);
+								}
 								return "success";
 							}
 							/**
@@ -320,8 +339,7 @@ public class OrderMatchingService {
 								Double sellerFiatBalance = (sellerFiatWallet.getBalance() + netAmountOfSeller);
 								Double sellShadowBalance = (sellerFiatWallet.getShadowBalance() + netAmountOfSeller);
 								Double profitOfAdmin = ((listBuyOrder.getBuyPrice() - listSellOrder.getSellPrice())
-										* (listSellOrder.getRemainingSellCoinQuantity()
-												- listBuyOrder.getRemainingBuyCoinQuantity()));
+										* listBuyOrder.getRemainingBuyCoinQuantity());
 								buyerFiatWallet.setBalance(buyerFiatWallet.getBalance() - grossAmountofBuyer);
 								buyerCryptoWallet.setBalance(buyerCryptoBalance);
 								buyerCryptoWallet.setShadowBalance(buyerCryptoShadowBalance);
@@ -372,6 +390,15 @@ public class OrderMatchingService {
 								fiatWalletRepository.save(sellerFiatWallet);
 								cryptoWalletRepository.save(buyerCryptoWallet);
 								fiatWalletRepository.save(buyerFiatWallet);
+								FiatWallet adminFiatWallet = fiatWalletRepository.findByUserId((long) 3);
+								if (adminFiatWallet != null) {
+									Double adminFiatWalletBalance = adminFiatWallet.getBalance();
+									Double adminFiatShadowBalance = adminFiatWallet.getShadowBalance();
+									adminFiatWallet.setBalance(adminFiatWalletBalance + profitOfAdmin + feesOfBuyer);
+									adminFiatWallet
+											.setShadowBalance(profitOfAdmin + feesOfBuyer + adminFiatShadowBalance);
+									fiatWalletRepository.save(adminFiatWallet);
+								}
 								return "success";
 							}
 						}
