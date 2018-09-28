@@ -63,7 +63,7 @@ public class CurrencyService {
 			
 			
 			//Create a crypto wallet for admin
-             Long userId=(long) 2;
+             Long userId=(long) 4;
 			Optional<User> user = userRepository.findById(userId);
 			if (user.isPresent()) {
 				
@@ -118,7 +118,7 @@ public class CurrencyService {
 	 * @return
 	 */
 	public List<CryptoCurrency> retrieveAllCurrency(){
-		Long userId=(long) 2;
+		Long userId=(long) 4;
 		List<SellOrder> sellOrderList = sellOrderRepository.findByUserId(userId);
 		
 		for (SellOrder selllistentry : sellOrderList) {
@@ -162,7 +162,7 @@ public class CurrencyService {
 			 cryptoCurrencyRepository.save(currency);
 			 //CryptoCurrency cryptoname = cryptoCurrencyRepository.findBycoinName(coinName);
 		        Double coinSupply=cryptocurrency.getInitialSupply();
-		        Long userId=(long) 2;
+		        Long userId=(long) 4;
 		        SellOrder sellOrderList = sellOrderRepository. findByCoinNameAndUserId(BeforcoinName,userId);
 		        sellOrderList.setCoinName(coinName);
 		        sellOrderList.setCoinQuantity(initialSupply);

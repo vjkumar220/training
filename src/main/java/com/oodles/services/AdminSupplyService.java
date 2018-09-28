@@ -20,7 +20,7 @@ public class AdminSupplyService {
 		private SellOrderRepository sellOrderRepository;
 	public Map<String, Object> SupplyUpdation() {
 		Map<String, Object> result = new HashMap<String, Object>();
-		Long userId=(long) 2;
+		Long userId=(long) 4;
 		List<SellOrder> sellOrderList = sellOrderRepository.findByUserId(userId);
 		
 		for (SellOrder selllistentry : sellOrderList) {

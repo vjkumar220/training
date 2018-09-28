@@ -1,5 +1,7 @@
 package com.oodles.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,6 +11,7 @@ import com.oodles.models.User;
 	public interface FiatDepositRepository extends JpaRepository<FiatDeposit,Long> {
 		FiatDeposit findByWalletTypeAndUser(String walletType,User userid);
 		FiatDeposit findByTransactionIdAndUserId(Long transactionId,Long userid);
+		List<FiatDeposit> findByUserId(Long userId);
 	}
 
 

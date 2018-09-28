@@ -276,7 +276,7 @@ public class OrderMatchingService {
 								equalcoinprofit.setSellerId(sellerUserId);
 								profitBookRepository.save(equalcoinprofit);
 								//Admin wallet update
-								 Long userId=(long) 2;
+								 Long userId=(long) 4;
 									Optional<User> user = userRepository.findById(userId);
 									if (user.isPresent()) {
 										User foundUser = user.get();
@@ -384,7 +384,7 @@ public class OrderMatchingService {
 								equalcoinprofit.setSellerId(sellerUserId);
 								profitBookRepository.save(equalcoinprofit);
 								//Admin wallet update
-								 Long userId=(long) 2;
+								 Long userId=(long) 4;
 									Optional<User> user = userRepository.findById(userId);
 									if (user.isPresent()) {
 										User foundUser = user.get();
@@ -494,7 +494,7 @@ public class OrderMatchingService {
 								equalcoinprofit.setSellerId(sellerUserId);
 								profitBookRepository.save(equalcoinprofit);
 								//Admin wallet update
-								 Long userId=(long) 2;
+								 Long userId=(long) 4;
 									Optional<User> user = userRepository.findById(userId);
 									if (user.isPresent()) {
 										User foundUser = user.get();

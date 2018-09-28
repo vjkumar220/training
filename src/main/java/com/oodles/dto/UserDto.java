@@ -6,7 +6,7 @@ import javax.validation.constraints.Size;
 
 public class UserDto {
 	@Size(min=2, message="Name should have atleast 2 characters")
-	  @Pattern(regexp="[a-zA-Z]+", message="Enter Alphabet only")
+	  @Pattern(regexp="^[a-zA-Z ]+$", message="Enter Alphabet only")
 
     private String name;
 	 @NotBlank
@@ -20,7 +20,7 @@ public class UserDto {
     
     private String password;
 	 @NotBlank
-	 @Pattern(regexp="[a-zA-Z]+", message="Enter Alphabet only")
+	 @Pattern(regexp="^[a-zA-Z ]+$", message="Enter Alphabet only")
     private String country;
 	
 	 

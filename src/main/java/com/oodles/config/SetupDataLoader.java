@@ -36,6 +36,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         if (alreadySetup) {
             return;
         }final Role adminRole = createRoleIfNotFound("ADMIN");
+        createRoleIfNotFound("USER");
+        createRoleIfNotFound("SubAdmin");
         createUserIfNotFound("TradeExchange", "trade@gmail.com", "9089754667", "Test@123","India", new HashSet<Role>(Arrays.asList(adminRole)) );
 
         alreadySetup = true;

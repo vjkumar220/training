@@ -51,13 +51,15 @@ public class OrderMatchingController {
 	}
 
 
-	@GetMapping(value = "/v1/user/transaction/history/buyer/{buyerId}")
+	@RequestMapping(method = RequestMethod.GET, value = "/v1/user/transaction/history/buyer/{buyerId}")
+
+	
 	public Map<String, Object> buyerHistory(@PathVariable Long buyerId) {
 		List<BuyTransaction> output = transactionService.buyTransactionHistory(buyerId);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, StringConstant.Success, null, output);
 	}
+	@RequestMapping(method = RequestMethod.GET, value ="/v1/user/transaction/history/seller/{sellerId}")
 	
-	@GetMapping(value = "/v1/user/transaction/history/seller/{sellerId}")
 	public Map<String, Object> sellerHistory(@PathVariable Long sellerId) {
 		List<SellTransaction> output = transactionService.sellTransactionHistory(sellerId);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, StringConstant.Success, null, output);

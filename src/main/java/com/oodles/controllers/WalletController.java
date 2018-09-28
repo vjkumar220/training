@@ -1,5 +1,6 @@
 package com.oodles.controllers;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -12,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.oodles.dto.CryptoApprovalDto;
-import com.oodles.dto.CryptoDepositDto;
 import com.oodles.dto.CryptoWalletDto;
 import com.oodles.dto.CryptoWithdrawDto;
 import com.oodles.dto.FiatApprovalDto;
@@ -21,13 +20,19 @@ import com.oodles.dto.FiatDepositDto;
 import com.oodles.dto.FiatWithdrawDto;
 import com.oodles.dto.StringConstant;
 import com.oodles.exceptions.ResponseHandler;
+import com.oodles.models.CryptoWallet;
+import com.oodles.models.FiatDeposit;
+import com.oodles.models.FiatWallet;
 import com.oodles.services.WalletService;
+import com.oodles.services.WallethHistoryService;
 
 @RestController
 public class WalletController {
 	private Logger logger = LoggerFactory.getLogger(WalletController.class);
 	@Autowired
 	private WalletService walletService;
+	@Autowired
+	private WallethHistoryService walletHistoryService;
 
 	/**
 	 *  Create a fiat wallet
@@ -168,5 +173,27 @@ public class WalletController {
 			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, StringConstant.Success, null, result);
 
 	}
+	@RequestMapping(method = RequestMethod.GET,value = "/v1/user/wallet/fiat/history/{userId}")
+	
+	public Map<String, Object> fiatWalletHistory(@PathVariable Long userId) {
+		FiatWallet output = walletHistoryService.fiatWalletHistory(userId);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, StringConstant.Success, null, output);
+	}
+@RequestMapping(method = RequestMethod.GET, value ="/v1/user/wallet/crypto/history/{userId}}")
+	
+	public Map<String, Object> cryptoWalletHistory(@PathVariable Long userId) {
+		List<CryptoWallet> output = walletHistoryService.cryptoWalletHistory(userId);
+			return ResponseHandler.generateResponse(HttpStatus.OK, false, StringConstant.Success, null, output);
+	}	
+	
+@RequestMapping(method = RequestMethod.GET, value ="/v1/admin/wallet/fiat/deposit/{userId}}")
 
+public Map<String, Object> fiatDepositHistory(@PathVariable Long userId) {
+	List<FiatDeposit> output = walletHistoryService.fiatWalletDepositHistory(userId);
+		return ResponseHandler.generateResponse(HttpStatus.OK, false, StringConstant.Success, null, output);
+}	
+
+	
+	
+	
 }
