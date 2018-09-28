@@ -18,8 +18,8 @@ import com.oodles.models.LoginUser;
 import com.oodles.services.UserService;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/token")
-public class AuthenticationController {
+@RequestMapping("/login")
+public class LoginController {
 
     @Autowired
     private AuthenticationManager authenticationManager;

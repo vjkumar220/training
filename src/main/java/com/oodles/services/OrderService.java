@@ -52,6 +52,8 @@ public class OrderService {
 	private CryptoWalletRepository cryptoWalletRepository;
 	@Autowired
 	private CryptoCurrencyRepository cryptoCurrencyRepository;
+	@Autowired
+	private OrderMatchingService orderMatchingService;
 	
 	public Map<String, Object> createLimitOrder(OrderDto orderDTO) {
 		logger.info("createOrder service entered");
@@ -167,6 +169,7 @@ public class OrderService {
 					newOrder.setStatus(status.PENDING);
 					newOrder.setUser(foundUser);
 					buyOrderRepository.save(newOrder);
+					orderMatchingService.orderMatch();
 					result.put("responseMessage", "success");
 					logger.info("Create order service end");
 					return result;

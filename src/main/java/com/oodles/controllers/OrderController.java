@@ -32,7 +32,7 @@ public class OrderController {
 	 *  Create Limit Order
 	 * @param orderDTO
 	 * @return
-	 */
+	 *//*
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/order/limit")
 
 	public Map createLimitOrder(@RequestBody OrderDto orderDTO) {
@@ -47,11 +47,11 @@ public class OrderController {
 		
 	}
 
-	/**
+	*//**
 	 *  Create Market Order
 	 * @param marketOrderDTO
 	 * @return
-	 */
+	 *//*
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/order/market")
 
 	public Map createMarketOrder(@RequestBody MarketOrderDto marketOrderDTO) {
@@ -65,7 +65,7 @@ public class OrderController {
 
 		
 	}
-
+*/
 	/**
 	 *  Create Buy Order
 	 * @param orderDTO
