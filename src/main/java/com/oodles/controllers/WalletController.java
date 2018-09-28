@@ -101,7 +101,7 @@ public class WalletController {
 	 *  Deposit in Crypto wallet
 	 * @param cryptoDepositDTO
 	 * @return
-	 */
+	 *//*
 
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/wallets/crypto/deposit")
 
@@ -114,11 +114,11 @@ public class WalletController {
 			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, StringConstant.Success, null, result);
 
 	}
-	/**
+	*//**
 	 *  Admin Approval for Crypto Deposit
 	 * @param cryptoApprovalDTO
 	 * @return
-	 */
+	 *//*
 
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/admin/wallets/crypto/deposit/approval")
 
@@ -131,7 +131,7 @@ public class WalletController {
 			logger.info("Approval controller end");
 			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, StringConstant.Success, null, result);
 
-	}
+	}*/
 	/**
 	 *  Fiat Wallet Withdraw
 	 * @param fiatWithdrawDTO

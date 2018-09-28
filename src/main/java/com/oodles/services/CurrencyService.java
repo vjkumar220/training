@@ -12,7 +12,6 @@ import com.oodles.dto.CryptoCurrencyDto;
 import com.oodles.enums.OrderStatus;
 import com.oodles.models.CryptoCurrency;
 import com.oodles.models.CryptoWallet;
-import com.oodles.models.FiatWallet;
 import com.oodles.models.ProfitBook;
 import com.oodles.models.SellOrder;
 import com.oodles.models.User;
@@ -119,6 +118,18 @@ public class CurrencyService {
 	 * @return
 	 */
 	public List<CryptoCurrency> retrieveAllCurrency(){
+		Long userId=(long) 2;
+		List<SellOrder> sellOrderList = sellOrderRepository.findByUserId(userId);
+		
+		for (SellOrder selllistentry : sellOrderList) {
+			Double remainingcoin=selllistentry.getRemainingCoin();
+		
+		CryptoCurrency cryptoname = cryptoCurrencyRepository.findBycoinName(selllistentry.getCoinName());
+        if(cryptoname!=null)
+        {
+        	cryptoname.setInitialSupply(remainingcoin);
+		cryptoCurrencyRepository.save(cryptoname);
+        }}
 		 
 		return cryptoCurrencyRepository.findAll();
 	}
@@ -137,6 +148,7 @@ public class CurrencyService {
 	{
 		Optional<CryptoCurrency> value=cryptoCurrencyRepository.findById(currencyId);
 		CryptoCurrency cryptocurrency = value.get();
+		String BeforcoinName=cryptocurrency.getCoinName();
 		 if(value.isPresent())
 		 
 		{
@@ -148,7 +160,17 @@ public class CurrencyService {
 			 currency.setPrice(price);
 			 currency.setSymbol(symbol);
 			 cryptoCurrencyRepository.save(currency);
-		}		
+			 //CryptoCurrency cryptoname = cryptoCurrencyRepository.findBycoinName(coinName);
+		        Double coinSupply=cryptocurrency.getInitialSupply();
+		        Long userId=(long) 2;
+		        SellOrder sellOrderList = sellOrderRepository. findByCoinNameAndUserId(BeforcoinName,userId);
+		        sellOrderList.setCoinName(coinName);
+		        sellOrderList.setCoinQuantity(initialSupply);
+		        sellOrderList.setSellDesiredPrice(price);
+		        sellOrderList.setRemainingCoin(initialSupply);
+		        sellOrderRepository.save(sellOrderList);
+			 		}	
+		 
 		return cryptocurrency;
 	}
 	/**
