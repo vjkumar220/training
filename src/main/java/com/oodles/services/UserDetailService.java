@@ -24,6 +24,9 @@ private UserRepository userRepository;
 			
 			throw new UsernameNotFoundException("Invalid username or password.");
 		}
+		else if(user.getEnabled().equalsIgnoreCase("Inactive")){
+			throw new UsernameNotFoundException("Invalid username or password.");
+			}
 		return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getAuthority(user));
 	}
 

@@ -21,7 +21,7 @@ import com.oodles.services.OTPService;
 public class OTPSystemController {
 	@Autowired
 	private OTPService otpService;
-	@RequestMapping(value="/v1/user/mobile/verify/{userId}",method=RequestMethod.POST)
+	@RequestMapping(value="v1/user/mobile/verify/{userId}",method=RequestMethod.POST)
 	public Map sendOtp(@PathVariable String userId) {
 		String result = null;
 		
@@ -29,7 +29,7 @@ public class OTPSystemController {
 			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, StringConstant.Success, null, result);
 		
 	}
-	@RequestMapping(value="/v1/user/mobile/verify",method=RequestMethod.PUT)
+	@RequestMapping(value="v1/user/mobile/verify",method=RequestMethod.PUT)
 	public Map verifyOtp(@RequestBody OtpDto requestOTP) {
 		String result = null;
 		

@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,7 @@ import com.oodles.repository.FiatWalletRepository;
 import com.oodles.repository.ProfitBookRepository;
 import com.oodles.repository.SellOrderRepository;
 import com.oodles.repository.SellTransactionRepository;
+import com.oodles.repository.UserRepository;
 
 @Service
 public class OrderMatchingService {
@@ -50,6 +52,8 @@ public class OrderMatchingService {
 	private SellTransactionRepository sellTransactionRepository;
     @Autowired
     private ProfitBookRepository profitBookRepository;
+    @Autowired
+	private UserRepository userRepository;
 	public List<BuyOrder> buyList() {
 		List<BuyOrder> result = buyOrderRepository.findAllByStatus(OrderStatus.PENDING);
 
@@ -182,6 +186,13 @@ public class OrderMatchingService {
 							// Checking Coin price
 							BuyOrder buy = buyOrderRepository.findByBuyOrderId(buyId);
 							SellOrder sell = sellOrderRepository.findBySellOrderId(sellId);
+							
+							
+							
+							
+							
+							
+							
 							if (buylistentry.getRemainingCoin() > selllistentry.getRemainingCoin()) {
                                 if(buyerUserId!=sellerUserId)
                                 {
@@ -264,7 +275,29 @@ public class OrderMatchingService {
 								equalcoinprofit.setProfitAmount(profitAmount);
 								equalcoinprofit.setSellerId(sellerUserId);
 								profitBookRepository.save(equalcoinprofit);
-								
+								//Admin wallet update
+								 Long userId=(long) 2;
+									Optional<User> user = userRepository.findById(userId);
+									if (user.isPresent()) {
+										User foundUser = user.get();
+										FiatWallet newWalletsType = fiatWalletRepository.findByUser(foundUser);
+										Double currentadminbalance=newWalletsType.getBalance();
+										Double currentadminshadowbalance = newWalletsType.getShadowBalance();
+																		
+								if(buyerUserId==userId)
+								{
+									newWalletsType.setBalance(currentadminbalance+((buyamount) * fees / 100));
+									newWalletsType.setShadowBalance(currentadminshadowbalance+((buyamount) * fees / 100));
+									fiatWalletRepository.save(newWalletsType);
+								}
+								else
+								{
+
+									newWalletsType.setBalance(currentadminbalance+profitAmount);
+									newWalletsType.setShadowBalance(currentadminshadowbalance+profitAmount);
+									fiatWalletRepository.save(newWalletsType);
+								}}
+									
 								logger.info("for same coin quantity saved");
 								result.put("responseMessage", "success");
                                 }
@@ -350,6 +383,28 @@ public class OrderMatchingService {
 								equalcoinprofit.setProfitAmount(profitAmount);
 								equalcoinprofit.setSellerId(sellerUserId);
 								profitBookRepository.save(equalcoinprofit);
+								//Admin wallet update
+								 Long userId=(long) 2;
+									Optional<User> user = userRepository.findById(userId);
+									if (user.isPresent()) {
+										User foundUser = user.get();
+										FiatWallet newWalletsType = fiatWalletRepository.findByUser(foundUser);
+										Double currentadminbalance=newWalletsType.getBalance();
+										Double currentadminshadowbalance = newWalletsType.getShadowBalance();
+																		
+								if(buyerUserId==userId)
+								{
+									newWalletsType.setBalance(currentadminbalance+((buyamount) * fees / 100));
+									newWalletsType.setShadowBalance(currentadminshadowbalance+((buyamount) * fees / 100));
+									fiatWalletRepository.save(newWalletsType);
+								}
+								else
+								{
+
+									newWalletsType.setBalance(currentadminbalance+profitAmount);
+									newWalletsType.setShadowBalance(currentadminshadowbalance+profitAmount);
+									fiatWalletRepository.save(newWalletsType);
+								}}
 								
 								logger.info("for same coin quantity saved");
 								result.put("responseMessage", "success");
@@ -438,7 +493,28 @@ public class OrderMatchingService {
 								equalcoinprofit.setProfitAmount(profitAmount);
 								equalcoinprofit.setSellerId(sellerUserId);
 								profitBookRepository.save(equalcoinprofit);
-								
+								//Admin wallet update
+								 Long userId=(long) 2;
+									Optional<User> user = userRepository.findById(userId);
+									if (user.isPresent()) {
+										User foundUser = user.get();
+										FiatWallet newWalletsType = fiatWalletRepository.findByUser(foundUser);
+										Double currentadminbalance=newWalletsType.getBalance();
+										Double currentadminshadowbalance = newWalletsType.getShadowBalance();
+																		
+								if(buyerUserId==userId)
+								{
+									newWalletsType.setBalance(currentadminbalance+((amountforbuy) * fees / 100));
+									newWalletsType.setShadowBalance(currentadminshadowbalance+((amountforbuy) * fees / 100));
+									fiatWalletRepository.save(newWalletsType);
+								}
+								else
+								{
+
+									newWalletsType.setBalance(currentadminbalance+profitAmount);
+									newWalletsType.setShadowBalance(currentadminshadowbalance+profitAmount);
+									fiatWalletRepository.save(newWalletsType);
+								}}
 								
 								
 								logger.info("for same coin quantity saved");
