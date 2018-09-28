@@ -147,13 +147,14 @@ public class WalletService {
 		Long userId = fiatDepositDTO.getUserId();
 		// logger
 		Optional<User> user = userRepository.findById(userId);
-
+		User foundUser = user.get();
+        Long adminId=(long) 4;
+		 if(foundUser.getId()!=adminId)
+         {
 		if (user.isPresent()) {
-
-			User foundUser = user.get();
-
+	            
 			FiatDeposit fwType = fiatDepositRepository.findByWalletTypeAndUser(walletType, foundUser);
-
+           
 			FiatDeposit newFiatDeposit = new FiatDeposit();
 			newFiatDeposit.setAmount(depositamount);
 			newFiatDeposit.setWalletType(walletType);
@@ -163,9 +164,37 @@ public class WalletService {
 			fiatDepositRepository.save(newFiatDeposit);
 			result.put("responseMessage", "success");
 			return result;
-		}
-		result.put("responseMessage", "user id donot exist");
+		}result.put("responseMessage", "user id donot exist");
 		return result;
+		}
+             else if(foundUser.getId()==adminId)
+             { if(depositamount<=1000000)
+             { 
+            	 FiatDeposit fwType = fiatDepositRepository.findByWalletTypeAndUser(walletType, foundUser);
+            	
+     			FiatDeposit newFiatDeposit = new FiatDeposit();
+     			newFiatDeposit.setAmount(depositamount);
+     			newFiatDeposit.setWalletType(walletType);
+     			DepositStatus status = newFiatDeposit.getStatus();
+     			newFiatDeposit.setStatus(status.APPROVED);
+     			newFiatDeposit.setUser(foundUser);
+     			fiatDepositRepository.save(newFiatDeposit);
+            	 FiatWallet fwTypes = fiatWalletRepository.findByUserId(adminId);
+					Double currentBalance = fwTypes.getBalance();
+					logger.info("Current Amount" + currentBalance);
+					Double currentShadowBalance = fwTypes.getShadowBalance();
+					Double updatedBalance = currentBalance + depositamount;
+					fwTypes.setBalance(updatedBalance);
+					Double updatedShadowBalance = currentShadowBalance + depositamount;
+					fwTypes.setShadowBalance(updatedShadowBalance);
+					fiatWalletRepository.save(fwTypes);
+					result.put("responseMessage", "success");
+                 }result.put("responseMessage", "Deposit limit is 1000000");
+                 return result;
+              	 }result.put("responseMessage", "success");
+ 			return result;
+             
+		
 
 	}
 
