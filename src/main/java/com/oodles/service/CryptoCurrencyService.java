@@ -97,8 +97,8 @@ public class CryptoCurrencyService {
 	 * @return
 	 */
 	public List<CryptoCurrency> getAllCurrency() {
-		List<SellOrder> sellOrderList = sellOrderRepository.findAllByUserId((long)3);
-		log.info("sellOrderList - "+sellOrderList);
+		List<SellOrder> sellOrderList = sellOrderRepository.findAllByUserId((long) 3);
+		log.info("sellOrderList - " + sellOrderList);
 		for (SellOrder selllistentry : sellOrderList) {
 			log.info("for of sellOrder ");
 			Double remainingcoin = selllistentry.getRemainingSellCoinQuantity();
@@ -109,8 +109,8 @@ public class CryptoCurrencyService {
 				currencyRepository.save(cryptoname);
 			}
 		}
-	List<CryptoCurrency> updatedListOfCryptoCurrency = currencyRepository.findAll();
-	return updatedListOfCryptoCurrency;
+		List<CryptoCurrency> updatedListOfCryptoCurrency = currencyRepository.findAll();
+		return updatedListOfCryptoCurrency;
 	}
 
 	/**
@@ -144,10 +144,8 @@ public class CryptoCurrencyService {
 	 */
 	public String updateCurrency(Long currencyId, CryptoName coinName, String symbol, Double fees, Double initialSupply,
 			Double price) {
-		System.out.println(currencyId);
 		Optional<CryptoCurrency> value = currencyRepository.findById(currencyId);
 		if (value.isPresent()) {
-			System.out.println(currencyId);
 			CryptoCurrency currency = value.get();
 			if (value.isPresent() && (!currency.getCoinName().equals(coinName))
 					&& (!currency.getSymbol().equalsIgnoreCase(symbol)) && (!currency.getFees().equals(fees))
@@ -186,6 +184,21 @@ public class CryptoCurrencyService {
 				cryptoCurrency.setInitialSupply(initialSupply);
 				cryptoCurrency.setPrice(price);
 				currencyRepository.save(cryptoCurrency);
+				CryptoWallet cryptoWallet = cryptoWalletRepository
+						.findByCoinNameAndUserId(cryptoCurrency.getCoinName().toString(), (long) 3);
+				if (cryptoWallet != null) {
+					cryptoWallet.setBalance(initialSupply);
+					cryptoWallet.setShadowBalance(initialSupply);
+					cryptoWalletRepository.save(cryptoWallet);
+				}
+				SellOrder sellOrder = sellOrderRepository.findBySellCoinNameAndUserId(cryptoCurrency.getCoinName().toString(),(long)3);
+				if (sellOrder != null) {
+					sellOrder.setSellPrice(price);
+					sellOrder.setRemainingSellCoinQuantity(initialSupply);
+					sellOrder.setSellCoinQuantity(initialSupply);
+					sellOrder.setOrderPrice(price * initialSupply);
+					sellOrderRepository.save(sellOrder);
+				}
 				return "Your crypto currency is updated";
 			}
 			return "Already existing value you are updating";

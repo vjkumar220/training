@@ -16,13 +16,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.domain.FiatDeposit;
 import com.oodles.dto.ApprovalDto;
-import com.oodles.dto.CryptoApprovalDto;
-import com.oodles.dto.CryptoDepositDto;
 import com.oodles.dto.FiatDepositDto;
 import com.oodles.service.DepositService;
 import com.oodles.util.ResponseHandler;
@@ -75,12 +72,12 @@ public class DepositController {
 		return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, result);
 	}
 
-	/**
+/*	*//**
 	 * Creating the crypto deposit request
 	 * 
 	 * @param cryptoDepositDto
 	 * @return
-	 */
+	 *//*
 	@PreAuthorize("hasRole('USER')")
 	@PostMapping(value = "v1/user/crypto/deposit")
 	public Map<String, Object> createCryptoDeposit(@Valid @RequestBody CryptoDepositDto cryptoDepositDto) {
@@ -89,16 +86,16 @@ public class DepositController {
 
 	}
 
-	/**
+	*//**
 	 * Approve and update balance crypto deposit request
 	 * 
 	 * @param cryptoApprovalDto
 	 * @return
-	 */
+	 *//*
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(value = "v1/admin/approve/crypto/deposit")
 	public Map<String, Object> approveCryptoDepositRequest(@Valid @RequestBody CryptoApprovalDto cryptoApprovalDto) {
 		Map<Object, Object> result = depositService.approveCryptoRequest(cryptoApprovalDto);
 		return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, result);
-	}
+	}*/
 }

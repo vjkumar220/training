@@ -14,4 +14,5 @@ public interface SellOrderRepository extends JpaRepository<SellOrder, Long> {
 
 	SellOrder findBySellOrderId(Long sellId);
 	List<SellOrder> findAllByUserId(Long userId);
+	SellOrder findBySellCoinNameAndUserId(String coinName ,Long userId);
 }

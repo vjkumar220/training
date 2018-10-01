@@ -46,7 +46,7 @@ public class UserController {
 	@PostMapping(value = "/signup")
 	public Map<String, Object> createUser(@Valid @RequestBody UserDto user) {
 		Map<Object, Object> output = userService.createUser(user);
-		return ResponseHandler.generateResponse(HttpStatus.OK, false, SUCCESS, null, output);
+		return ResponseHandler.generateResponse(HttpStatus.CREATED, false, SUCCESS, null, output);
 	}
 
 	/**

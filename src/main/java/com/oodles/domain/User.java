@@ -76,7 +76,11 @@ public class User implements Serializable {
 
 	private String mobileCode;
 	
+	private String mobileCheck;
+	
 	private String emailCode;
+	
+	private String emailCheck;
 	
 	private String passToken;
 	
@@ -227,5 +231,22 @@ public class User implements Serializable {
 	public void setExpiryTimeOfEmail(Long expiryTimeOfEmail) {
 		this.expiryTimeOfEmail = expiryTimeOfEmail;
 	}
+
+	public String getMobileCheck() {
+		return mobileCheck;
+	}
+
+	public void setMobileCheck(String mobileCheck) {
+		this.mobileCheck = mobileCheck;
+	}
+
+	public String getEmailCheck() {
+		return emailCheck;
+	}
+
+	public void setEmailCheck(String emailCheck) {
+		this.emailCheck = emailCheck;
+	}
+	
 
 }

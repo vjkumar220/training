@@ -1,17 +1,16 @@
 package com.oodles.spring;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +23,8 @@ import com.oodles.repository.UserRepository;
 
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
+
+	Logger log = LoggerFactory.getLogger(SetupDataLoader.class);
 
 	private boolean alreadySetup = false;
 
@@ -43,7 +44,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
 	@Override
 	@Transactional
+	@EventListener
 	public void onApplicationEvent(final ContextRefreshedEvent event) {
+		log.info("Context Refreshed Event is fired"+event);
 		if (alreadySetup) {
 			return;
 		}
@@ -64,7 +67,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 		User userNumber = userRepository.findByPhoneNumber("9998887776");
 		if (userEmail == null && userNumber == null) {
 			Role findRole1 = roleRepository.findByRoleType("ADMIN");
-			Role findRole2 = roleRepository.findByRoleType("USER");;
+			Role findRole2 = roleRepository.findByRoleType("USER");
+			;
 			User newUser = new User();
 			HashSet<Role> roleSet = new HashSet<>();
 			roleSet.add(findRole1);
@@ -102,5 +106,12 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 		}
 		alreadySetup = true;
 	}
+	
+	
+	@EventListener
+	public void onApplicationEvent(final ContextClosedEvent event) {
+		log.info("Context closed event fired "+event);
+     }
+
 
 }

@@ -1,8 +1,16 @@
 package com.oodles.domain;
 
-public class LoginUser {
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
+public class LoginUser {
+	
+	@NotNull(message = "Enter the email")
+	@Email(message = "Enter Valid Email Id")
 	private String username;
+	@NotNull(message = "Enter the password")
+	@Pattern(regexp = "^.*(?=.{8,})(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$", message = " Enter Password Valid password")
 	private String password;
 
 	public String getUsername() {

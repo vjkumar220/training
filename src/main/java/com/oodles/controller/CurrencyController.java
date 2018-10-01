@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.domain.CryptoCurrency;
 import com.oodles.dto.CryptoCurrencyDto;
-import com.oodles.dto.FiatCurrencyDto;
 import com.oodles.service.CryptoCurrencyService;
 import com.oodles.service.FiatCurrencyService;
 import com.oodles.util.ResponseHandler;
@@ -51,19 +50,19 @@ public class CurrencyController {
 		return ResponseHandler.generateResponse(HttpStatus.CREATED, false, SUCCESS, null, result);
 	}
 
-	/**
+/*	*//**
 	 * creating fiat currency
 	 * 
 	 * @param fiatCurrency
 	 * @return
-	 */
+	 *//*
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(value = "v1/admin/currency/fiat/currency")
 	public Map<String, Object> createFiatCurrency(@Valid @RequestBody FiatCurrencyDto fiatCurrency) {
 		Map<Object, Object> result = fiatCurrencyService.createFiatCurrency(fiatCurrency);
 		return ResponseHandler.generateResponse(HttpStatus.CREATED, false, SUCCESS, null, result);
 	}
-
+*/
 	/**
 	 *  Getting all existing currency
 	 * @return

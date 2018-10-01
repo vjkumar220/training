@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import org.omg.CORBA.UnknownUserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +26,12 @@ import com.oodles.dto.EmailDto;
 import com.oodles.dto.EmailVerifyDto;
 import com.oodles.dto.OtpDto;
 import com.oodles.dto.UserDto;
-import com.oodles.exception.ResourceNotFoundException;
 import com.oodles.repository.FiatWalletRepository;
 import com.oodles.repository.RoleRepository;
 import com.oodles.repository.UserRepository;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
-
-import javassist.tools.rmi.ObjectNotFoundException;
 
 @Service(value = "userService")
 public class UserService implements UserDetailsService {
@@ -89,8 +85,7 @@ public class UserService implements UserDetailsService {
 	}
 
 	/**
-	 * Creating new User
-	 * 
+	 * Creating new User 
 	 * @param user
 	 * @return
 	 */
@@ -118,7 +113,7 @@ public class UserService implements UserDetailsService {
 			newUser.setRoles(roleSet);
 			role.setUsers(userSet);
 			userRepository.save(newUser);
-			result.put("responseMessage", "Welcome to our Trade Exchnage");
+			result.put("responseMessage", "Success");
 			return result;
 		}
 		result.put("responseMessage", "e-Mail or phone number is alredy present");
@@ -153,7 +148,6 @@ public class UserService implements UserDetailsService {
 
 	/**
 	 * delete user by id
-	 * 
 	 * @param id
 	 * @return
 	 */
@@ -170,7 +164,6 @@ public class UserService implements UserDetailsService {
 
 	/**
 	 * update user
-	 * 
 	 * @param id
 	 * @param name
 	 * @param email
@@ -252,9 +245,10 @@ public class UserService implements UserDetailsService {
 						Optional<User> value = userRepository.findById(user.getId());
 						if (value.isPresent()) {
 							User user1 = value.get();
-							String emailCode = user1.getEmailCode();
-							String mobileCode = user1.getMobileCode();
-							if (emailCode != null && mobileCode != null) {
+							user1.setMobileCheck("check");
+							userRepository.save(user1);
+							String emailCheck = user1.getEmailCheck();
+							if(emailCheck != null) {
 								user1.setStatus("active");
 								userRepository.save(user);
 								FiatWallet newWalletType = fiatWalletRepository.findByUser(user1);
@@ -267,6 +261,7 @@ public class UserService implements UserDetailsService {
 										wallet.setUser(user1);
 										fiatWalletRepository.save(wallet);
 								}
+							
 							}
 						}
 						otp_data.remove(requestOTP.getMobileNumber());
@@ -331,9 +326,10 @@ public class UserService implements UserDetailsService {
 						Optional<User> value = userRepository.findById(newUser.getId());
 						if (value.isPresent()) {
 							User user = value.get();
-							String emailCode = user.getEmailCode();
-							String mobileCode = user.getMobileCode();
-							if (emailCode != null && mobileCode != null) {
+							user.setEmailCheck("check");
+							userRepository.save(user);
+							String mobileCheck = user.getMobileCheck();
+							if(mobileCheck != null) {
 								user.setStatus("active");
 								userRepository.save(user);
 								FiatWallet newWalletType = fiatWalletRepository.findByUser(user);
@@ -346,6 +342,7 @@ public class UserService implements UserDetailsService {
 									wallet.setUser(user);
 									fiatWalletRepository.save(wallet);
 							}
+							
 							}
 						}
 						email_data.remove(verifyEmail.getEmail());

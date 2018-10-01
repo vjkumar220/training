@@ -39,6 +39,9 @@ public class OrderService {
 	private FiatWalletRepository fiatWalletRepository;
 	@Autowired
 	private CryptoCurrencyRepository cryptoCurrencyRepository;
+	@Autowired
+	private OrderMatchingService orderMatchingService;
+
 	/**
 	 * This function is working for placing buy order
 	 */
@@ -68,11 +71,16 @@ public class OrderService {
 					if (shadowBalance >= orderPrice) {
 						log.info(coinNameDto.toString());
 						Double updateShadowBalance = (shadowBalance - orderPrice);
-						BuyOrder buyOrder = new BuyOrder(OrderStatus.PENDING, buyPrice, coinNameDto.toString(), coinQuantity, orderPrice, coinQuantity, orderFee, user);
+						BuyOrder buyOrder = new BuyOrder(OrderStatus.PENDING, buyPrice, coinNameDto.toString(),
+								coinQuantity, orderPrice, coinQuantity, orderFee, user);
 						fiatWallet.setShadowBalance(updateShadowBalance);
 						fiatWalletRepository.save(fiatWallet);
 						buyOrderRepository.save(buyOrder);
-						return "Your Buy Order is Placed";
+						String check = orderMatchingService.orderMatch();
+						if (check != null) {
+							return "Your Buy Order is Placed";
+						}
+						return "Some problem found";
 					}
 					return "Your Account is not sufficent amount to place order";
 				}
@@ -82,8 +90,10 @@ public class OrderService {
 		}
 		return "User Not Found";
 	}
+
 	/**
 	 * This function is working for creating sell order
+	 * 
 	 * @param sellOrderDto
 	 * @return
 	 */
@@ -104,7 +114,7 @@ public class OrderService {
 						userId);
 				if (findUserAndCoin != null) {
 					Double orderPrice = (sellPrice * coinQuantity);
-					if(shadowBalance >= coinQuantity) {
+					if (shadowBalance >= coinQuantity) {
 						Double updatedShadowBalance = (shadowBalance - coinQuantity);
 						SellOrder sellOrder = new SellOrder();
 						sellOrder.setOrderPrice(orderPrice);
@@ -117,7 +127,11 @@ public class OrderService {
 						cryptoWallet.setShadowBalance(updatedShadowBalance);
 						cryptoWalletRepository.save(cryptoWallet);
 						sellOrderRepository.save(sellOrder);
-						return "Your sell Order is generated";
+						String check = orderMatchingService.orderMatch();
+						if (check != null) {
+							return "Your sell Order is generated";
+						}
+						return "Some problem found";
 					}
 					return "Low Balance in your crypto wallet ";
 				}
