@@ -49,33 +49,6 @@ public class OrderMatchingService {
 	@Autowired
 	private ProfitTableRepository profitTableRepository;
 
-	public List<BuyOrder> buyList() {
-		List<BuyOrder> result = buyOrderRepository.findAllByBuyOrderStatus(OrderStatus.PENDING);
-		log.info("buy Order result");
-		Collections.sort(result, new Comparator<BuyOrder>() {
-			@Override
-			public int compare(BuyOrder o1, BuyOrder o2) {
-				return o1.getBuyPrice().compareTo(o2.getBuyPrice());
-			}
-		});
-		log.info("buy order result after sorted");
-		Collections.reverse(result);
-		return result;
-	}
-
-	public List<SellOrder> sellList() {
-		List<SellOrder> result = sellOrderRepository.findAllBySellOrderStatus(OrderStatus.PENDING);
-		log.info("sell order result");
-		Collections.sort(result, new Comparator<SellOrder>() {
-			@Override
-			public int compare(SellOrder o1, SellOrder o2) {
-				return o1.getSellPrice().compareTo(o2.getSellPrice());
-			}
-		});
-		log.info("sell order result after sorted");
-		return result;
-	}
-
 	/**
 	 * Order Matching
 	 * 
@@ -292,7 +265,7 @@ public class OrderMatchingService {
 								BuyTransaction buyTransaction = new BuyTransaction();
 								buyTransaction.setBuyerId(buyerId);
 								buyTransaction.setBuyOrder(buyOrder);
-								buyTransaction.setCoinQuantity(listBuyOrder.getRemainingBuyCoinQuantity());
+								buyTransaction.setCoinQuantity(sellCoinQuantity);
 								buyTransaction.setCointype(coinName);
 								buyTransaction.setExchangeRate(listBuyOrder.getBuyPrice());
 								buyTransaction.setGrossAmount(grossAmountofBuyer);
@@ -380,7 +353,7 @@ public class OrderMatchingService {
 								sellTransaction.setSellerId(sellerId);
 								sellTransaction.setBuyOrder(buyOrder);
 								sellTransaction.setCoinName(coinName);
-								sellTransaction.setCoinQuantity(listSellOrder.getRemainingSellCoinQuantity());
+								sellTransaction.setCoinQuantity(listBuyOrder.getRemainingBuyCoinQuantity());
 								sellTransaction.setExchangeRateSellDesiredPrice(listSellOrder.getSellPrice());
 								sellTransaction.setGrossAmount(netAmountOfSeller);
 								sellTransaction.setNetAmount(netAmountOfSeller);

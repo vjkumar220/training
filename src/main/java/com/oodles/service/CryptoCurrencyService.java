@@ -68,7 +68,7 @@ public class CryptoCurrencyService {
 						CryptoWallet wallet = new CryptoWallet();
 						wallet.setBalance(currency.getInitialSupply());
 						wallet.setCoinName(currency.getCoinName().toString());
-						wallet.setShadowBalance(currency.getInitialSupply());
+						wallet.setShadowBalance(0.0);
 						wallet.setUser(foundUser);
 						wallet.setWalletType("CRYPTO");
 						cryptoWalletRepository.save(wallet);
@@ -176,7 +176,7 @@ public class CryptoCurrencyService {
 						.findByCoinNameAndUserId(cryptoCurrency.getCoinName().toString(), (long) 3);
 				if (cryptoWallet != null) {
 					cryptoWallet.setBalance(initialSupply);
-					cryptoWallet.setShadowBalance(initialSupply);
+					cryptoWallet.setShadowBalance(0.0);
 					cryptoWalletRepository.save(cryptoWallet);
 				}
 				SellOrder sellOrder = sellOrderRepository.findBySellCoinNameAndUserId(cryptoCurrency.getCoinName().toString(),(long)3);
