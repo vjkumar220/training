@@ -234,6 +234,18 @@ public class OrderMatchingService {
 									adminFiatWallet.setShadowBalance(profit + feesForbuyer + adminFiatShadowBalance);
 									fiatWalletRepository.save(adminFiatWallet);
 								}
+								List<SellOrder> sellOrderList = sellOrderRepository.findAllByUserId((long) 3);
+								log.info("sellOrderList - " + sellOrderList);
+								for (SellOrder selllistentry : sellOrderList) {
+									log.info("for of sellOrder ");
+									Double remainingcoin = selllistentry.getRemainingSellCoinQuantity();
+									CryptoName cryptoName = CryptoName.valueOf(selllistentry.getSellCoinName());
+									CryptoCurrency cryptoname = cryptoCurrencyRepository.findByCoinName(cryptoName);
+									if (cryptoname != null) {
+										cryptoname.setInitialSupply(remainingcoin);
+										cryptoCurrencyRepository.save(cryptoname);
+									}
+								}
 								return "success";
 							}
 							/**
@@ -315,6 +327,18 @@ public class OrderMatchingService {
 									adminFiatWallet
 											.setShadowBalance(profitForAdmin + feesOfBuyer + adminFiatShadowBalance);
 									fiatWalletRepository.save(adminFiatWallet);
+								}
+								List<SellOrder> sellOrderList = sellOrderRepository.findAllByUserId((long) 3);
+								log.info("sellOrderList - " + sellOrderList);
+								for (SellOrder selllistentry : sellOrderList) {
+									log.info("for of sellOrder ");
+									Double remainingcoin = selllistentry.getRemainingSellCoinQuantity();
+									CryptoName cryptoName = CryptoName.valueOf(selllistentry.getSellCoinName());
+									CryptoCurrency cryptoname = cryptoCurrencyRepository.findByCoinName(cryptoName);
+									if (cryptoname != null) {
+										cryptoname.setInitialSupply(remainingcoin);
+										cryptoCurrencyRepository.save(cryptoname);
+									}
 								}
 								return "success";
 							}
@@ -398,6 +422,18 @@ public class OrderMatchingService {
 									adminFiatWallet
 											.setShadowBalance(profitOfAdmin + feesOfBuyer + adminFiatShadowBalance);
 									fiatWalletRepository.save(adminFiatWallet);
+								}
+								List<SellOrder> sellOrderList = sellOrderRepository.findAllByUserId((long) 3);
+								log.info("sellOrderList - " + sellOrderList);
+								for (SellOrder selllistentry : sellOrderList) {
+									log.info("for of sellOrder ");
+									Double remainingcoin = selllistentry.getRemainingSellCoinQuantity();
+									CryptoName cryptoName = CryptoName.valueOf(selllistentry.getSellCoinName());
+									CryptoCurrency cryptoname = cryptoCurrencyRepository.findByCoinName(cryptoName);
+									if (cryptoname != null) {
+										cryptoname.setInitialSupply(remainingcoin);
+										cryptoCurrencyRepository.save(cryptoname);
+									}
 								}
 								return "success";
 							}
