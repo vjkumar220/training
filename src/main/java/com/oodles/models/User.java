@@ -28,7 +28,7 @@ public class User  {
  	@Size(min=2, message="Name should have atleast 2 characters")
     private String name;
 	 @NotNull
-	  @Pattern(regexp=".+@.+\\.[a-z]+", message="Invalid Mail")
+	  @Pattern(regexp="^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$", message="Invalid Mail")
        private String email;
 	  @NotNull
 	 @Pattern(regexp="^[6-9]\\d{9}$",message="Invalid Mobile Number")

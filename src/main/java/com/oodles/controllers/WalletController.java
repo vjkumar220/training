@@ -40,7 +40,7 @@ public class WalletController {
 	 * @param userWalletDTO
 	 * @return
 	 */
-	@PreAuthorize("hasRole('USER')")
+	//@PreAuthorize("hasRole('USER')")
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/wallets/fiat/{userId}")
 

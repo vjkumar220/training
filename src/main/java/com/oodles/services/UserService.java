@@ -135,7 +135,7 @@ public class UserService {
 			newUsers.setCountry(country);
 			newUsers.setEmail(email);
 			newUsers.setMobilenumber(mobilenumber);
-			newUsers.setPassword(password);
+			newUsers.setPassword(bCryptPasswordEncoder.encode(password));
 			userRepository.save(newUsers);
 		}	
 		 

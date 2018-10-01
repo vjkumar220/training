@@ -5,7 +5,7 @@ import javax.validation.constraints.Pattern;
 
 public class VerifyEmailDto {
 	@NotBlank
-	  @Pattern(regexp=".+@.+\\.[a-z]+", message="Invalid Mail")
+	  @Pattern(regexp="^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$", message="Invalid Mail")
 	private String email;
 	@NotBlank
 	private String confirmationToken;
