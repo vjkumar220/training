@@ -3,6 +3,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oodles.dto.RoleDto;
 import com.oodles.dto.StringConstant;
-import com.oodles.exceptions.ResourceNotFoundException;
 import com.oodles.exceptions.ResponseHandler;
 import com.oodles.services.RoleService;
 
@@ -27,6 +27,8 @@ private RoleService roleService;
  * @param roleType
  * @return
  */
+@PreAuthorize("hasRole('ADMIN')")
+
 @RequestMapping(method = RequestMethod.POST, value = "/v1/admin/role/{roleType}")
 @ResponseBody
 public Map createUser(@PathVariable String roleType)  {
@@ -42,6 +44,8 @@ public Map createUser(@PathVariable String roleType)  {
  * @param userRoleDTO
  * @return
  */
+@PreAuthorize("hasRole('ADMIN')")
+
 @RequestMapping(method = RequestMethod.POST, value = "/v1/admin/role/assign")
 @ResponseBody
 public Map assignRole(@RequestBody RoleDto userRoleDTO)  {

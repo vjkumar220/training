@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +40,8 @@ public class WalletController {
 	 * @param userWalletDTO
 	 * @return
 	 */
+	@PreAuthorize("hasRole('USER')")
+	
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/wallets/fiat/{userId}")
 
 	public Map createFiatWallet(@PathVariable Long userId) {
@@ -56,6 +59,8 @@ public class WalletController {
 	 * @param userWalletDTO
 	 * @return
 	 */
+	@PreAuthorize("hasRole('USER')")
+	
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/wallets/crypto")
 
 	public Map createCryptoWallet(@RequestBody CryptoWalletDto cryptoWalletDTO) {
@@ -71,7 +76,8 @@ public class WalletController {
 	 * @param fiatDepositDTO
 	 * @return
 	 */
-
+	@PreAuthorize("hasRole('USER')")
+	
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/wallets/fiat/deposit")
 
 	public Map createFiatDeposit(@RequestBody FiatDepositDto fiatDepositDTO) {
@@ -90,6 +96,8 @@ public class WalletController {
 	 * @param fiatApprovalDTO
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ADMIN')")
+	
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/admin/wallets/fiat/deposit/approval")
 
 	public Map fiatDepositApproval(@RequestBody FiatApprovalDto fiatApprovalDTO) {
@@ -142,7 +150,8 @@ public class WalletController {
 	 * @param fiatWithdrawDTO
 	 * @return
 	 */
-
+	@PreAuthorize("hasRole('USER')")
+	
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/wallets/fiat/withdraw")
 
 	public Map createFiatWithdraw(@RequestBody FiatWithdrawDto fiatWithdrawDTO) {
@@ -160,7 +169,8 @@ public class WalletController {
 	 * @param cryptoWithdrawDTO
 	 * @return
 	 */
-
+	@PreAuthorize("hasRole('USER')")
+	
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/wallets/crypto/withdraw")
 
 	public Map createCryptoWithdraw(@RequestBody CryptoWithdrawDto cryptoWithdrawDTO) {
@@ -173,18 +183,23 @@ public class WalletController {
 			return ResponseHandler.generateResponse(HttpStatus.CREATED, false, StringConstant.Success, null, result);
 
 	}
+	@PreAuthorize("hasRole('USER')")
+	
 	@RequestMapping(method = RequestMethod.GET,value = "/v1/user/wallet/fiat/history/{userId}")
 	
 	public Map<String, Object> fiatWalletHistory(@PathVariable Long userId) {
 		FiatWallet output = walletHistoryService.fiatWalletHistory(userId);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, StringConstant.Success, null, output);
 	}
+	@PreAuthorize("hasRole('USER')")
+	
 @RequestMapping(method = RequestMethod.GET, value ="/v1/user/wallet/crypto/history/{userId}}")
 	
 	public Map<String, Object> cryptoWalletHistory(@PathVariable Long userId) {
 		List<CryptoWallet> output = walletHistoryService.cryptoWalletHistory(userId);
 			return ResponseHandler.generateResponse(HttpStatus.OK, false, StringConstant.Success, null, output);
 	}	
+	@PreAuthorize("hasRole('ADMIN')")
 	
 @RequestMapping(method = RequestMethod.GET, value ="/v1/admin/wallet/fiat/deposit/{userId}}")
 

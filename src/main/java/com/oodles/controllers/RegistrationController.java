@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,6 +45,7 @@ public class RegistrationController {
 	 *  To Retrieve all detail
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.GET, value = "/v1/admin/users")
 	
 	public List<User> viewAllUsers() {
@@ -56,7 +58,10 @@ public class RegistrationController {
 	 * @param id
 	 * @return
 	 */
+	
 	@CrossOrigin(origins = {"http://localhost:4200","http://localhost:8080"})
+	@PreAuthorize("hasRole('ADMIN')")
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/v1/admin/users/{userid}")
 	public Map getUser(@PathVariable(value = "userid") String id) {
 		Map result = null;
@@ -77,7 +82,8 @@ public class RegistrationController {
 	 * @param country
 	 * @return
 	 */
-
+	@PreAuthorize("hasRole('USER')")
+	
 	@RequestMapping(method = RequestMethod.PUT, value = "/v1/user/users/{id}/{name}/{email}/{password}/{mobilenumber}/{country}")
 	@ResponseBody
 	public Map updateUser(@PathVariable String id, @PathVariable String name, @PathVariable String email,
@@ -94,6 +100,8 @@ public class RegistrationController {
 	 * @param id
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ADMIN')")
+	
 	@RequestMapping(method = RequestMethod.DELETE, value = "/v1/admin/users/{id}")
 	@ResponseBody
 	public Map deleteUser(@PathVariable String id) {
@@ -104,6 +112,8 @@ public class RegistrationController {
 			return ResponseHandler.generateResponse(HttpStatus.NO_CONTENT, false, StringConstant.Success, null, result);
 		
 	}
+	@PreAuthorize("hasRole('ADMIN')")
+	
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/admin/users/action")
 
 	public Map enableUser(@RequestBody EnableDto enableDTO) {

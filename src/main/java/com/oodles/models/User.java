@@ -44,7 +44,8 @@ public class User  {
    private String confirmationToken;
    private Long expirytime;
    private String passToken;
-  
+   private String firstEnabled;
+   
    @OneToMany(cascade = CascadeType.ALL,
            fetch = FetchType.EAGER,
            mappedBy = "user")
@@ -242,6 +243,18 @@ public Set<SellOrder> getSellorder() {
 public void setSellorder(Set<SellOrder> sellorder) {
 	this.sellorder = sellorder;
 }
+
+
+public String getFirstEnabled() {
+	return firstEnabled;
+}
+
+
+public void setFirstEnabled(String firstEnabled) {
+	this.firstEnabled = firstEnabled;
+}
+
+
 
 
 

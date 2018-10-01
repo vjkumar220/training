@@ -75,12 +75,15 @@ public class VerifyEmailService {
 					if (verifyEmail.getConfirmationToken().equals(emailDto.getConfirmationToken())) {
 						String emailCode = user.getConfirmationToken();
 						String mobileCode = user.getOtp();
-						if (emailCode != null && mobileCode != null) {
+						String active=user.getFirstEnabled();
+						if(active.equalsIgnoreCase("Active"))
+						{if (emailCode != null && mobileCode != null) {
 						user.setEnabled("Active");
 						userRepository.save(user);
 						emailData.remove(emailAddress);
 						return "Verificarion code is verified successfully";
-						}}
+						}}return "Do mobile verification";
+						}
 					return "Verfication code is invalid";
 				}
 				return "Verification code is expired";

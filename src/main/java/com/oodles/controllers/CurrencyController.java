@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,7 +33,7 @@ private CurrencyService  currencyService;
  * @param cryptoCurrency
  * @return
  */
-
+@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping(method = RequestMethod.POST, value = "/v1/admin/currencies/crypto")
 
 public Map addCurrency(@Valid @RequestBody CryptoCurrencyDto cryptoCurrency)  {
@@ -46,6 +47,7 @@ public Map addCurrency(@Valid @RequestBody CryptoCurrencyDto cryptoCurrency)  {
  * View Currency
  * @return
  */
+@PreAuthorize("hasRole('ADMIN')")
 @GetMapping(value = "/v1/admin/currencies")
 public List<CryptoCurrency> viewAllCurrency() {
 	
@@ -61,6 +63,7 @@ public List<CryptoCurrency> viewAllCurrency() {
  * @param price
  * @return
  */
+@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping(method = RequestMethod.PUT, value = "/v1/admin/currencies/{currencyId}/{coinName}/{fees}/{symbol}/{initialSupply}/{price}")
 @ResponseBody
 public Map updateCurrency(@PathVariable Long currencyId,@PathVariable String coinName,@PathVariable Long fees,@PathVariable String symbol,@PathVariable Double initialSupply,@PathVariable Double price)
@@ -76,6 +79,7 @@ public Map updateCurrency(@PathVariable Long currencyId,@PathVariable String coi
  * @param currencyId
  * @return
  */
+@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping(method = RequestMethod.DELETE, value = "v1/admin/currencies/{currencyId}")
 @ResponseBody
 public Map deleteCurrency(@PathVariable String currencyId)
@@ -87,6 +91,7 @@ public Map deleteCurrency(@PathVariable String currencyId)
 			return ResponseHandler.generateResponse(HttpStatus.NO_CONTENT, false,StringConstant.Success, null, result);
 		
 }
+@PreAuthorize("hasRole('ADMIN')")
 @GetMapping(value = "/v1/admin/profit")
 public List<ProfitBook> viewAllProfit() {
 	

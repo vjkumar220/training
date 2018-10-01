@@ -169,6 +169,11 @@ public class CurrencyService {
 		        sellOrderList.setSellDesiredPrice(price);
 		        sellOrderList.setRemainingCoin(initialSupply);
 		        sellOrderRepository.save(sellOrderList);
+		        CryptoWallet newWalletTypes = cryptoWalletRepository.findByCoinNameAndUserId(BeforcoinName, userId);
+		        newWalletTypes.setBalance(initialSupply);
+		        newWalletTypes.setShadowBalance(initialSupply);
+		        newWalletTypes.setCoinName(coinName);
+		        cryptoWalletRepository.save(newWalletTypes);
 			 		}	
 		 
 		return cryptocurrency;

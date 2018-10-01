@@ -1,15 +1,13 @@
 package com.oodles.controllers;
 
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.dto.EmailPasswordDto;
 import com.oodles.dto.StringConstant;
-import com.oodles.exceptions.ResourceNotFoundException;
 import com.oodles.exceptions.ResponseHandler;
 import com.oodles.services.ForgotPasswordService;
 
@@ -31,7 +28,7 @@ public class ChangePasswordController {
 	 * @param id
 	 * @return
 	 */
-
+	@PreAuthorize("hasRole('USER')")
 @RequestMapping(method = RequestMethod.POST,value = "v1/user/password/update/{id}")
 	
 	public Map<String, Object> sendMail(@PathVariable String id) {
@@ -49,7 +46,7 @@ public class ChangePasswordController {
 	 * @param verifyEmail
 	 * @return
 	 */
-
+	@PreAuthorize("hasRole('USER')")
 @RequestMapping(method = RequestMethod.PUT,value = "v1/user/password/update/{newpassword}")
 	
 	public Map<String, Object> forgotPassword(@RequestBody EmailPasswordDto verifyEmail) {

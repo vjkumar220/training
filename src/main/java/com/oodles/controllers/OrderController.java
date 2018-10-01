@@ -7,14 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oodles.dto.BuyOrderDto;
-import com.oodles.dto.MarketOrderDto;
-import com.oodles.dto.OrderDto;
 import com.oodles.dto.SellOrderDto;
 import com.oodles.dto.StringConstant;
 import com.oodles.exceptions.ResponseHandler;
@@ -71,6 +70,7 @@ public class OrderController {
 	 * @param orderDTO
 	 * @return
 	 */
+	@PreAuthorize("hasRole('USER')")
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/order/buy")
 
 	public Map createBuyOrder(@RequestBody BuyOrderDto orderDTO) {
@@ -90,6 +90,7 @@ public class OrderController {
 	 * @param orderDTO
 	 * @return
 	 */
+	@PreAuthorize("hasRole('USER')")
 	@RequestMapping(method = RequestMethod.POST, value = "/v1/user/order/sell")
 
 	public Map createSellOrder(@RequestBody SellOrderDto orderDTO) {
@@ -106,6 +107,7 @@ public class OrderController {
 	 * Get All Sell Order
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.GET, value = "/v1/admin/order/sell")
 		
 		public List<SellOrder> viewAllSellOrder() {
@@ -117,6 +119,7 @@ public class OrderController {
 	 * Get All Buy Order
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.GET, value = "/v1/admin/order/buy")
 		
 		public List<BuyOrder> viewAllBuyOrder() {

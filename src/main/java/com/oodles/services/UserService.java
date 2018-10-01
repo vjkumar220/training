@@ -58,6 +58,7 @@ public class UserService {
 			newUser.setPassword(bCryptPasswordEncoder.encode(password));
 			newUser.setCountry(country);
 			newUser.setEnabled("Inactive");
+			newUser.setFirstEnabled("Inactive");
 			
 			newUser.setRole(roleSet);
 			role.setUser(userSet);

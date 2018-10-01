@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,18 +28,18 @@ public class OrderMatchingController {
 
 	@Autowired
 	private TransactionService transactionService;
-	
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.GET, value = "v1/admin/orders/sell")
 	public List<SellOrder> sellList(){
 		return orderMatchingService.sellList();
 	}
 
-
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.GET, value = "v1/admin/orders/buy")
 	public List<BuyOrder> buyList(){
 		return orderMatchingService.buyList();
 	}
-
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.GET, value = "/v1/admin/executeTransaction")
 
 	public Map orderMatch() {

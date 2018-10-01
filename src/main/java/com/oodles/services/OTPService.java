@@ -79,12 +79,15 @@ public class OTPService {
 							User user1 = value.get();
 							String emailCode = user1.getConfirmationToken();
 							String mobileCode = user1.getOtp();
-							if (emailCode != null && mobileCode != null) {
-								user1.setEnabled("Active");
-								userRepository.save(user);
+							String active=user1.getFirstEnabled();
+							if(active.equalsIgnoreCase("Inactive"))
+							{if (mobileCode != null) {
+								//user1.setEnabled("Active");
+								user1.setFirstEnabled("Active");
+								userRepository.save(user1);
 								
 							}
-						}
+						}}
 						otp_data.remove(requestOTP.getMobileNumber());
 						return "OTP is verified successfully";
 					}
